@@ -5,7 +5,7 @@ server:
 spring:
   ## Profile Setting (is Default)
   application:
-    name: SpringBoot-Sample-Local
+    name: EcoVoca
   config:
     activate:
       on-profile: local
