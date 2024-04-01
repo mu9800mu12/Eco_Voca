@@ -1,17 +1,19 @@
-package com.voca.eco.app.service.impl;
+package com.voca.eco.app.service;
 
-import com.voca.eco.app.domain.User;
-import com.voca.eco.app.domain.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class IUserService {
-    private final UserRepository userRepository;
+import com.voca.eco.app.dto.UserDTO;
 
+public interface IUserService {
+
+    //UserDTO getUserIDExists(UserDTO pDTO) throws Exception;
+
+    void createUser (Long userSeq,
+            final String userId,
+            final String userName,
+            final String userPassword,
+            final String userEmail,
+            final String userAddress,
+            final String userBirthday,
+            final String userNickname) throws Exception;
 
 }
