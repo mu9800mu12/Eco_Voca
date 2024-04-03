@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,10 +16,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Getter
+@Setter
 @Entity
-@Table(name = "ECO_VOCA_USER")
+@Table(name = "USER_INFO")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UserEntity {
@@ -28,58 +28,52 @@ public class UserEntity {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(updatable = false, insertable = false, unique = true)
-    @Column(name = "USER_SEQ")
-    private Long userSeq;
-
-    @NonNull
-    @Column
+    @JoinColumn(name = "USER_ID", updatable = false, insertable = false, unique = true)
     private String userId;
 
     @NonNull
-    @Column
-    private String Password;
+    @Column(name = "PASSWORD", length = 50, nullable = false)
+    private String password;
 
     @NonNull
     @Email
-    @Column
-    private String Email;
+    @Column(name ="EMAIL",nullable = false)
+    private String email;
 
     @NonNull
-    @Column
+    @Column(name = "USER_NAME", length = 500, nullable = false)
     private String userName;
 
     @NonNull
-    @Column
-    private String Nickname;
+    @Column(name = "NICKNAME", length = 500, nullable = false)
+    private String nickName;
 
     @NonNull
-    @Column
-    private String Birthday;
+    @Column(name ="BRITHDAY", nullable = false)
+    private String birthday;
 
     @NonNull
-    @Column
-    private String Address;
+    @Column(name ="ADDRESS", nullable = false)
+    private String address;
 
     @NonNull
-    @Column
-    private LocalDate createdAt;
+    @Column(name ="SINCE_DAY")
+    private LocalDate sinceDay;
 
 
     @Builder
-    public UserEntity(String userId, String Password, String Email, String userName, String Nickname, String Birthday, String Address) {
-        this.userSeq = userSeq;
+    public UserEntity(String userId, String password, String email, String userName, String nickName, String birthday, String address) {
         this.userId = userId;
-        this.Password = Password;
-        this.Email = Email;
+        this.password = password;
+        this.email = email;
         this.userName = userName;
-        this.Nickname = Nickname;
-        this.Birthday = Birthday;
-        this.Address = Address;
-        this.createdAt = LocalDate.now();
+        this.nickName = nickName;
+        this.birthday = birthday;
+        this.address = address;
+        this.sinceDay = LocalDate.now();
     }
 
-    public void updateUserAddress(final String userAddress) {
-        this.Address = Address;
+    public void updateUserAddress(final String address) {
+        this.address = address;
     }
 }
