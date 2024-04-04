@@ -56,6 +56,21 @@ public class UserController {
         return existsYn;
 
     }
+    @ResponseBody
+    @PostMapping(value = "UserEmailExists")
+    public int UserEmailExists(HttpServletRequest request) throws Exception {
+
+        String email = CmmUtil.nvl(request.getParameter("email"));
+        log.debug("email" + email);
+
+        //UserDTO pDTO = UserDTO.builder().userId(userId).build();
+
+        int existsYn = Optional.ofNullable(userService.UserEmailExists(email))
+                .orElse(2);
+
+        return existsYn;
+
+    }
 
     @ResponseBody
     @PostMapping(value = "createUser")
@@ -90,9 +105,8 @@ public class UserController {
                 .userName(userName)
                 .nickName(nickName)
                 .birthday(birthday)
-                .chgId(userId)
                 .build();
-
+        log.debug(this.getClass().getName()+ " 서비스로 넘어가기 전에");
         int res = userService.createUser(pDTO);
 
         log.debug("회원가입 결과(res) :" + res);

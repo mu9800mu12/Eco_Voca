@@ -39,7 +39,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int UserEmailExists(String email) throws Exception {
-        Optional<UserEntity> rEntity = userRepository.findByUserId(email);
+        Optional<UserEntity> rEntity = userRepository.findByEmail(email);
 
         log.info("email" + email);
 
@@ -101,15 +101,20 @@ public class UserService implements IUserService {
         int res = 0;
         log.debug("pDTO" +pDTO);
         String userId = CmmUtil.nvl(pDTO.userId());
+        log.debug("userId" + userId);
+        //DTO로 받아서 int로 형변환 해야 함
 
+        // 회원가입 중복 방지를 위해 DB에서 데이터 조회
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
-
+        log.debug("rEntity1" + rEntity);
         if(rEntity.isPresent()){
             res =2;
+            log.debug("res값은 2이입니다");
         }
 
+        log.debug("유저엔터티 세이브 값을 엔터티로 저장합니다" );
         UserEntity save = userRepository.save(UserEntity.builder()
-                .userId(pDTO.userId())
+                .userId(CmmUtil.nvl(pDTO.userId()))
                 .userName(CmmUtil.nvl(pDTO.userName()))
                 .password(CmmUtil.nvl(pDTO.password()))
                 .email(CmmUtil.nvl(pDTO.email()))
@@ -118,14 +123,15 @@ public class UserService implements IUserService {
                 .birthday(CmmUtil.nvl(pDTO.birthday()))
                 .address(CmmUtil.nvl(pDTO.address()))
                 .build());
+            log.debug("유저 엔터티 세이브 끝");
 
 
         if(save != null) { // 성공
             res = 1;
-
+            log.debug("res는 1임");
         } else {
             res= 0;
-
+            log.debug("res는 0임");
         }
         log.debug(this.getClass().getName() + "회원가입 성공!");
 

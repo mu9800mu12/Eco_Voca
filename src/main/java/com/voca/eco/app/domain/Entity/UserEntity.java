@@ -26,17 +26,15 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "USER_ID", updatable = false, insertable = false, unique = true)
+    @Column(name = "USER_ID")
     private String userId;
 
     @NonNull
-    @Column(name = "PASSWORD", length = 50, nullable = false)
+    @Column(name = "PASSWORD", length = 128, nullable = false)
     private String password;
 
     @NonNull
-    @Email
+    //@Email
     @Column(name ="EMAIL",nullable = false)
     private String email;
 
@@ -49,7 +47,7 @@ public class UserEntity {
     private String nickName;
 
     @NonNull
-    @Column(name ="BRITHDAY", nullable = false)
+    @Column(name ="BIRTHDAY", nullable = false)
     private String birthday;
 
     @NonNull
