@@ -46,12 +46,9 @@ public class UserController {
     public int UserIdExists(HttpServletRequest request) throws Exception {
 
         String userId = CmmUtil.nvl(request.getParameter("userId"));
-        log.debug("userId" + userId);
+        log.info("userId" + userId);
 
-        //UserDTO pDTO = UserDTO.builder().userId(userId).build();
-
-        int existsYn = Optional.ofNullable(userService.UserIdExists(userId))
-                .orElse(2);
+        int existsYn = userService.UserIdExists(userId);
 
         return existsYn;
 
@@ -61,12 +58,26 @@ public class UserController {
     public int UserEmailExists(HttpServletRequest request) throws Exception {
 
         String email = CmmUtil.nvl(request.getParameter("email"));
-        log.debug("email" + email);
+        log.info("email" + email);
+        log.info(this.getClass().getName() + "이메일 컨트롤러임 ");
 
         //UserDTO pDTO = UserDTO.builder().userId(userId).build();
+        int existsYn =userService.UserEmailExists(email);
 
-        int existsYn = Optional.ofNullable(userService.UserEmailExists(email))
-                .orElse(2);
+        return existsYn;
+
+    }
+
+    @ResponseBody
+    @PostMapping(value = "NickNameExists")
+    public int NickNameExists(HttpServletRequest request) throws Exception {
+
+        String nickName = CmmUtil.nvl(request.getParameter("nickName"));
+        log.info("nickName" + nickName);
+        log.info(this.getClass().getName() + " 닉네임  컨트롤러임 ");
+
+        //UserDTO pDTO = UserDTO.builder().userId(userId).build();
+        int existsYn =userService.NickNameExists(nickName);
 
         return existsYn;
 
@@ -76,7 +87,7 @@ public class UserController {
     @PostMapping(value = "createUser")
     public MsgDTO createUser(HttpServletRequest request) throws Exception {
 
-        log.debug(this.getClass().getName() + "createUser Start!");
+        log.info(this.getClass().getName() + "createUser Start!");
 
         String msg;
 
@@ -105,11 +116,12 @@ public class UserController {
                 .userName(userName)
                 .nickName(nickName)
                 .birthday(birthday)
+                .address(address)
                 .build();
-        log.debug(this.getClass().getName()+ " 서비스로 넘어가기 전에");
+        log.info(this.getClass().getName()+ " 서비스로 넘어가기 전에");
         int res = userService.createUser(pDTO);
 
-        log.debug("회원가입 결과(res) :" + res);
+        log.info("회원가입 결과(res) :" + res);
 
         if (res == 1) {
             msg = "회원가입 되었습니다.";
@@ -127,7 +139,7 @@ public class UserController {
         //결과 메시지 전달하기
         MsgDTO dto = MsgDTO.builder().result(res).msg(msg).build();
 
-        log.info(this.getClass().getName() + "insertUserInfo End!");
+        log.info(this.getClass().getName() + "createUser End!");
 
         return dto;
     }
@@ -153,12 +165,12 @@ public class UserController {
         final String password = EncryptUtil.encHashSHA256(
                 CmmUtil.nvl(request.getParameter("password")));
 
-        log.debug("userId" + userId);
-        log.debug("password" + password);
+        log.info("userId" + userId);
+        log.info("password" + password);
 
         int res = userService.UserLogin(userId, password);
 
-        log.debug("res :" + res);
+        log.info("res :" + res);
 
         if (res == 1) { //로그인 성공
 

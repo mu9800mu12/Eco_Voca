@@ -20,6 +20,20 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
 
+    @Override
+    public int NickNameExists(String nickName) throws Exception {
+        Optional<UserEntity> rEntity = userRepository.findByNickName(nickName);
+
+        log.info("nickName 이 잘 들어오는지 보는중이죠: " + nickName);
+
+        //아이디가 있으면 1, 없으면 0
+        int existsYn = rEntity.isPresent() ? 1 : 0;
+
+        log.info("existsYn 이 잘 들어오는지 보는중이죠: " + existsYn);
+
+        log.info(this.getClass().getName() + "NickNameExists End!");
+        return existsYn;
+    }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -27,7 +41,7 @@ public class UserService implements IUserService {
 
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
 
-        log.info("userId" + userId);
+        log.info("userId : " + userId);
 
         //아이디가 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
@@ -41,12 +55,12 @@ public class UserService implements IUserService {
     public int UserEmailExists(String email) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByEmail(email);
 
-        log.info("email" + email);
+        log.info("email :" + email);
 
         //이메일이 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
-
         log.info(this.getClass().getName() + "userEmailExists End!");
+        log.info(this.getClass().getName() + "이메일 서비스 yb 값임 " + existsYn);
 
         return existsYn;
     }
@@ -82,7 +96,7 @@ public class UserService implements IUserService {
         if (rEntity.isPresent()) {
             res=1;
         }
-        log.debug(this.getClass().getName() + "userLogin");
+        log.info(this.getClass().getName() + "userLogin");
 
         return res;
     }
@@ -99,20 +113,20 @@ public class UserService implements IUserService {
     public int createUser(UserDTO pDTO) throws Exception{
         // 회원 가입 성공 : 1, 중복으로 인한 취소 : 2, 기타 에러 : 0
         int res = 0;
-        log.debug("pDTO" +pDTO);
         String userId = CmmUtil.nvl(pDTO.userId());
-        log.debug("userId" + userId);
-        //DTO로 받아서 int로 형변환 해야 함
+
+        log.info("pDTO" + pDTO);
+        log.info("userId : " + userId);
 
         // 회원가입 중복 방지를 위해 DB에서 데이터 조회
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
-        log.debug("rEntity1" + rEntity);
+        log.info("rEntity가 잘들어오는지 보는 중입니다 :: " + rEntity);
         if(rEntity.isPresent()){
             res =2;
-            log.debug("res값은 2이입니다");
+            log.info("유저 아이디가 존재하는 나는 res값이 2입니다");
         }
 
-        log.debug("유저엔터티 세이브 값을 엔터티로 저장합니다" );
+        log.info("유저엔터티 세이브 값을 엔터티로 저장합니다" );
         UserEntity save = userRepository.save(UserEntity.builder()
                 .userId(CmmUtil.nvl(pDTO.userId()))
                 .userName(CmmUtil.nvl(pDTO.userName()))
@@ -123,17 +137,17 @@ public class UserService implements IUserService {
                 .birthday(CmmUtil.nvl(pDTO.birthday()))
                 .address(CmmUtil.nvl(pDTO.address()))
                 .build());
-            log.debug("유저 엔터티 세이브 끝");
+            log.info("유저 엔터티 세이브 끝");
 
 
         if(save != null) { // 성공
             res = 1;
-            log.debug("res는 1임");
+            log.info("res는 1임");
         } else {
             res= 0;
-            log.debug("res는 0임");
+            log.info("res는 0임");
         }
-        log.debug(this.getClass().getName() + "회원가입 성공!");
+        log.info(this.getClass().getName() + "회원가입 성공!");
 
         return res;
     }

@@ -15,6 +15,9 @@ public interface IUserService {
     // 이메일 중복 확인
     int UserEmailExists(final String email) throws Exception;
 
+    // 닉네임 중복 확인
+    int NickNameExists(final String nickName) throws Exception;
+
 
     // 아이디 찾기
     UserDTO FindByUserId(final String userId,

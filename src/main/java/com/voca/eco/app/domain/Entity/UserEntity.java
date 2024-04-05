@@ -21,7 +21,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "USER_INFO")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+        //(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class UserEntity {
 
@@ -34,8 +35,7 @@ public class UserEntity {
     private String password;
 
     @NonNull
-    //@Email
-    @Column(name ="EMAIL",nullable = false)
+    @Column(name = "EMAIL", nullable = false)
     private String email;
 
     @NonNull
@@ -47,20 +47,21 @@ public class UserEntity {
     private String nickName;
 
     @NonNull
-    @Column(name ="BIRTHDAY", nullable = false)
+    @Column(name = "BIRTHDAY", nullable = false)
     private String birthday;
 
     @NonNull
-    @Column(name ="ADDRESS", nullable = false)
+    @Column(name = "ADDRESS", nullable = false)
     private String address;
 
     @NonNull
-    @Column(name ="SINCE_DAY")
+    @Column(name = "SINCE_DAY")
     private LocalDate sinceDay;
 
 
     @Builder
-    public UserEntity(String userId, String password, String email, String userName, String nickName, String birthday, String address) {
+    public UserEntity(String userId, String password, String email, String userName,
+            String nickName, String birthday, String address) {
         this.userId = userId;
         this.password = password;
         this.email = email;
@@ -69,7 +70,9 @@ public class UserEntity {
         this.birthday = birthday;
         this.address = address;
         this.sinceDay = LocalDate.now();
+
     }
+
 
     public void updateUserAddress(final String address) {
         this.address = address;
