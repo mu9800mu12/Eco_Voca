@@ -21,12 +21,15 @@
 
       // 아이디 중복체크
       $("#btnUserId").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        UserIdExists(f)
+        UserIdExists(f);
       })
 
       // 이메일 중복체크
       $("#btnUserEmail").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+       // isValidEmail(ff);
         UserEmailExists(f);
+
+
       })
       // 이메일 중복체크
       $("#btnNickName").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
@@ -78,7 +81,17 @@
         f.email.focus();
         return;
       }
-      // Ajax 호출해서 회원가입하기
+
+      // 이메일 올바른 형식작성
+      // function isValidEmail(ff){
+      //    if (ff.email.value === /^[^\s@]+@[^\s@]+\.[^\s@]+$/) {
+      //      alert("올바른 형식으로 작성하세요.");
+      //      ff.email.focus();
+      //      return;
+      //    }
+      // }
+
+      // Ajax 호출해서 이메일중복 검사하기
       $.ajax({
             url: "/user/UserEmailExists",
             type: "post", // 전송방식은 Post
@@ -88,7 +101,10 @@
               if (json === 1) {
                 alert("이미 사용 중인 이메일입니다.");
                 f.email.focus();
-              } else { //
+              } else if (json !== /^[^\s@]+@[^\s@]+\.[^\s@]+$/){ //
+                emailCheck = 0;
+                alert("올바른 이메일 형식으로 입력 바랍니다");
+              }else { //
                 emailCheck = 0;
                 alert("사용 가능한 이메일입니다.");
               }
@@ -96,121 +112,136 @@
           }
       )
     }
-    function NickNameExists(f) {
-      if (f.nickName.value === "") {
-        alert("닉네임을 입력하세요.");
-        f.nickName.focus();
-        return;
-      }
-      // Ajax 호출해서 회원가입하기
-      $.ajax({
-            url: "/user/NickNameExists",
-            type: "post", // 전송방식은 Post
-            dataType: "JSON", // 전송 결과는 JSON으로 받기
-            data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-            success: function (json) { // 호출이 성공했다면..
-              console.log(json)
-              if (json === 1) {
-                alert("이미 가입된 닉네임이 존재합니다.");
-                f.nickName.focus();
-              } else {
-                nickNameCheck = 0;
-                alert("사용 가능한 닉네임입니다..");
-              }
-            }
-          }
-      )
-    }
-    // 카카오 우편번호 조회 API 호출
-    function kakaoPost(f) {
-      new daum.Postcode({
-        oncomplete: function (data) {
-          // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
-          // 주요 결과값
-          // 주소 : data.address
-          // 우편번호 : data.zonecode
-          let address = data.address; // 주소
-          let zonecode = data.zonecode; // 우편번호
-          f.address.value = "(" + zonecode + ")" + address
+
+      function NickNameExists(f) {
+        if (f.nickName.value === "") {
+          alert("닉네임을 입력하세요.");
+          f.nickName.focus();
+          return;
         }
-      }).open();
-    }
 
-    //회원가입 정보의 유효성 체크하기
-    function createUser(f) {
-      if (f.userId.value === "") {
-        alert("아이디를 입력하세요.");
-        f.userId.focus();
-        return;
-      }
-      if (userIdCheck !== 0) {
-        alert("아이디 중복 체크 및 중복되지 않은 아이디로 가입 바랍니다.");
-        f.userId.focus();
-        return;
-      }
-      if (f.userName.value === "") {
-        alert("이름을 입력하세요.");
-        f.userName.focus();
-        return;
-      }
-      if (f.password.value === "") {
-        alert("비밀번호를 입력하세요.");
-        f.password.focus();
-        return;
-      }
-      if (f.password2.value === "") {
-        alert("비밀번호확인을 입력하세요.");
-        f.password2.focus();
-        return;
-      }
-      if (f.password.value !== f.password2.value) {
-        alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        f.password.focus();
-        return;
-      }
-      if (f.email.value === "") {
-        alert("이메일을 입력하세요.");
-        f.email.focus();
-        return;
-      }
-      if (emailCheck !== 0) {
-        alert("이메일 중복 체크 및 중복되지 않은 이메일로 가입 바랍니다.");
-        f.email.focus();
-        return;
-      }
-      if (f.address.value === "") {
-        alert("주소를 입력하세요.");
-        f.address.focus();
-        return;
-      }
-      if (f.nickName.value === "") {
-        alert("닉네임을 입력하세요.");
-        f.nickName.focus();
-        return;
-      }
-      if (f.birthday.value === "") {
-        alert("생년월일을 입력하세요.");
-        f.birthday.focus();
-        return;
-      }
-
-      // Ajax 호출해서 회원가입하기
-      $.ajax({
-            url: "/user/createUser",
-            type: "post", // 전송방식은 Post
-            dataType: "JSON", // 전송 결과는 JSON으로 받기
-            data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-            success: function (json) { // /user/insertUserInfo 호출이 성공했다면..
-              if (json.result === 1) { // 회원가입 성공
-                alert(json.msg); // 메시지 띄우기
-                location.href = "/user/login"; // 로그인 페이지 이동
-              } else { // 회원가입 실패
-                alert(json.msg); // 메시지 띄우기
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+              url: "/user/NickNameExists",
+              type: "post", // 전송방식은 Post
+              dataType: "JSON", // 전송 결과는 JSON으로 받기
+              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+              success: function (json) { // 호출이 성공했다면..
+                console.log(json)
+                if (json === 1) {
+                  alert("이미 가입된 닉네임이 존재합니다.");
+                  f.nickName.focus();
+                } else {
+                  nickNameCheck = 0;
+                  alert("사용 가능한 닉네임입니다..");
+                }
               }
             }
+        )
+      }
+
+      // function isValidEmail(email) {
+      //   // 이메일 형식의 정규표현식
+      //   const email1 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      //   return email.test(email);
+      // }
+
+      // 카카오 우편번호 조회 API 호출
+      function kakaoPost(f) {
+        new daum.Postcode({
+          oncomplete: function (data) {
+            // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
+            // 주요 결과값
+            // 주소 : data.address
+            // 우편번호 : data.zonecode
+            let address = data.address; // 주소
+            let zonecode = data.zonecode; // 우편번호
+            f.address.value = "(" + zonecode + ")" + address
           }
-      )
+        }).open();
+      }
+
+      //회원가입 정보의 유효성 체크하기
+      function createUser(f) {
+        if (f.userId.value === "") {
+          alert("아이디를 입력하세요.");
+          f.userId.focus();
+          return;
+        }
+        if (userIdCheck !== 0) {
+          alert("아이디 중복 체크 및 중복되지 않은 아이디로 가입 바랍니다.");
+          f.userId.focus();
+          return;
+        }
+        if (f.userName.value === "") {
+          alert("이름을 입력하세요.");
+          f.userName.focus();
+          return;
+        }
+        if (f.password.value === "") {
+          alert("비밀번호를 입력하세요.");
+          f.password.focus();
+          return;
+        }
+        if (f.password2.value === "") {
+          alert("비밀번호확인을 입력하세요.");
+          f.password2.focus();
+          return;
+        }
+        if (f.password.value !== f.password2.value) {
+          alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+          f.password.focus();
+          return;
+        }
+        if (f.email.value === "") {
+          alert("이메일을 입력하세요.");
+          f.email.focus();
+          return;
+        }
+        if (emailCheck !== 0) {
+          alert("이메일 중복 체크 및 중복되지 않은 이메일로 가입 바랍니다.");
+          f.email.focus();
+          return;
+        }
+        if (f.address.value === "") {
+          alert("주소를 입력하세요.");
+          f.address.focus();
+          return;
+        }
+        if (f.nickName.value === "") {
+          alert("닉네임을 입력하세요.");
+          f.nickName.focus();
+          return;
+        }
+        if (f.birthday.value === "") {
+          alert("생년월일을 입력하세요.");
+          f.birthday.focus();
+          return;
+        }
+
+        if (nickNameCheck !== 0) {
+          alert(" 닉네임 을 다른 이름으로 작성 바랍니다.");
+          f.nickName.focus();
+          return;
+        }
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+              url: "/user/createUser",
+              type: "post", // 전송방식은 Post
+              dataType: "JSON", // 전송 결과는 JSON으로 받기
+              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+              success: function (json) { // /user/createUser 호출이 성공했다면..
+                if (json.result === 1) { // 회원가입 성공
+                  alert(json.msg); // 메시지 띄우기
+                  location.href = "/user/login"; // 로그인 페이지 이동
+                } else { // 회원가입 실패
+                  alert(json.msg); // 메시지 띄우기
+                }
+              }
+            }
+        )
     }
+
   </script>
 </head>
 <body>

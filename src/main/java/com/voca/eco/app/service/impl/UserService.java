@@ -57,6 +57,11 @@ public class UserService implements IUserService {
 
         log.info("email :" + email);
 
+        /*
+        여기에 이메일은 암호화 되어 있으니 암호화된 이메일 확인 절차가 필요함
+        암호화 되어 있으니 중복 클릭을 눌러도 값이 없다고 값이 반환됨
+         */
+
         //이메일이 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
         log.info(this.getClass().getName() + "userEmailExists End!");

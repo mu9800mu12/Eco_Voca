@@ -76,9 +76,9 @@ public class UserController {
         log.info("nickName" + nickName);
         log.info(this.getClass().getName() + " 닉네임  컨트롤러임 ");
 
-        //UserDTO pDTO = UserDTO.builder().userId(userId).build();
-        int existsYn =userService.NickNameExists(nickName);
 
+        int existsYn =userService.NickNameExists(nickName);
+        log.info("닉네임 컨ㅌ롤러 Yn확인 하는 중입니다 값은 : " +existsYn);
         return existsYn;
 
     }
