@@ -21,16 +21,17 @@ public interface IUserService {
 
     // 아이디 찾기
     UserDTO FindByUserId(final String userId,
-                         final String userName) throws Exception;
+                         final String userName,
+                         final String email) throws Exception;
 
     // 비밀번호 찾기
     UserDTO FindByPassword(final String userId,
                            final String password,
-                           final String userName) throws Exception;
+                           final String userName,
+                            final String emails) throws Exception;
 
     // 이메일 인증
 
-    int UserMailCheck (final String Email) throws Exception;
 
     // 로그인
     int UserLogin(final String userId,

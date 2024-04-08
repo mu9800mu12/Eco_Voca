@@ -22,7 +22,9 @@ public record UserDTO(String userId,
                       String regId, //등록자
                       String regDt,
                       String chgId, //수정자
-                      String chgDt
+                      String chgDt,
+
+                      int authNumber
                       ) {
 
 }

@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -23,14 +22,7 @@ public class UserService implements IUserService {
     @Override
     public int NickNameExists(String nickName) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByNickName(nickName);
-
-        log.info("nickName 이 잘 들어오는지 보는중이죠: " + nickName);
-
-        //아이디가 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
-
-        log.info("existsYn 이 잘 들어오는지 보는중이죠: " + existsYn);
-
         log.info(this.getClass().getName() + "NickNameExists End!");
         return existsYn;
     }
@@ -38,14 +30,9 @@ public class UserService implements IUserService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int UserIdExists(String userId) throws Exception {
-
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
-
         log.info("userId : " + userId);
-
-        //아이디가 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
-
         log.info(this.getClass().getName() + "userIdExists End!");
         return existsYn;
     }
@@ -54,18 +41,13 @@ public class UserService implements IUserService {
     @Transactional(rollbackOn = Exception.class)
     public int UserEmailExists(String email) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByEmail(email);
-
         log.info("email :" + email);
-
         /*
         여기에 이메일은 암호화 되어 있으니 암호화된 이메일 확인 절차가 필요함
         암호화 되어 있으니 중복 클릭을 눌러도 값이 없다고 값이 반환됨
          */
-
-        //이메일이 있으면 1, 없으면 0
         int existsYn = rEntity.isPresent() ? 1 : 0;
         log.info(this.getClass().getName() + "userEmailExists End!");
-        log.info(this.getClass().getName() + "이메일 서비스 yb 값임 " + existsYn);
 
         return existsYn;
     }
@@ -74,7 +56,10 @@ public class UserService implements IUserService {
     @Transactional(rollbackOn = Exception.class)
     public UserDTO FindByUserId(
             String userId,
-            String userName)
+            String userName,
+            String email)
+
+
             throws Exception {
 
         return null;
@@ -85,24 +70,21 @@ public class UserService implements IUserService {
     public UserDTO FindByPassword(
             String userId,
             String password,
-            String userName)
+            String userName,
+            String email)
             throws Exception {
 
         return null;
     }
-
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int UserLogin(String userId, String password) throws Exception {
-
         int res =0;
         Optional<UserEntity> rEntity = userRepository.findByUserIdAndPassword(CmmUtil.nvl(userId), CmmUtil.nvl(password));
-
         if (rEntity.isPresent()) {
             res=1;
         }
         log.info(this.getClass().getName() + "userLogin");
-
         return res;
     }
 
@@ -158,11 +140,11 @@ public class UserService implements IUserService {
     }
 
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public int UserMailCheck(String Email) throws Exception {
-        return 0;
-    }
+//    @Override
+//    @Transactional(rollbackOn = Exception.class)
+//    public int UserMailCheck(String Email) throws Exception {
+//        return 0;
+//    }
 
 
 

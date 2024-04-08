@@ -2,12 +2,14 @@ package com.voca.eco.app.controller;
 
 import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.UserDTO;
+import com.voca.eco.app.service.IMailService;
 import com.voca.eco.app.service.IUserService;
 import com.voca.eco.common.util.CmmUtil;
 import com.voca.eco.common.util.EncryptUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 
     private final IUserService userService;
+
+    private final IMailService mailService;
 
     @GetMapping(value = "index")
     public String index() {
@@ -63,6 +67,7 @@ public class UserController {
 
         //UserDTO pDTO = UserDTO.builder().userId(userId).build();
         int existsYn =userService.UserEmailExists(email);
+
 
         return existsYn;
 
@@ -154,7 +159,6 @@ public class UserController {
     }
 
     @ResponseBody
-
     @PostMapping(value = "loginProc")
     public MsgDTO loginProc(HttpServletRequest request, HttpSession session) throws Exception {
 
@@ -200,6 +204,65 @@ public class UserController {
         log.info(this.getClass().getName() + "user/loginSuccess Start And End!");
 
         return "user/loginSuccess";
+    }
+
+    /**
+     * 회원 가입 전 이메일 중복체크하기(Ajax를 통해 입력한 아이디 정보 받음)
+     * 유효한 이메일인 확인하기 위해 입력된 이메일에 인증번호 포함하여 메일 발송
+     */
+    @ResponseBody
+    @PostMapping(value = "getEmailExists")
+    public MsgDTO getEmailExists(HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".getEmailExists Start!");
+
+        int res = 0;
+        String msg ="";
+
+        String email = CmmUtil.nvl(request.getParameter("email")); // 회원아이디
+
+        log.info("email : " + email);
+
+        int existsYn = userService.UserEmailExists(email);
+
+        log.info("나는 0이어야 참인 Yn입니다 값은 : "+existsYn);
+
+        //이메일이 DB에 없어서 참
+        if(existsYn == 0){
+            log.info("인증번호 생성 시작");
+
+            // 6자리 랜덤 숫자 생성하기
+            int authNumber = ThreadLocalRandom.current().nextInt(100000, 10000000);
+
+            log.info("authNumber : " + authNumber);
+
+            String title = "이메일 인증번호 발송 메일";
+            String contents = "인증번호는 " + authNumber + "입니다.";
+
+            res = mailService.doSendMail(email, title, contents);
+
+            if(res == 0) {
+
+                msg = "메일 발송에 실패하였습니다. 메일을 다시 확인해주세요";
+
+            } else {
+                msg = "사용 가능한 이메일입니다. 메일 발송하였습니다. 인증번호를 작성해주세요";
+            }
+
+            log.info("나는 1이어야 성공하는 res 입니다 값은 : " + res);
+
+        } else {
+
+            msg = "이메일이 존재합니다. 다른 이메일로 가입 바랍니다.";
+
+        }
+
+        log.info(this.getClass().getName() + ".getEmailExists End!");
+
+        return MsgDTO.builder()
+                .msg(msg)
+                .result(res)
+                .build();
     }
 
 
