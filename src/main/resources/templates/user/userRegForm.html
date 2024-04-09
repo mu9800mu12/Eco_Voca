@@ -17,7 +17,7 @@
     // 이메일 인증번호 보내기 (성공 :0 / 실패 : 1)
     let doSendMail =  "0";
 
-    let emailAuthNumber = "";
+    let emailAuthNumber = 0;
 
     // HTML로딩이 완료되고, 실행됨
     $(document).ready(function () {
@@ -67,13 +67,13 @@
         datatype: "JSON",
         data: $("#f").serialize(),
         success: function (json) {
-          if(json.existsYn ==="Y") {
+          if(json.existsYn === 1) {
             alert("이미 가입된 이메일 주소가 존재합니다.");
             f.email.focus();
           } else {
             alert("이메일로 인증번호가 발송되었습니다. \n받은 메일의 인증번호를 입력하시기 바랍니다.")
+            console.log(json.authNumber)
             emailAuthNumber = json.authNumber;
-
           }
 
 
@@ -258,13 +258,12 @@
         f.nickName.focus();
         return;
       }
-      if (authNumber.value === "") {
+      if (f.authNumber.value === "") {
         alert("이메일 인증번호를 입력하세요.");
         f.authNumber.focus();
         return;
-        ;
       }
-      if (authNumber.value !== emailAuthNumber) {
+      if (f.authNumber.value != emailAuthNumber) {
         alert("이메일 인증번호가 일치하지 않습니다.");
         f.authNumber.focus();
         return;

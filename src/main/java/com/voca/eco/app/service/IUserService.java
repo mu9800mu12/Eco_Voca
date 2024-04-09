@@ -10,31 +10,29 @@ public interface IUserService {
     int createUser (UserDTO pDTO) throws Exception;
 
     // 아이디 중복 확인
-    int UserIdExists(final String userId) throws Exception;
+    int userIdExists(final String userId) throws Exception;
 
     // 이메일 중복 확인
-    int UserEmailExists(final String email) throws Exception;
+    int userEmailExists(final String email) throws Exception;
 
     // 닉네임 중복 확인
-    int NickNameExists(final String nickName) throws Exception;
+    int nickNameExists(final String nickName) throws Exception;
 
 
     // 아이디 찾기
-    UserDTO FindByUserId(final String userId,
-                         final String userName,
+    UserDTO getUserId(final String userName,
                          final String email) throws Exception;
 
     // 비밀번호 찾기
-    UserDTO FindByPassword(final String userId,
-                           final String password,
-                           final String userName,
-                            final String emails) throws Exception;
+    UserDTO getPassword(final String userId,
+                            final String userName,
+                            final String email) throws Exception;
 
     // 이메일 인증
 
 
     // 로그인
-    int UserLogin(final String userId,
+    int userLogin(final String userId,
             final String password) throws Exception;
 
 

@@ -47,20 +47,11 @@ public class MailService implements IMailService {
         try {
 
             messageHelper.setTo(toMail); // 받는 사람
-            log.info("1");
             messageHelper.setFrom(fromMail); // 보내는 사람
-            log.info("2");
             messageHelper.setSubject(title); // 메일 제목
-            log.info("3");
             messageHelper.setText(contents); // 메일 내용
-            log.info("4");
-
-
-
-
 
             mailSender.send(message);
-            log.info("5");
         } catch (Exception e) {//모든 에러 다 잡기
             res = 0; // 메일 발송이 실패해기 때문에 0으로 변경
             log.info("[ERROR] " + this.getClass().getName() + ".doSendMail : " + e);

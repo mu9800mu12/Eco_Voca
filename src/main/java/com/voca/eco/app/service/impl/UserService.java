@@ -1,14 +1,18 @@
 package com.voca.eco.app.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voca.eco.app.domain.Entity.UserEntity;
 import com.voca.eco.app.domain.UserRepository;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IUserService;
 import com.voca.eco.common.util.CmmUtil;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,7 +24,7 @@ public class UserService implements IUserService {
 
 
     @Override
-    public int NickNameExists(String nickName) throws Exception {
+    public int nickNameExists(String nickName) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByNickName(nickName);
         int existsYn = rEntity.isPresent() ? 1 : 0;
         log.info(this.getClass().getName() + "NickNameExists End!");
@@ -29,7 +33,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public int UserIdExists(String userId) throws Exception {
+    public int userIdExists(String userId) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
         log.info("userId : " + userId);
         int existsYn = rEntity.isPresent() ? 1 : 0;
@@ -39,7 +43,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public int UserEmailExists(String email) throws Exception {
+    public int userEmailExists(String email) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByEmail(email);
         log.info("email :" + email);
         /*
@@ -54,31 +58,41 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public UserDTO FindByUserId(
+    public UserDTO getUserId(
+            String userName,
+            String email) throws Exception {
+
+        UserDTO rDTO = null;
+
+        log.info(this.getClass().getName() + "아이디 찾기 서비스 시작");
+
+        Optional<UserEntity> rEntity = userRepository.findByEmailAndUserName(userName, email);
+
+        if (rEntity.isPresent()){
+        rDTO = new ObjectMapper().convertValue(rEntity,
+                UserDTO.class);
+
+        } else {
+            rDTO = UserDTO.builder().build();
+        }
+
+        return rDTO;
+    }
+
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public UserDTO getPassword(
             String userId,
             String userName,
             String email)
-
-
             throws Exception {
 
         return null;
     }
-
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public UserDTO FindByPassword(
-            String userId,
-            String password,
-            String userName,
-            String email)
-            throws Exception {
-
-        return null;
-    }
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public int UserLogin(String userId, String password) throws Exception {
+    public int userLogin(String userId, String password) throws Exception {
         int res =0;
         Optional<UserEntity> rEntity = userRepository.findByUserIdAndPassword(CmmUtil.nvl(userId), CmmUtil.nvl(password));
         if (rEntity.isPresent()) {
@@ -140,11 +154,6 @@ public class UserService implements IUserService {
     }
 
 
-//    @Override
-//    @Transactional(rollbackOn = Exception.class)
-//    public int UserMailCheck(String Email) throws Exception {
-//        return 0;
-//    }
 
 
 

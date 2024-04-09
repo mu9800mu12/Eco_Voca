@@ -17,12 +17,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
-@Setter
+@Getter
 @Entity
 @Table(name = "USER_INFO")
 @NoArgsConstructor
         //(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor
 public class UserEntity {
 

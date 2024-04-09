@@ -4,6 +4,7 @@ import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IMailService;
 import com.voca.eco.app.service.IUserService;
+import com.voca.eco.app.service.impl.UserService;
 import com.voca.eco.common.util.CmmUtil;
 import com.voca.eco.common.util.EncryptUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,13 +30,6 @@ public class UserController {
 
     private final IMailService mailService;
 
-    @GetMapping(value = "index")
-    public String index() {
-
-        log.info(this.getClass().getName() + "index Start And End!");
-
-        return "html/index";
-    }
 
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
@@ -46,13 +41,30 @@ public class UserController {
     }
 
     @ResponseBody
+    @PostMapping(value = "getUserId")
+    public UserDTO FindByUserId(HttpServletRequest request) throws Exception {
+
+        String email = CmmUtil.nvl(request.getParameter("email"));
+        String userName = CmmUtil.nvl(request.getParameter("userName"));
+
+        log.info("email :" +email);
+        log.info("userName :" +userName);
+
+        UserDTO rDTO = userService.getUserId(userName,email);
+
+        //json.userId
+
+        return rDTO;
+    }
+
+    @ResponseBody
     @PostMapping(value = "UserIdExists")
     public int UserIdExists(HttpServletRequest request) throws Exception {
 
         String userId = CmmUtil.nvl(request.getParameter("userId"));
         log.info("userId" + userId);
 
-        int existsYn = userService.UserIdExists(userId);
+        int existsYn = userService.userIdExists(userId);
 
         return existsYn;
 
@@ -66,7 +78,7 @@ public class UserController {
         log.info(this.getClass().getName() + "이메일 컨트롤러임 ");
 
         //UserDTO pDTO = UserDTO.builder().userId(userId).build();
-        int existsYn =userService.UserEmailExists(email);
+        int existsYn =userService.userEmailExists(email);
 
 
         return existsYn;
@@ -82,8 +94,8 @@ public class UserController {
         log.info(this.getClass().getName() + " 닉네임  컨트롤러임 ");
 
 
-        int existsYn =userService.NickNameExists(nickName);
-        log.info("닉네임 컨ㅌ롤러 Yn확인 하는 중입니다 값은 : " +existsYn);
+        int existsYn =userService.nickNameExists(nickName);
+        log.info("닉네임 컨트롤러 Yn확인 하는 중입니다 값은 : " +existsYn);
         return existsYn;
 
     }
@@ -172,7 +184,7 @@ public class UserController {
         log.info("userId" + userId);
         log.info("password" + password);
 
-        int res = userService.UserLogin(userId, password);
+        int res = userService.userLogin(userId, password);
 
         log.info("res :" + res);
 
@@ -217,22 +229,23 @@ public class UserController {
         log.info(this.getClass().getName() + ".getEmailExists Start!");
 
         int res = 0;
-        String msg ="";
+        String msg = "";
 
         String email = CmmUtil.nvl(request.getParameter("email")); // 회원아이디
 
         log.info("email : " + email);
 
-        int existsYn = userService.UserEmailExists(email);
+        int existsYn = userService.userEmailExists(email);
 
-        log.info("나는 0이어야 참인 Yn입니다 값은 : "+existsYn);
+        log.info("나는 1이면 이메일 중복인 Yn입니다 값은 : " + existsYn);
 
         //이메일이 DB에 없어서 참
-        if(existsYn == 0){
+        int authNumber = 0;
+        if (existsYn == 0) {
             log.info("인증번호 생성 시작");
 
             // 6자리 랜덤 숫자 생성하기
-            int authNumber = ThreadLocalRandom.current().nextInt(100000, 10000000);
+            authNumber = ThreadLocalRandom.current().nextInt(100000, 10000000);
 
             log.info("authNumber : " + authNumber);
 
@@ -241,7 +254,7 @@ public class UserController {
 
             res = mailService.doSendMail(email, title, contents);
 
-            if(res == 0) {
+            if (res == 0) {
 
                 msg = "메일 발송에 실패하였습니다. 메일을 다시 확인해주세요";
 
@@ -262,6 +275,7 @@ public class UserController {
         return MsgDTO.builder()
                 .msg(msg)
                 .result(res)
+                .authNumber(authNumber)
                 .build();
     }
 
