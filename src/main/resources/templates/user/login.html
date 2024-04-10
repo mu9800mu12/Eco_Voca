@@ -1,111 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>로그인 화면</title>
-<link rel="stylesheet" href="/css/login.css"/>
-<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="/js/login.js"></script>
+  <meta charset="UTF-8">
+  <title>로그인 화면</title>
+  <link rel="stylesheet" href="/css/login.css"/>
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="/js/login.js"></script>
+  <script type="text/javascript">
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+      // 회원가입
+      $("#btnUserReg").on("click", function () { //버튼 클릭 시 발생 이벤트
+        location.href = "userRegForm";
+      });
 
-    <script type="text/javascript">
+      // 메인화면
+      $("#btnMain").on("click", function () {
+        location.href = "/main";
+      });
 
-        // HTML로딩이 완료되고,  실행됨
-        $(document).ready(function () {
+      // 로그인
+      $("#btnLogin").on("click", function () {
+        let f = document.getElementById("f"); //form 태그
 
-            // 회원가입
-            $("#btnUserReg").on("click", function () { //버튼 클릭 시 발생 이벤트
-                location.href = "userRegForm";
-            })
+        if (f.userId.value === "") {
+          alert("아이디를 입력하세요.");
+          f.userId.focus();
+          return;
+        }
 
-            // 메인화면
-            $("#btnMain").on("click", function (){
-                location.href = "/html/index.html";
-            })
+        if (f.password.value === "") {
+          alert("비밀번호를 입력하세요.");
+          f.password.focus();
+          return;
+        }
 
-            // 로그인
-            $("#btnLogin").on("click", function (){
-                let f =document.getElementById("f"); //form 태그
+        // Ajax 호출해서 로그인하기
+        $.ajax({
+          url: "/user/loginProc",
+          type: "post",               //전송방식
+          dataType: "JSON",           //전송 결과 JSON으로 받기
+          data: $("#f").serialize(),  // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경
+          success: function (json) {
+            if (json.result === 1) { //로그인 성공
+              alert(json.msg); //메시지띄우기
+              location.href = "/user/loginSuccess"; //로그인 성공페이지 이동
+            } else {                //로그인 실패
+              alert(json.msg);    //메시지 띄우기
+              $("#userId").focus();   //아이디 입력 항목에 마우스 커서 이동
+            }
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="wrapper">
+  <div class="container">
+    <div class="sign-up-container">
 
-                if (f.userId.value ===""){
-                    alert("아이디를 입력하세요.");
-                    f.userId.focus();
-                    return;
-                }
-
-                if(f.password.value ==="") {
-                    alert("비밀번호를 입력하세요.");
-                    f.password.focus();
-                    return;
-
-                }
-
-                // Ajax 호출해서 로그인하기
-                $.ajax({
-                        url: "/user/loginProc",
-                        type: "post",               //전송방식
-                        dataType: "JSON",           //전송 결과 JSON으로 받기
-                        data: $("#f").serialize(),  // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경
-                        success: function (json) {
-
-                            if (json.result === 1) { //로그인 성공
-                                alert(json.msg); //메시지띄우기
-                                location.href = "/user/loginSuccess"; //로그인 성공페이지 이동
-
-                            } else {                //로그인 실패
-                                alert(json.msg);    //메시지 띄우기
-                                $("#userId").focus();   //아이디 입력 항목에 마우스 커서 이동
-                            }
-                        }
-                    }
-                )
-            })
-        })
-
-    </script>
-
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>KidKinder - Kindergarten Website Template</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-        <meta content="Free HTML Templates" name="keywords" />
-        <meta content="Free HTML Templates" name="description" />
-        <link href="/css/login.css" rel="stylesheet" />
-    </head>
-
-
-
-    <body>
-    <div class="wrapper">
-        <div class="container">
-            <div class="sign-up-container">
-
-            </div>
-            <div class="sign-in-container">
-                <form>
-                    <h1>로그인</h1>
-
-                    <span>Challenge! To my world</span>
-                    <input type="text" placeholder="아이디">
-                    <input type="password" placeholder="비밀번호">
-                    <br>
-                    <button class="btnLogin">로그인</button>
-                    <br>
-                    <div><a href="/user/findId" style="font-size: 10px; margin-right: 7px">아이디 찾기</a>
-                    <a href=/user/findPassword style="font-size: 10px; margin-left: 15px">비밀번호 찾기</a></div>
-                    <br>
-                </form>
-            </div>
-            <div class="overlay-container">
-
-                <div class="overlay-right">
-                    <h1>계정을 원하시나요?</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button id="btnUserReg" class="overlay_btn">회원가입</button>
-                </div>
-            </div>
-        </div>
     </div>
-    </body>
-    </html>
+    <div class="sign-in-container">
+      <form id="f">
+        <h1>로그인</h1>
+        <span>Challenge! To my world</span>
+        <input type="text" name="userId" id="userId" style="width:90%" placeholder="아이디"/>
+        <input type="password" name="password" id="password" style="width:90%" placeholder="비밀번호">
+        <br>
+        <button class="btnLogin" id="btnLogin" type="button">로그인</button>
+        <br>
+        <div>
+          <a href="/user/findId" style="font-size: 10px; margin-right: 7px">아이디 찾기</a>
+          <a href="/user/findPassword" style="font-size: 10px; margin-left: 15px">비밀번호 찾기</a>
+        </div>
+        <br>
+      </form>
+    </div>
+    <div class="overlay-container">
+      <div class="overlay-right">
+        <h1>계정을 원하시나요?</h1>
+        <p>Enter your personal details and start journey with us</p>
+        <button id="btnUserReg" class="overlay_btn">회원가입</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

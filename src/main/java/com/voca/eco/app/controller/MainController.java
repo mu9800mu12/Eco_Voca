@@ -15,7 +15,7 @@ public class MainController {
     @GetMapping(value = "index")
     public String index() {
 
-        log.info(this.getClass().getName() + "index Start And End!");
+        log.info(this.getClass().getName() + ": index Start And End!");
 
         return "/index";
     }

@@ -40,9 +40,16 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "findId")
+    public String getUserId1() {
+
+        log.info(this.getClass().getName() + "user/UserId Start and End");
+
+        return "user/findId";
+    }
     @ResponseBody
     @PostMapping(value = "getUserId")
-    public UserDTO FindByUserId(HttpServletRequest request) throws Exception {
+    public UserDTO getUserId(HttpServletRequest request) throws Exception {
 
         String email = CmmUtil.nvl(request.getParameter("email"));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
