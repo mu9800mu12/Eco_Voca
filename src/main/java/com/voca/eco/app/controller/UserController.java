@@ -40,6 +40,15 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "loginEx")
+    public String loginEx() {
+
+        log.info(this.getClass().getName() + "user/RegForm Start and End");
+
+        return "user/loginEx";
+
+    }
+
     @GetMapping(value = "findId")
     public String getUserId1() {
 

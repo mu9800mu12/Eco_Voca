@@ -291,29 +291,28 @@
   <style>
     .divTableCell {
       display: flex;
-      align-items: center; /* 수직 가운데 정렬 */
+      align-items: center; / 수직 가운데 정렬 /
     }
   </style>
 
   <style>
     h2 {
-      text-align: center; /* 가운데 정렬 */
-      font-weight: bold; /* 굵은 글꼴 */
-      margin-top: 20px; /* 위쪽 여백 추가 */
-      margin-bottom: 20px; /* 아래쪽 여백 추가 */
+      text-align: center; / 가운데 정렬 /
+      font-weight: bold; / 굵은 글꼴 /
+      margin-top: 20px; / 위쪽 여백 추가 /
+      margin-bottom: 20px; / 아래쪽 여백 추가 /
     }
   </style>
 
 </head>
-<body>
-<h2>회원 가입하기</h2>
-<hr/>
+<body style="background: #1F262D;">
+<h2 style="color: #FFAB00">회원 가입하기</h2>
 <br/>
 <form id="f">
   <div class="divTable minimalistBlack">
     <div class="divTableBody">
       <div class="divTableRow">
-        <div class="divTableCell">* 아이디
+        <div class="divTableCell"> 아이디
         </div>
         <div class="divTableCell">
           <input type="text" name="userId" style="width:80%" placeholder="아이디"/>
@@ -321,37 +320,37 @@
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 이름
+        <div class="divTableCell"> 이름
         </div>
         <div class="divTableCell">
           <input type="text" name="userName" style="width:80%" placeholder="이름"/>
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 비밀번호
+        <div class="divTableCell"> 비밀번호
         </div>
         <div class="divTableCell">
           <input type="password" name="password" style="width:80%" placeholder="비밀번호"/>
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 비밀번호 확인
+        <div class="divTableCell"> 비밀번호 확인
         </div>
         <div class="divTableCell">
           <input type="password" name="password2" style="width:80%" placeholder="비밀번호 확인"/>
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 이메일
+        <div class="divTableCell"> 이메일
         </div>
         <div class="divTableCell">
-          <input type="email" name="email" style="width:80%" placeholder="email"/>
-          <input type="text" name="authNumber" style="width: 30%" placeholder="인증번호">
+          <input type="email" name="email" style="width:55%" placeholder="email"/>
+          <input type="text" name="authNumber"  style="width: 30%; margin-left: 10px;" placeholder="인증번호">
           <button id="btnSendMail" type="button">중복확인</button>
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 주소
+        <div class="divTableCell"> 주소
         </div>
         <div class="divTableCell">
           <input type="text" name="address" style="width:80%" placeholder="주소"/>
@@ -359,7 +358,7 @@
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 닉네임
+        <div class="divTableCell"> 닉네임
         </div>
         <div class="divTableCell">
           <input type="text" name="nickName" style="width:80%" placeholder="닉네임"/>
@@ -367,7 +366,7 @@
         </div>
       </div>
       <div class="divTableRow">
-        <div class="divTableCell">* 생년월일
+        <div class="divTableCell"> 생년월일
         </div>
         <div class="divTableCell">
           <input type="date" name="birthday" style="width:80%"/>
