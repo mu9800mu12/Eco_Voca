@@ -24,9 +24,9 @@ public interface IUserService {
                          final String email) throws Exception;
 
     // 비밀번호 찾기
-    UserDTO getPassword(final String userId,
-                            final String userName,
-                            final String email) throws Exception;
+    UserDTO getUserPassword(final String userName,
+                            final String email,
+                            final String userId) throws Exception;
 
     // 이메일 인증
 
@@ -37,8 +37,7 @@ public interface IUserService {
 
 
     // 비밀번호 변경
-    int updatePassword(final String userId,
-                        final String password) throws Exception;
+    void updatePassword(final String password) throws Exception;
 
     // 회원 삭제
 

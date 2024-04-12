@@ -66,30 +66,55 @@ public class UserService implements IUserService {
 
         log.info(this.getClass().getName() + "아이디 찾기 서비스 시작");
 
-        Optional<UserEntity> rEntity = userRepository.findByEmailAndUserName(userName, email);
+        Optional<UserEntity> rEntity = userRepository.findByEmailAndUserName(email, userName);
+        log.info("rEntity : " + rEntity);
 
         if (rEntity.isPresent()){
-        rDTO = new ObjectMapper().convertValue(rEntity,
+        rDTO = new ObjectMapper().convertValue(rEntity.get(),
                 UserDTO.class);
+
+            log.info(this.getClass().getName() + "나는 날아가는 r dTO 서비스 입니다" + rDTO);
 
         } else {
             rDTO = UserDTO.builder().build();
+
+            log.info(this.getClass().getName() + "나는 날아가는 r dTO 서비스 입니다" + rDTO);
+        }
+
+        return rDTO;
+    }
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public UserDTO getUserPassword(
+            String userName,
+            String email,
+            String userId) throws Exception {
+
+        UserDTO rDTO = null;
+
+        log.info(this.getClass().getName() + "비밀번호 찾기 서비스 시작");
+
+        Optional<UserEntity> rEntity = userRepository.findByUserNameAndEmailAndUserId(userName, email, userId);
+
+        log.info("rEntity : " + rEntity);
+
+        if (rEntity.isPresent()){
+            rDTO = new ObjectMapper().convertValue(rEntity.get(),
+                    UserDTO.class);
+
+            log.info(this.getClass().getName() + "나는 잠시동안만 현생에 머무는 r dTO 서비스 입니다" + rDTO);
+
+        } else {
+            rDTO = UserDTO.builder().build();
+
+            log.info(this.getClass().getName() + "나는 잠시동안만 현생에 머무는 r dTO 서비스 입니다" + rDTO);
         }
 
         return rDTO;
     }
 
 
-    @Override
-    @Transactional(rollbackOn = Exception.class)
-    public UserDTO getPassword(
-            String userId,
-            String userName,
-            String email)
-            throws Exception {
 
-        return null;
-    }
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int userLogin(String userId, String password) throws Exception {
@@ -105,9 +130,14 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public int updatePassword(String userId, String password) throws Exception {
+    public void updatePassword(String password) throws Exception {
+        log.info(this.getClass().getName() + ".newPasswordProc Start! 시~작 합니다~~!");
 
-        return 0;
+        // 비밀번호 재설정
+        userRepository.updateByPassword(password);
+
+        log.info(this.getClass().getName() + ".newPasswordProc End! 끝입니다.");
+
     }
     @Override
     @Transactional(rollbackOn = Exception.class)

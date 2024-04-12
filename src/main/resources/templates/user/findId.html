@@ -2,67 +2,111 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>아이디 찾기</title>
-  <link rel="stylesheet" href="/css/login.css"/>
+  <link rel="stylesheet" href="/css/findId.css"/>
   <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+
+      // 로그인
+      $("#btnMain").on("click", function () {
+        location.href = "/main";
+      });
+
+      // 아이디찾기
+      $("#btnFindId").on("click", function () {
+        let f = document.getElementById("f"); //form 태그
+
+        if (f.userName.value === "") {
+          alert("이름를 입력하세요.");
+          f.userName.focus();
+          return;
+        }
+
+        if (f.email.value === "") {
+          alert("이메일를 입력하세요.");
+          f.email.focus();
+          return;
+        }
+
+        // Ajax 호출해서 로그인하기
+        $.ajax({
+          url: "/user/getUserId",
+          type: "post",               //전송방식
+          dataType: "JSON",           //전송 결과 JSON으로 받기
+          data: $("#f").serialize(),  // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경
+          success: function (json) {
+            if (json.userId === undefined) { //아이디 찾기 실패
+              alert("입력하는 정보와 일치하는 아이디가 없습니다."); //메시지띄우기
+
+            } else {
+              alert("회원님의 아이디는 : " + json.userId + " 입니다");    //메시지 띄우기
+              $("#userId").focus();
+              location.href = "/user/login";
+
+            }
+          }
+        });
+      });
+    });
+
+  </script>
 </head>
+
+<style>
+  .divTableCell {
+    display: flex;
+    align-items: center;
+  / 수직 가운데 정렬 /
+  }
+</style>
+
+<style>
+  h2 {
+    text-align: center;
+  / 가운데 정렬 / font-weight: bold;
+  / 굵은 글꼴 / margin-top: 20 px;
+  / 위쪽 여백 추가 / margin-bottom: 20 px;
+  / 아래쪽 여백 추가 /
+  }
+</style>
+
+
 <body>
+<h2>아이디 찾기</h2>
+<br/>
+<form id="f">
+  <div class="divTable minimalistBlack">
+    <div class="divTableBody">
+      <div class="divTableRow">
+
+      </div>
+      <div class="divTableRow">
+        <div class="divTableCell"> 이름
+        </div>
+        <div class="divTableCell">
+          <input type="text" name="userName" style="width:100%" placeholder="이름"/>
+        </div>
+      </div>
+
+      <div class="divTableRow">
+        <div class="divTableCell"> 이메일
+        </div>
+        <div class="divTableCell">
+          <input type="email" name="email" style="width:100%" placeholder="email"/>
+<!--          <input type="text" name="authNumber" style="width: 30%; margin-left: 10px;"-->
+<!--                 placeholder="인증번호">-->
+<!--          <button id="btnSendMail" type="button">확인</button>-->
+        </div>
+      </div>
 
 
-
-
-
-
-
-<!-- 로그인 페이지 -->
-<!-- 상단바 부분 -->
-<div id="header"></div>
-<br>
-<br>
-<div class="card mb-3 mx-auto" style="width: 90%; font-family: 'Noto Sans KR', sans-serif;">
-  <br/>
-
-  <div class="card-body mx-auto">
-    <h1 style="font-family: 'Do Hyeon', sans-serif;">아이디 찾기</h1>
+      <input type="hidden" name="sinceDay"/>
+    </div>
   </div>
-  <hr/>
-
-  <h6 style="text-align: center">* 회원정보에 등록한 정보를 입력해주세요.</h6>
-  <form id="f" class="mx-auto" style="width:80%;" >
-
-    <div class="form-group">
-      <div class="form-floating mb-3">
-        <label for="userName">이름</label>
-        <input type="text" class="form-control" name="userName" id="userName" style="width:95%" placeholder="이름">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="form-floating mb-3">
-        <label for="email">이메일</label>
-        <input type="email" class="form-control" name="email" id="email" style="width:95%" placeholder="email">
-      </div>
-    </div>
-
-    <br/>
-    <br/>
-
-    <!-- 아이디 찾기 버튼 영역 -->
-    <div class="d-grid gap-2">
-      <button id="btnSend" type="button" class="btn btn-lg btn-primary">아이디 찾기</button>
-    </div>
-    <br/>
-
-    <div class="row" style="text-align: center">
-      <div class="mx-auto">
-        <button id="btnSignUp" type="button">회원가입</button>
-      </div>
-      <div class="mx-auto">
-        <button id="btnFindPassword" type="button">비밀번호 찾기</button>
-        <button id="btnLogin" type="button">로그인</button>
-      </div>
-    </div>
-  </form>
-</div>
+  <div>
+    <button id="btnFindId" name="btnFindId" type="button">아이디 찾기</button>
+  </div>
+</form>
 </body>
 </html>

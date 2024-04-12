@@ -1,7 +1,6 @@
 package com.voca.eco.app.domain;
 
 import com.voca.eco.app.domain.Entity.UserEntity;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -24,8 +23,10 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     Optional<UserEntity> findByEmailAndUserName(String email, String userName);
 
+    Optional<UserEntity> findByUserNameAndEmailAndUserId(String userName, String email, String userId);
 
 
+    void updateByPassword(String password);
 
 
 

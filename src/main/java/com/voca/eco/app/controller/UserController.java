@@ -11,9 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,36 +42,115 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "loginEx")
-    public String loginEx() {
-
-        log.info(this.getClass().getName() + "user/RegForm Start and End");
-
-        return "user/loginEx";
-
-    }
-
     @GetMapping(value = "findId")
-    public String getUserId1() {
+    public String findUserId() {
 
         log.info(this.getClass().getName() + "user/UserId Start and End");
 
         return "user/findId";
     }
+
+    @GetMapping(value = "findPassword")
+    public String getUserPasswordpage() {
+
+        log.info(this.getClass().getName() + "user/UserId Start and End");
+
+        return "user/findPassword";
+    }
+
+    @GetMapping(value = "findUpdatePassword")
+    public String getUserUpdatePassword() {
+
+        log.info(this.getClass().getName() + "user/UserId Start and End");
+
+        return "user/findUpdatePassword";
+    }
+
+
+    /**
+     * 비밀번호 찾기 로직 수행
+     * <p>
+     * 아이디, 이름, 이메일 일치하면, 비밀번호 재발급 화면 이동
+     */
+    @PostMapping(value = "newPasswordProc")
+    public String newPasswordProc(HttpServletRequest request, ModelMap model, HttpSession session)
+            throws Exception {
+
+        log.info(this.getClass().getName() + ".user/newPasswordProc Start!");
+
+        String msg = ""; // 웹에 보여줄 메시지
+
+        // 정상적인 접근인지 체크
+        String newPassword = CmmUtil.nvl((String) session.getAttribute("NEW_PASSWORD"));
+
+        if (newPassword.length() > 0) { //정상 접근
+
+            String password = CmmUtil.nvl(request.getParameter("password")); // 신규 비밀번호
+
+            log.info("password : " + password);
+
+            UserDTO pDTO = UserDTO.builder()
+                    .userId(newPassword)
+                    .password(EncryptUtil.encHashSHA256(password))
+                    .build();
+
+            userService.updatePassword(password);
+
+            // 비밀번호 재생성하는 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
+            session.setAttribute("NEW_PASSWORD", "");
+            session.removeAttribute("NEW_PASSWORD");
+
+            msg = "비밀번호가 재설정되었습니다.";
+
+        } else { // 비정상 접근
+            msg = "비정상 접근입니다.";
+        }
+
+        model.addAttribute("msg", msg);
+
+        log.info(this.getClass().getName() + ".user/newPasswordProc End!");
+
+        return "user/newPasswordResult";
+
+    }
+
+    @ResponseBody
+    @PostMapping(value = "getUserPassword")
+    public UserDTO getUserPassword(HttpServletRequest request) throws Exception {
+
+        String userId = CmmUtil.nvl(request.getParameter("userId"));
+        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+        String userName = CmmUtil.nvl(request.getParameter("userName"));
+
+        log.info("userId :" + userId);
+        log.info("email :" + email);
+        log.info("userName :" + userName);
+
+        UserDTO rDTO = userService.getUserPassword(userName, email, userId);
+
+        log.info(this.getClass().getName() + "rDTO 내용을 담은 나는 : " + rDTO);
+        //json.userId
+
+        // rDTO에 이메일과 이름으로 찾은 회원정보 전체가 담겨 있음
+        return rDTO;
+    }
+
     @ResponseBody
     @PostMapping(value = "getUserId")
     public UserDTO getUserId(HttpServletRequest request) throws Exception {
 
-        String email = CmmUtil.nvl(request.getParameter("email"));
+        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
-        log.info("email :" +email);
-        log.info("userName :" +userName);
+        log.info("email :" + email);
+        log.info("userName :" + userName);
 
-        UserDTO rDTO = userService.getUserId(userName,email);
+        UserDTO rDTO = userService.getUserId(userName, email);
 
+        log.info(this.getClass().getName() + "rDTO 내용을 담은 나는 : " + rDTO);
         //json.userId
 
+        // rDTO에 이메일과 이름으로 찾은 회원정보 전체가 담겨 있음
         return rDTO;
     }
 
@@ -85,6 +166,7 @@ public class UserController {
         return existsYn;
 
     }
+
     @ResponseBody
     @PostMapping(value = "UserEmailExists")
     public int UserEmailExists(HttpServletRequest request) throws Exception {
@@ -94,8 +176,7 @@ public class UserController {
         log.info(this.getClass().getName() + "이메일 컨트롤러임 ");
 
         //UserDTO pDTO = UserDTO.builder().userId(userId).build();
-        int existsYn =userService.userEmailExists(email);
-
+        int existsYn = userService.userEmailExists(email);
 
         return existsYn;
 
@@ -109,9 +190,8 @@ public class UserController {
         log.info("nickName" + nickName);
         log.info(this.getClass().getName() + " 닉네임  컨트롤러임 ");
 
-
-        int existsYn =userService.nickNameExists(nickName);
-        log.info("닉네임 컨트롤러 Yn확인 하는 중입니다 값은 : " +existsYn);
+        int existsYn = userService.nickNameExists(nickName);
+        log.info("닉네임 컨트롤러 Yn확인 하는 중입니다 값은 : " + existsYn);
         return existsYn;
 
     }
@@ -151,7 +231,7 @@ public class UserController {
                 .birthday(birthday)
                 .address(address)
                 .build();
-        log.info(this.getClass().getName()+ " 서비스로 넘어가기 전에");
+        log.info(this.getClass().getName() + " 서비스로 넘어가기 전에");
         int res = userService.createUser(pDTO);
 
         log.info("회원가입 결과(res) :" + res);
@@ -235,8 +315,7 @@ public class UserController {
     }
 
     /**
-     * 회원 가입 전 이메일 중복체크하기(Ajax를 통해 입력한 아이디 정보 받음)
-     * 유효한 이메일인 확인하기 위해 입력된 이메일에 인증번호 포함하여 메일 발송
+     * 회원 가입 전 이메일 중복체크하기(Ajax를 통해 입력한 아이디 정보 받음) 유효한 이메일인 확인하기 위해 입력된 이메일에 인증번호 포함하여 메일 발송
      */
     @ResponseBody
     @PostMapping(value = "getEmailExists")
