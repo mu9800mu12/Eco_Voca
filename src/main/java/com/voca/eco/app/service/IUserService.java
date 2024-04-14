@@ -37,7 +37,8 @@ public interface IUserService {
 
 
     // 비밀번호 변경
-    void updatePassword(final String password) throws Exception;
+    void updatePassword(final String password,
+                        final String userId) throws Exception;
 
     // 회원 삭제
 

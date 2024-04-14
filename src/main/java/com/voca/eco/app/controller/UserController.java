@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @RequestMapping(value = "/user")
@@ -66,57 +67,12 @@ public class UserController {
         return "user/findUpdatePassword";
     }
 
-
-    /**
-     * 비밀번호 찾기 로직 수행
-     * <p>
-     * 아이디, 이름, 이메일 일치하면, 비밀번호 재발급 화면 이동
+    /*
+     * 비밀번호 찾기 로직
      */
-    @PostMapping(value = "newPasswordProc")
-    public String newPasswordProc(HttpServletRequest request, ModelMap model, HttpSession session)
-            throws Exception {
-
-        log.info(this.getClass().getName() + ".user/newPasswordProc Start!");
-
-        String msg = ""; // 웹에 보여줄 메시지
-
-        // 정상적인 접근인지 체크
-        String newPassword = CmmUtil.nvl((String) session.getAttribute("NEW_PASSWORD"));
-
-        if (newPassword.length() > 0) { //정상 접근
-
-            String password = CmmUtil.nvl(request.getParameter("password")); // 신규 비밀번호
-
-            log.info("password : " + password);
-
-            UserDTO pDTO = UserDTO.builder()
-                    .userId(newPassword)
-                    .password(EncryptUtil.encHashSHA256(password))
-                    .build();
-
-            userService.updatePassword(password);
-
-            // 비밀번호 재생성하는 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
-            session.setAttribute("NEW_PASSWORD", "");
-            session.removeAttribute("NEW_PASSWORD");
-
-            msg = "비밀번호가 재설정되었습니다.";
-
-        } else { // 비정상 접근
-            msg = "비정상 접근입니다.";
-        }
-
-        model.addAttribute("msg", msg);
-
-        log.info(this.getClass().getName() + ".user/newPasswordProc End!");
-
-        return "user/newPasswordResult";
-
-    }
-
     @ResponseBody
     @PostMapping(value = "getUserPassword")
-    public UserDTO getUserPassword(HttpServletRequest request) throws Exception {
+    public UserDTO getUserPassword(HttpServletRequest request, HttpSession session) throws Exception {
 
         String userId = CmmUtil.nvl(request.getParameter("userId"));
         String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
@@ -129,12 +85,48 @@ public class UserController {
         UserDTO rDTO = userService.getUserPassword(userName, email, userId);
 
         log.info(this.getClass().getName() + "rDTO 내용을 담은 나는 : " + rDTO);
-        //json.userId
+
+        session.setAttribute("NEW_PASSWORD", userId);
 
         // rDTO에 이메일과 이름으로 찾은 회원정보 전체가 담겨 있음
         return rDTO;
     }
+    /**
+     * 비밀번호 업데이트
+     */
+    /**
+     * 비밀번호 업데이트
+     */
+    @PostMapping(value = "updatePassword")
+    public String updatePassword(HttpSession session, HttpServletRequest request) throws Exception {
 
+        log.info(" 비밀번호 업데이트 시~~작");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String password = CmmUtil.nvl(EncryptUtil.encHashSHA256(request.getParameter("password")));
+
+        log.info("userId : " + userId);
+        log.info("password : " + password);
+
+        int res = userService.userIdExists(userId);
+        String msg = "";
+
+        if (res == 1) {
+            userService.updatePassword(userId,password);
+        } else {
+//            throw new Exception("비밀번호 변경에 실패하였습니다.");
+        }
+
+        return "user/findUpdatePassword";
+//        return MsgDTO.builder()
+//                .result(res)
+//                .msg(msg)
+//                .build();
+    }
+
+    /**
+     * 아이디 찾기
+     */
     @ResponseBody
     @PostMapping(value = "getUserId")
     public UserDTO getUserId(HttpServletRequest request) throws Exception {

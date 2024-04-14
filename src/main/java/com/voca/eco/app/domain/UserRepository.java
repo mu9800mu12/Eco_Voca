@@ -1,8 +1,12 @@
 package com.voca.eco.app.domain;
 
 import com.voca.eco.app.domain.Entity.UserEntity;
+import com.voca.eco.app.dto.UserDTO;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 
@@ -20,13 +24,15 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     Optional<UserEntity> findAllByUserId(String userId);
 
-
+    // 아이디 찾기
     Optional<UserEntity> findByEmailAndUserName(String email, String userName);
-
+    // 비밀번호 찾기
     Optional<UserEntity> findByUserNameAndEmailAndUserId(String userName, String email, String userId);
 
-
-    void updateByPassword(String password);
+    // 비밀번호 업데이트
+    @Modifying
+    @Query("UPDATE UserEntity u SET u.password = :newPassword WHERE u.userId = :userId")
+    void updatePassword(@Param("userId") String userId, @Param("newPassword") String newPassword);
 
 
 

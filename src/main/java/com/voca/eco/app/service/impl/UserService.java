@@ -7,6 +7,7 @@ import com.voca.eco.app.domain.UserRepository;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IUserService;
 import com.voca.eco.common.util.CmmUtil;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,9 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
 
 
+    /*
+     * 닉네임 중복확인
+     */
     @Override
     public int nickNameExists(String nickName) throws Exception {
         Optional<UserEntity> rEntity = userRepository.findByNickName(nickName);
@@ -31,6 +35,9 @@ public class UserService implements IUserService {
         return existsYn;
     }
 
+    /*
+     * 아이디 중복확인
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int userIdExists(String userId) throws Exception {
@@ -40,7 +47,9 @@ public class UserService implements IUserService {
         log.info(this.getClass().getName() + "userIdExists End!");
         return existsYn;
     }
-
+    /*
+     * 이메일 중복확인
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int userEmailExists(String email) throws Exception {
@@ -56,6 +65,9 @@ public class UserService implements IUserService {
         return existsYn;
     }
 
+    /*
+     * 아이디 찾기
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UserDTO getUserId(
@@ -83,6 +95,9 @@ public class UserService implements IUserService {
 
         return rDTO;
     }
+    /*
+     * 비밀번호 찾기
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UserDTO getUserPassword(
@@ -112,12 +127,12 @@ public class UserService implements IUserService {
 
         return rDTO;
     }
-
-
-
+    /*
+     * 로그인 로직
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public int userLogin(String userId, String password) throws Exception {
+    public int userLogin(String userId, String password)throws Exception {
         int res =0;
         Optional<UserEntity> rEntity = userRepository.findByUserIdAndPassword(CmmUtil.nvl(userId), CmmUtil.nvl(password));
         if (rEntity.isPresent()) {
@@ -126,19 +141,32 @@ public class UserService implements IUserService {
         log.info(this.getClass().getName() + "userLogin");
         return res;
     }
-
-
+    /*
+     * 비밀번호 찾기 및 수정 로직
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void updatePassword(String password) throws Exception {
+    public void updatePassword(String userId,
+                                String password) throws Exception {
         log.info(this.getClass().getName() + ".newPasswordProc Start! 시~작 합니다~~!");
 
-        // 비밀번호 재설정
-        userRepository.updateByPassword(password);
+            userRepository.updatePassword(userId, password);
+//
+//        Optional<UserEntity> pEntity = userRepository.findByUserId(userId);
+//
+//        UserEntity rEntity = UserEntity.builder()
+//                .userId(userId)
+//                .password(password)
+//                .build();
+//
+//        userRepository.save(rEntity);
 
         log.info(this.getClass().getName() + ".newPasswordProc End! 끝입니다.");
 
     }
+    /*
+     * 회원가입 로직
+     */
     @Override
     @Transactional(rollbackOn = Exception.class)
     public int createUser(UserDTO pDTO) throws Exception{
