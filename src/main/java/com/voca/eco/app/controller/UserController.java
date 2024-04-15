@@ -34,6 +34,8 @@ public class UserController {
     private final IMailService mailService;
 
 
+
+
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
 
@@ -91,9 +93,6 @@ public class UserController {
         // rDTO에 이메일과 이름으로 찾은 회원정보 전체가 담겨 있음
         return rDTO;
     }
-    /**
-     * 비밀번호 업데이트
-     */
     /**
      * 비밀번호 업데이트
      */
@@ -366,5 +365,32 @@ public class UserController {
                 .build();
     }
 
+
+    @GetMapping(value = "myPageIndex")
+    public String myPageIndex() {
+
+        log.info(this.getClass().getName() + "myPageIndex 시작");
+
+        return "myPage/myPageIndex";
+
+    }
+
+    @GetMapping(value = "readMyPage")
+    public String readMyPage() {
+
+        log.info(this.getClass().getName() + "readMyPage");
+
+        return "myPage/readMyPage";
+
+    }
+
+    @GetMapping(value = "updateMyPage")
+    public String updateMyPage() {
+
+        log.info(this.getClass().getName() + "updateMyPage 시작");
+
+        return "myPage/updateMyPage";
+
+    }
 
 }
