@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -212,10 +213,34 @@ public class UserService implements IUserService {
     }
 
 
+    @Override
+    public UserDTO myPageIndex(String userId) throws Exception {
 
+        log.info(" 마이페이지 보고 시이이이이이잉작입니다~~~!!!");
 
+        UserDTO rDTO = null;
+
+        Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
+
+        rDTO = new ObjectMapper().convertValue(rEntity.get(),
+                UserDTO.class);
+
+        log.info(this.getClass().getName() + " rDTO 값이 잘 들어오는 확인하는 여기는 마이페이지 인덱스 보여주기" + rDTO);
+
+        return rDTO;
+    }
+
+    @Override
+    public void userDelete(String userId) throws Exception {
+
+        log.info(" 나는 회원을 탈퇴하는 서비스 입니다");
+
+        userRepository.deleteByUserId(userId);
+
+        log.info(" 나는 회원을 탈퇴하는 서비스 입니다 끝입니다 !!!!!!!!!!!");
 
     }
+}
 
  
 

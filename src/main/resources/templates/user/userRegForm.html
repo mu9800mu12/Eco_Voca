@@ -19,6 +19,9 @@
 
     let emailAuthNumber = 0;
 
+    // 이메일 정규식
+    let emailFormat = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
     // HTML로딩이 완료되고, 실행됨
     $(document).ready(function () {
       // let f = document.getElementById("f"); // form 태그
@@ -60,6 +63,13 @@
         f.email.focus();
         return;
       }
+
+      if (!emailFormat.test(f.email.value)) {
+        alert("올바른 이메일 형식으로 입력하세요.");
+        f.email.focus();
+        return;
+      }
+
       // Ajax 호출해서 회원가입하기
       $.ajax({
         url:"/user/getEmailExists",
@@ -109,43 +119,7 @@
       )
     }
 
-    // 이메일 중복 체크
-    function UserEmailExists(f) {
-      if (f.email.value === "") {
-        alert("이메일을 입력하세요.");
-        f.email.focus();
-        return;
-      }
 
-      // 이메일 올바른 형식작성
-      // function isValidEmail(ff){
-      //    if (ff.email.value === /^[^\s@]+@[^\s@]+\.[^\s@]+$/) {
-      //      alert("올바른 형식으로 작성하세요.");
-      //      ff.email.focus();
-      //      return;
-      //    }
-      // }
-
-      // Ajax 호출해서 이메일중복 검사하기
-      $.ajax({
-            url: "/user/UserEmailExists",
-            type: "post", // 전송방식은 Post
-            dataType: "JSON", // 전송 결과는 JSON으로 받기
-            data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-            success: function (json) { // 호출이 성공했다면..
-              if (json === 1) {
-                alert("이메일이 존재합니다 다른 이메일로 가입 바랍니다");
-                f.email.focus();
-              } else { //
-                alert(" 가입 가능한 이메일입니다");
-                emailCheck = 0;
-
-              }
-
-            }
-          }
-      )
-    }
 
     function NickNameExists(f) {
       if (f.nickName.value === "") {
@@ -258,7 +232,7 @@
         f.nickName.focus();
         return;
       }
-      if (f.authNumber.value === "") {
+           if (f.authNumber.value === "") {
         alert("이메일 인증번호를 입력하세요.");
         f.authNumber.focus();
         return;

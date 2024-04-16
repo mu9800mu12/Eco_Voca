@@ -21,7 +21,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     //로그인 시 아이디 비밀번호 조회
     Optional<UserEntity> findByUserIdAndPassword(String userId, String password);
 
-
     Optional<UserEntity> findAllByUserId(String userId);
 
     // 아이디 찾기
@@ -34,6 +33,8 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     @Query("UPDATE UserEntity u SET u.password = :newPassword WHERE u.userId = :userId")
     void updatePassword(@Param("userId") String userId, @Param("newPassword") String newPassword);
 
+    // 회원탈퇴하기
+    Optional<UserEntity> deleteByUserId(String userId);
 
 
 }

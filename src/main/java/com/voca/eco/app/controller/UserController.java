@@ -366,12 +366,15 @@ public class UserController {
     }
 
 
+    /*
+     * 마이페이지 보기
+     */
     @GetMapping(value = "myPageIndex")
-    public String myPageIndex() {
+    public String myPageIndex1() {
 
         log.info(this.getClass().getName() + "myPageIndex 시작");
 
-        return "myPage/myPageIndex";
+        return "user/myPageIndex";
 
     }
 
@@ -380,7 +383,7 @@ public class UserController {
 
         log.info(this.getClass().getName() + "readMyPage");
 
-        return "myPage/readMyPage";
+        return "user/readMyPage";
 
     }
 
@@ -389,7 +392,34 @@ public class UserController {
 
         log.info(this.getClass().getName() + "updateMyPage 시작");
 
-        return "myPage/updateMyPage";
+        return "user/updateMyPage";
+
+    }
+
+    /*
+     * 마이페이지 보여주기
+     */
+    @ResponseBody
+    @PostMapping(value = "myPageIndex")
+    public UserDTO myPageIndex(HttpSession session) throws Exception {
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        return userService.myPageIndex(userId);
+    }
+
+    /*
+     * 유저 삭제하기
+     */
+    @ResponseBody
+    @PostMapping(value = "deleteUser")
+    public void deleteUser(HttpSession session) throws Exception {
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        log.info("나는 유저를 삭제시키는 컨트롤러에 세션 아이디 값 입니다" + userId);
+
+        userService.userDelete(userId);
 
     }
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 탈퇴하기</title>
+  <link rel="stylesheet" href="/css/table.css"/>
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+      myPageIndex();
+    });
+    // 내 정보 가져오기
+    function myPageIndex() {
+
+      $.ajax({
+        url: "/user/myPageIndex",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+
+          $("#userId").val(json.userId)
+          $("#email").val(json.email)
+          $("#userName").val(json.userName)
+          $("#nickName").val(json.nickName)
+          $("#address").val(json.address)
+          $("#birthday").val(json.birthday)
+          $("#sinceDay").val(json.sinceDay)
+        }
+      })
+    }
+
+
+  </script>
+</head>
+<body>
+
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="userId" name="userId" disabled="">
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="email" class="form-control" id="email" name="email" disabled="">
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="userName" name="userName" disabled="">
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="address" name="address">
+  </div>
+</div>
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="birthday" name="birthday">
+  </div>
+</div>
+<div class="form-group">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="sinceDay" name="sinceDay">
+  </div>
+</div>
+
+</body>
+</html>

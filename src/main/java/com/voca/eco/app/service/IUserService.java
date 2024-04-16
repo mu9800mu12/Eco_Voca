@@ -40,7 +40,13 @@ public interface IUserService {
     void updatePassword(final String password,
                         final String userId) throws Exception;
 
+    // 마이페이지 보기
+    UserDTO myPageIndex(String userId) throws Exception;
+
+
     // 회원 삭제
+    void userDelete(String userId) throws Exception;
+
 
 
 
