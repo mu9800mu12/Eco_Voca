@@ -216,7 +216,8 @@ public class UserController {
                 .userId(userId)
                 .userName(userName)
                 .password(EncryptUtil.encHashSHA256(password))
-                .email(EncryptUtil.encAES128CBC(email))
+//                .email(EncryptUtil.encAES128CBC(email))
+                .email(email)
                 .userName(userName)
                 .nickName(nickName)
                 .birthday(birthday)
@@ -396,12 +397,23 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "deleteUser")
+    public String deleteUser(){
+
+        log.info(this.getClass().getName()+ "deleteUser 시작");
+
+        return "/user/deleteUser";
+    }
+
+
     /*
      * 마이페이지 보여주기
      */
     @ResponseBody
     @PostMapping(value = "myPageIndex")
     public UserDTO myPageIndex(HttpSession session) throws Exception {
+
+        log.info(this.getClass().getName()+ "내 정보 보여주기 페이지 실행");
 
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
@@ -412,8 +424,8 @@ public class UserController {
      * 유저 삭제하기
      */
     @ResponseBody
-    @PostMapping(value = "deleteUser")
-    public void deleteUser(HttpSession session) throws Exception {
+    @PostMapping(value = "removeUser")
+    public void removeUser(HttpSession session) throws Exception {
 
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 

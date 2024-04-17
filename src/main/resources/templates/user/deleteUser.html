@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>회원 탈퇴하기</title>
-  <link rel="stylesheet" href="/css/table.css"/>
+  <link rel="stylesheet" href="/css/myPageIndex.css"/>
   <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
 
+
+
     $(document).ready(function() {
       myPageIndex();
-    });
-    // 내 정보 가져오기
+
+      // 회원탈퇴 로직 호출
+      $("#btnDeleteUser").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        removeUser();
+      })
+
+    // 아이디 띄워주기
     function myPageIndex() {
 
       $.ajax({
@@ -21,54 +28,51 @@
         success: function (json) {
 
           $("#userId").val(json.userId)
-          $("#email").val(json.email)
-          $("#userName").val(json.userName)
-          $("#nickName").val(json.nickName)
-          $("#address").val(json.address)
-          $("#birthday").val(json.birthday)
-          $("#sinceDay").val(json.sinceDay)
+
         }
       })
     }
+      function removeUser() {
+        let f = document.getElementById("f"); // form 태그
+        // let f;
+        // if (f.userDelete.value !== "계정 삭제") {
+        //   alert("구문을 올바르게 작성바랍니다");
+        //   f.userDelete.focus();
+        //   return;
+        // }
 
+        $.ajax({
+          url: "/user/removeUser",
+          type: "post",
+          dataType: "JSON",
+          data: $("#f").serialize(),
+          success: function () {
+
+            alert("계정 삭제가 완료되었습니다.");
+
+          }
+        })
+      }
+
+    });
 
   </script>
 </head>
 <body>
-
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="userId" name="userId" disabled="">
+회원탈퇴하기
+<div>
+  <div>
+    <input type="text" class="form-control" name="userDelete" id="userId" >님의 계정을 정말로 탈퇴하겠습니까?
   </div>
 </div>
 
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="email" class="form-control" id="email" name="email" disabled="">
+<div>
+  <div>
+    <input type="text" id="userDelete" placeholder="계정 삭제"> 계정 삭제 입력시 계정이 삭제됩니다
   </div>
 </div>
 
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="userName" name="userName" disabled="">
-  </div>
-</div>
-
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="address" name="address">
-  </div>
-</div>
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="birthday" name="birthday">
-  </div>
-</div>
-<div class="form-group">
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="sinceDay" name="sinceDay">
-  </div>
-</div>
+<button id="btnDeleteUser" name="btnDeleteUser">회원탈퇴하기</button>
 
 </body>
 </html>

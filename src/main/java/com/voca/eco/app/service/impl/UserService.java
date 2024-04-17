@@ -214,6 +214,7 @@ public class UserService implements IUserService {
 
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public UserDTO myPageIndex(String userId) throws Exception {
 
         log.info(" 마이페이지 보고 시이이이이이잉작입니다~~~!!!");
@@ -231,6 +232,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void userDelete(String userId) throws Exception {
 
         log.info(" 나는 회원을 탈퇴하는 서비스 입니다");
