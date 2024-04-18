@@ -3,18 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>회원 탈퇴하기</title>
-  <link rel="stylesheet" href="/css/myPageIndex.css"/>
+  <link rel="stylesheet" href="/css/deleteUser.css"/>
   <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
-
-
-
+    // HTML로딩이 완료되고, 실행됨
     $(document).ready(function() {
       myPageIndex();
 
       // 회원탈퇴 로직 호출
       $("#btnDeleteUser").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        let deleteText = document.getElementById("deleteText"); // form 태그
+        if (deleteText.value !== "계정 삭제") {
+          alert("올바른 문구를 입력하세요");
+          deleteText.focus();
+          return;
+        }
+
+
         removeUser();
+
+        alert("계정 삭제가 완료되었습니다.");
+
+        location.href = "/user/login";
       })
 
     // 아이디 띄워주기
@@ -58,21 +68,58 @@
 
   </script>
 </head>
+
+<style>
+  .divTableCell {
+    display: flex;
+    align-items: center;
+  / 수직 가운데 정렬 /
+  }
+</style>
+
+<style>
+  h2 {
+    text-align: center;
+  / 가운데 정렬 / font-weight: bold;
+  / 굵은 글꼴 / margin-top: 20 px;
+  / 위쪽 여백 추가 / margin-bottom: 20 px;
+  / 아래쪽 여백 추가 /
+  }
+</style>
+
+
 <body>
-회원탈퇴하기
-<div>
-  <div>
-    <input type="text" class="form-control" name="userDelete" id="userId" >님의 계정을 정말로 탈퇴하겠습니까?
+<h2>회원 탈퇴</h2>
+<br/>
+<form id="f">
+  <div class="divTable minimalistBlack">
+    <div class="divTableBody">
+      <div class="divTableRow">
+
+      </div>
+      <div class="divTableRow">
+        <div class="divTableCell">
+        </div>
+        <div class="divTableCell">
+          <input type="text" name="userDelete" id="userId" disabled="" value="님의 계정을 정말로 탈퇴하겠습니까?">
+        </div>
+      </div>
+
+      <div class="divTableRow">
+        <div class="divTableCell">
+        </div>
+        <div class="divTableCell">
+          <input type="text" id="deleteText" name="deleteText" placeholder="계정 삭제">
+          <h5>"계정 삭제" 입력시 계정이 삭제됩니다</h5>
+        </div>
+      </div>
+
+
+    </div>
   </div>
-</div>
-
-<div>
   <div>
-    <input type="text" id="userDelete" placeholder="계정 삭제"> 계정 삭제 입력시 계정이 삭제됩니다
+    <button id="btnDeleteUser" name="btnDeleteUser">회원탈퇴하기</button>
+
   </div>
-</div>
-
-<button id="btnDeleteUser" name="btnDeleteUser">회원탈퇴하기</button>
-
+</form>
 </body>
-</html>

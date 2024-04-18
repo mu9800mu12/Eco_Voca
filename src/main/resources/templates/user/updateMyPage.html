@@ -2,9 +2,156 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>내 정보 수정하기</title>
-</head>
-<body>
+  <link rel="stylesheet" href="/css/updateMyPage.css"/>
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
 
+    $(document).ready(function () {
+
+      myPageIndex();
+
+      $("#btnUpdate").on("click", function () {
+        let f = document.getElementById("f"); //form 태그
+        updateMyPage();
+      })
+
+      $("#btnUpdateMypage").on("click", function () { //버튼 클릭 시 발생 이벤트
+        location.href = "updateMyPage";
+      });
+
+      $("#btnUpdatePassword").on("click", function () { //버튼 클릭 시 발생 이벤트
+        location.href = "findUpdatePassword";
+      });
+      $("#btnDeleteUser").on("click", function () { //버튼 클릭 시 발생 이벤트
+        location.href = "deleteUser";
+      });
+
+      function updateMyPage() {
+
+        $.ajax({
+              url: "/user/updateMyPage",
+              type: "post", // 전송방식은 Post
+              dataType: "JSON", // 전송 결과는 JSON으로 받기
+              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+              success: function (json) { // 호출이 성공했다면..
+                console.log(json)
+                if (json.result === 1) {
+                  alert(json.msg)
+                  location.href = "/user/myPageIndex"; // myPage로 이동
+                } else {
+                  alert("");
+                }
+              }
+            }
+        )
+
+      }
+
+
+
+
+      // 내 정보 가져오기
+      function myPageIndex() {
+
+        $.ajax({
+          url: "/user/myPageIndex",
+          type: "post",
+          dataType: "JSON",
+          data: $("#f").serialize(),
+          success: function (json) {
+
+            $("#userId").val(json.userId)
+            $("#email").val(json.email)
+            $("#userName").val(json.userName)
+            $("#nickName").val(json.nickName)
+            $("#address").val(json.address)
+            $("#birthday").val(json.birthday)
+            $("#sinceDay").val(json.sinceDay)
+          }
+        })
+      }
+    });
+
+  </script>
+</head>
+
+<style>
+  .divTableCell {
+    display: flex;
+    align-items: center;
+  / 수직 가운데 정렬 /
+  }
+</style>
+
+<style>
+  h2 {
+    text-align: center;
+  / 가운데 정렬 / font-weight: bold;
+  / 굵은 글꼴 / margin-top: 20 px;
+  / 위쪽 여백 추가 / margin-bottom: 20 px;
+  / 아래쪽 여백 추가 /
+  }
+</style>
+
+
+<body>
+<h2>내 정보 수정</h2>
+<br/>
+<form id="f">
+
+  <div style="margin: auto">
+    <div style="width: 100%">
+      <div> 아이디
+        <input type="text" class="form-control" id="userId" name="userId" value="" disabled="" style="width: 100%">
+      </div>
+    </div>
+
+    <div style="width: 100%">
+      <div > 이메일
+        <input type="email" class="form-control" id="email" name="email" disabled="" style="width: 100%">
+      </div>
+    </div>
+
+    <div style="width: 100%">
+      <div > 이름
+        <input type="text" class="form-control" id="userName" name="userName" disabled="" style="width: 100%">
+      </div>
+    </div>
+
+    <div style="width: 100%">
+      <div > 닉네임
+        <input type="text" class="form-control" id="nickName" name="nickName" style="width: 100%">
+      </div>
+    </div>
+
+        <div style="width: 100%">
+      <div > 주소
+        <input type="text" class="form-control" id="address" name="address" style="width: 100%">
+      </div>
+    </div>
+    <div style="width: 100%">
+      <div > 생년월일
+        <input type="text" class="form-control" id="birthday" name="birthday" disabled="" style="width: 100%">
+      </div>
+    </div>
+    <div style="width: 100%">
+      <div > 가입날짜
+        <input type="text" class="form-control" id="sinceDay" name="sinceDay" disabled="" style="width: 100%">
+      </div>
+    </div>
+  </div>
+  <div class="divTable minimalistBlack">
+    <div class="divTableBody">
+      <div class="divTableRow">
+
+
+      </div>
+    </div>
+    <div>
+      <button id="btnUpdate" name="btnUpdate" type="button">정보 수정하기</button>
+      <button id="btnUpdatePassword" name="btnUpdatePassword" type="button">비밀번호 변경</button>
+    </div>
+  </div>
+</form>
 </body>
 </html>

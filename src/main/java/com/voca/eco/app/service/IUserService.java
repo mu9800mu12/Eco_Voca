@@ -41,13 +41,15 @@ public interface IUserService {
                         final String userId) throws Exception;
 
     // 마이페이지 보기
-    UserDTO myPageIndex(String userId) throws Exception;
+    UserDTO myPageIndex(final String userId) throws Exception;
 
 
     // 회원 삭제
-    void userDelete(String userId) throws Exception;
+    void userDelete(final String userId) throws Exception;
 
-
+    void updateMyPage(final String userId,
+            final String nickName,
+            final String address) throws Exception;
 
 
 }

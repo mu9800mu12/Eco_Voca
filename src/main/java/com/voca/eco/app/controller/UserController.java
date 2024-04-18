@@ -34,8 +34,6 @@ public class UserController {
     private final IMailService mailService;
 
 
-
-
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
 
@@ -77,7 +75,8 @@ public class UserController {
     public UserDTO getUserPassword(HttpServletRequest request, HttpSession session) throws Exception {
 
         String userId = CmmUtil.nvl(request.getParameter("userId"));
-        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+//        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+        String email = (CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
         log.info("userId :" + userId);
@@ -130,7 +129,8 @@ public class UserController {
     @PostMapping(value = "getUserId")
     public UserDTO getUserId(HttpServletRequest request) throws Exception {
 
-        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+//        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+        String email = (CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
         log.info("email :" + email);
@@ -332,12 +332,12 @@ public class UserController {
             log.info("인증번호 생성 시작");
 
             // 6자리 랜덤 숫자 생성하기
-            authNumber = ThreadLocalRandom.current().nextInt(100000, 10000000);
+            authNumber = ThreadLocalRandom.current().nextInt(1000, 100000);
 
             log.info("authNumber : " + authNumber);
 
             String title = "이메일 인증번호 발송 메일";
-            String contents = "인증번호는 " + authNumber + "입니다.";
+            String contents = "인증번호는 " + authNumber + " " + "입니다.";
 
             res = mailService.doSendMail(email, title, contents);
 
@@ -419,6 +419,53 @@ public class UserController {
 
         return userService.myPageIndex(userId);
     }
+    @ResponseBody
+    @PostMapping(value = "updateMyPage")
+    public MsgDTO updateMyPage(HttpSession session, HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + "내 정보 업데이트 컨트롤러 시작합니다~");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String nickName = CmmUtil.nvl(request.getParameter("nickName"));
+        String address =CmmUtil.nvl(request.getParameter("address"));
+
+        log.info(this.getClass().getName() + "여기는 내정보 업데이트 로그 찍기 userId :" + userId);
+        log.info(this.getClass().getName() + "여기는 내정보 업데이트 로그 찍기 nickName : " + nickName);
+        log.info(this.getClass().getName() + "여기는 내정보 업데이트 로그 찍기 address : " + address);
+
+
+        int res = 0;
+        String msg = "";
+        try {
+            userService.updateMyPage(userId, nickName, address);
+            res = 1;
+            msg = "수정되었습니다.";
+
+        } catch (Exception e) {
+
+            log.info(e.toString());
+            e.printStackTrace();
+
+            res = 0;
+            msg = "정보 수정 실패."
+                    + "\n다시 실행해 주세요.";
+
+            return MsgDTO.builder()
+                    .result(res)
+                    .msg(msg)
+                    .build();
+        }
+
+
+        log.info(this.getClass().getName() + "내 정보 업데이트 컨트롤러 끝났습니다~");
+
+        return MsgDTO.builder()
+                .msg(msg)
+                .result(res)
+                .build();
+    }
+
+
 
     /*
      * 유저 삭제하기

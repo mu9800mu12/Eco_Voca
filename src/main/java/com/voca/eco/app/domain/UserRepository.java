@@ -1,7 +1,6 @@
 package com.voca.eco.app.domain;
 
 import com.voca.eco.app.domain.Entity.UserEntity;
-import com.voca.eco.app.dto.UserDTO;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,7 +33,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     void updatePassword(@Param("userId") String userId, @Param("newPassword") String newPassword);
 
     // 회원탈퇴하기
-    Optional<UserEntity> deleteByUserId(String userId);
+    void deleteByUserId(String userId);
 
 
 }

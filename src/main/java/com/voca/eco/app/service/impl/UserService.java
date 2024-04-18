@@ -7,6 +7,7 @@ import com.voca.eco.app.domain.UserRepository;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IUserService;
 import com.voca.eco.common.util.CmmUtil;
+import com.voca.eco.common.util.EncryptUtil;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -191,7 +192,8 @@ public class UserService implements IUserService {
                 .userId(CmmUtil.nvl(pDTO.userId()))
                 .userName(CmmUtil.nvl(pDTO.userName()))
                 .password(CmmUtil.nvl(pDTO.password()))
-                .email(CmmUtil.nvl(pDTO.email()))
+//                .email(CmmUtil.nvl(EncryptUtil.encAES128CBC(pDTO.email())))
+                .email(CmmUtil.nvl((pDTO.email())))
                 .userName(CmmUtil.nvl(pDTO.userName()))
                 .nickName(CmmUtil.nvl(pDTO.nickName()))
                 .birthday(CmmUtil.nvl(pDTO.birthday()))
@@ -212,6 +214,28 @@ public class UserService implements IUserService {
         return res;
     }
 
+    // 내 정보 수정하기
+    @Override
+    public void updateMyPage(String userId, String nickName, String address)
+            throws Exception {
+
+        log.info(this.getClass().getName() + "내 정보 수정 시작!");
+
+        Optional<UserEntity> pEntity = userRepository.findByUserId(userId);
+
+        userRepository.save(UserEntity.builder()
+                .userId(userId)
+                .email(pEntity.get().getEmail())
+                .nickName(nickName)
+                .address(address)
+                .userName(pEntity.get().getUserName())
+                .password(pEntity.get().getPassword())
+                .birthday(pEntity.get().getBirthday())
+                .build());
+
+        log.info(this.getClass().getName() + "내 정보 수정 끝!");
+
+    }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -219,15 +243,19 @@ public class UserService implements IUserService {
 
         log.info(" 마이페이지 보고 시이이이이이잉작입니다~~~!!!");
 
+        UserDTO pDTO = null;
         UserDTO rDTO = null;
 
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
 
         rDTO = new ObjectMapper().convertValue(rEntity.get(),
                 UserDTO.class);
-
+//
         log.info(this.getClass().getName() + " rDTO 값이 잘 들어오는 확인하는 여기는 마이페이지 인덱스 보여주기" + rDTO);
 
+        rDTO = new ObjectMapper().convertValue(rEntity.get(),
+                UserDTO.class);
+        // 복호화 어케하는지 모르겠음
         return rDTO;
     }
 
