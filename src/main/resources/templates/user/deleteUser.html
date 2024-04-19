@@ -37,7 +37,7 @@
         data: $("#f").serialize(),
         success: function (json) {
 
-          $("#userId").val(json.userId)
+          $("#userId").val(json.userId + " 님의 계정을 삭제하시겠습니까?")
 
         }
       })
@@ -101,7 +101,7 @@
         <div class="divTableCell">
         </div>
         <div class="divTableCell">
-          <input type="text" name="userDelete" id="userId" disabled="" value="님의 계정을 정말로 탈퇴하겠습니까?">
+          <input type="text" name="userDelete" id="userId" disabled="" width="80">
         </div>
       </div>
 
