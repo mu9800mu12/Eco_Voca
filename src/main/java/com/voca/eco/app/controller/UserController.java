@@ -34,6 +34,15 @@ public class UserController {
     private final IMailService mailService;
 
 
+    @GetMapping(value = "index")
+    public String index() {
+
+        log.info(this.getClass().getName() + "user/RegForm Start and End");
+
+        return "user/index";
+
+    }
+
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
 
