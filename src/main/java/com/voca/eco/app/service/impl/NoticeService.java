@@ -16,10 +16,31 @@ public class NoticeService implements INoticeService {
 
     private final NoticeRepository noticeRepository;
 
-
     @Override
     public List<NoticeDTO> getNoticeList() {
 
         return null;
+    }
+
+    @Override
+    public NoticeDTO getNoticeInfo(NoticeDTO pDTO, boolean type) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void updateNoticeInfo(Long noticeSeq, String title, String contents,
+            String userId, String noticeYn) {
+
+    }
+
+    @Override
+    public void deleteNoticeInfo(Long noticeSeq) throws Exception {
+
+    }
+
+    @Override
+    public void insertNoticeInfo(String title, String noticeYn, String contents,
+            String userId) throws Exception {
+
     }
 }
