@@ -112,6 +112,7 @@ public class UserController {
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String password = CmmUtil.nvl(EncryptUtil.encHashSHA256(request.getParameter("password")));
 
+
         //toDo if 문 사용해서 세션값이 있을 때만 비밀번호 재설정할 수 있게 만들어라~        - 이교수님
         //  그런데 데브툴 쓰고 있어서 세션값이 안날라 간거다? 아무튼 쓰자 4줄도 안된다고 하신다~
 
