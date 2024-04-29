@@ -112,27 +112,26 @@ public class UserController {
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String password = CmmUtil.nvl(EncryptUtil.encHashSHA256(request.getParameter("password")));
 
-
-        //toDo if 문 사용해서 세션값이 있을 때만 비밀번호 재설정할 수 있게 만들어라~        - 이교수님
+        //toDo if 문 사용해서 세션값이 있을 때만 비밀번호 재설정할 수 있게 만들어라~          - 이교수님
         //  그런데 데브툴 쓰고 있어서 세션값이 안날라 간거다? 아무튼 쓰자 4줄도 안된다고 하신다~
+        if(session != null) {
 
-        log.info("userId : " + userId);
-        log.info("password : " + password);
+            log.info("userId : " + userId);
+            log.info("password : " + password);
 
-        int res = userService.userIdExists(userId);
-        String msg = "";
+            int res = userService.userIdExists(userId);
+            String msg = "";
 
-        if (res == 1) {
-            userService.updatePassword(userId,password);
-        } else {
-//            throw new Exception("비밀번호 변경에 실패하였습니다.");
+            if (res == 1) {
+                userService.updatePassword(userId, password);
+            } else {
+                msg = "사용자가 존재하지 않습니다.";
+
+            }
         }
 
         return "user/findUpdatePassword";
-//        return MsgDTO.builder()
-//                .result(res)
-//                .msg(msg)
-//                .build();
+
     }
 
     /**

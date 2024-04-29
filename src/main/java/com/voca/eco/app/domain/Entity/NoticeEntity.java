@@ -1,5 +1,11 @@
 package com.voca.eco.app.domain.Entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +28,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "NOTICE")
 @DynamicInsert
 @DynamicUpdate
-@Cacheable
+//@Cacheable
 @Entity
 public class NoticeEntity {
 
@@ -54,12 +60,16 @@ public class NoticeEntity {
     private String regId;
 
     @Column(name = "reg_dt", updatable = false)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime regDt;
 
     @Column(name = "chg_id")
     private String chgId;
 
     @Column(name = "chg_dt")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime chgDt;
 
     @Builder
