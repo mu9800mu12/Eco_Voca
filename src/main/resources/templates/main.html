@@ -13,12 +13,19 @@
       });
     })
 
+    $(document).ready(function () {
+
+      $("#btnNotice").on("click", function () { //버튼 클릭 시 발생 이벤트
+        location.href = "/notice/noticeList";
+      });
+    })
+
   </script>
 </head>
 <body>
 <button id="btnMyPage" class="overlay_btn">마이페이지</button>
 <button id="btnStudy" class="overlay_btn">공부</button>
-<button id="btn게으시이파안" class="overlay_btn">게시판</button>
+<button id="btnNotice" class="overlay_btn">게시판</button>
 <button id="btn고으개액센타" class="overlay_btn">고객센터</button>
 </body>
 </html>

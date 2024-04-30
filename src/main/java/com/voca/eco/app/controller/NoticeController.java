@@ -43,6 +43,8 @@ public class NoticeController {
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
 
+        log.info("유저네임은 : " + userId);
+
         log.info(this.getClass().getName() + "게시판 End!");
 
         return "notice/noticeList";
