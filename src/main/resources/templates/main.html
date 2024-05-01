@@ -1,31 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/myPageIndex.css"/>
-  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    $(document).ready(function () {
+  <title>Gp Bootstrap Template - Index</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-      $("#btnMyPage").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "/user/myPageIndex";
-      });
-    })
+  <!-- Favicons -->
+  <link href="/imgMainMain/favicon.png" rel="icon">
+  <link href="/imgMainMain/apple-touch-icon.png" rel="apple-touch-icon">
 
-    $(document).ready(function () {
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-      $("#btnNotice").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "/notice/noticeList";
-      });
-    })
+  <!-- vendor/main CSS Files -->
+  <link href="vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  </script>
+  <!-- Template Main CSS File -->
+  <link href="/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Gp
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Updated: Mar 17 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
+
 <body>
-<button id="btnMyPage" class="overlay_btn">마이페이지</button>
-<button id="btnStudy" class="overlay_btn">공부</button>
-<button id="btnNotice" class="overlay_btn">게시판</button>
-<button id="btn고으개액센타" class="overlay_btn">고객센터</button>
+
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top ">
+  <div class="container d-flex align-items-center justify-content-lg-between">
+
+    <h1 class="logo me-auto me-lg-0"><a href="index.html">하루 경제<span>.</span></a></h1>
+    <!-- Uncomment below if you prefer to use an image logo -->
+    <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="/imgMain/logo.png" alt="" class="img-fluid"></a>-->
+
+    <nav id="navbar" class="navbar order-last order-lg-0">
+      <ul>
+        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+        <li><a class="nav-link scrollto" href="#services">커뮤니티</a></li>
+        <li><a class="nav-link scrollto " href="#portfolio">마이페이지</a></li>
+        <li><a class="nav-link scrollto" href="#team">고객센터</a></li>
+        <li class="dropdown"><a href="#"><span>공부하기</span> <i class="bi bi-chevron-down"></i></a>
+          <ul>
+            <li><a href="#">단어 기초학습</a></li>
+            <li><a href="#">단어 기본학습</a></li>
+            <li><a href="#">단어 심화학습</a></li>
+            <li><a href="#">최신 빈도 200제</a></li>
+            <li><a href="#">나의 공부 일지</a></li>
+          </ul>
+        </li>
+        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav><!-- .navbar -->
+
+    <a href="#about" class="get-started-btn scrollto">Get Started</a>
+
+  </div>
+</header><!-- End Header -->
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center justify-content-center">
+  <div class="container" data-aos="fade-up">
+
+    <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
+      <div class="col-xl-6 col-lg-8">
+        <h1>Powerful Digital Solutions With Gp<span>.</span></h1>
+        <h2>We are team of talented digital marketers</h2>
+      </div>
+    </div>
+
+    <div class="row gy-4 mt-5 justify-content-center" data-aos="zoom-in" data-aos-delay="250">
+      <div class="col-xl-2 col-md-4">
+        <div class="icon-box">
+          <i class="ri-store-line"></i>
+          <h3><a href="">경제단어 700선</a></h3>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4">
+        <div class="icon-box">
+          <i class="ri-bar-chart-box-line"></i>
+          <h3><a href="">경제 빈도 200선</a></h3>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4">
+        <div class="icon-box">
+          <i class="ri-calendar-todo-line"></i>
+          <h3><a href="">시사경제용어</a></h3>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4">
+        <div class="icon-box">
+          <i class="ri-paint-brush-line"></i>
+          <h3><a href="">코스피 지수 예측</a></h3>
+        </div>
+      </div>
+      <div class="col-xl-2 col-md-4">
+        <div class="icon-box">
+          <i class="ri-database-2-line"></i>
+          <h3><a href="">학습 DB</a></h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End Hero -->
+
+<main id="main">
+
+  <!-- ======= About Section ======= -->
+
+  <!-- ======= Clients Section ======= -->
+  <section id="clients" class="clients">
+    <div class="container" data-aos="zoom-in">
+
+      <div class="clients-slider swiper">
+        <div class="swiper-wrapper align-items-center">
+          <div class="swiper-slide"><img src="/imgMain/clients/client-1.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-2.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-3.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-4.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-5.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-6.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-7.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-8.png" class="img-fluid" alt=""></div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+    </div>
+  </section><!-- End Clients Section -->
+
+
+
+  <!-- ======= Testimonials Section ======= -->
+  <section id="testimonials" class="testimonials">
+    <div class="container" data-aos="zoom-in">
+
+      <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper-wrapper">
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/imgMain/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+              <h3>Alexander Hamilton</h3>
+              <h4>Ceo &amp; Founder</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                "경제는 모든 산업의 기초입니다."
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/imgMain/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+              <h3>Sheryl Sandberg</h3>
+              <h4>Designer</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                "성장은 끊임없는 학습과 혁신의 결과입니다."
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/imgMain/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+              <h3>Edward J. Zander</h3>
+              <h4>Store Owner</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                "가난은 무지와 불안에 근거합니다."
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/imgMain/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+              <h3>Ronald Reagan</h3>
+              <h4>Freelancer</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                "경제는 실용적인 명제이며, 더 좋은 생활을 만들어냅니다."
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+
+
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <img src="/imgMain/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+              <h3>故정주영 회장</h3>
+              <h4>Entrepreneur</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                "시련은 있어도 실패는 없다"
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div><!-- End testimonial item -->
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+    </div>
+  </section><!-- End Testimonials Section -->
+
+
+  <!-- ======= Contact Section ======= -->
+
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-info">
+            <h3>하루 경제<span>.</span></h3>
+            <p>
+              A108 Adam Street <br>
+              NY 535022, USA<br><br>
+              <strong>Phone:</strong> +1 5589 55488 55<br>
+              <strong>Email:</strong> info@example.com<br>
+            </p>
+            <div class="social-links mt-3">
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+            <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-6 footer-newsletter">
+          <h4>Our Newsletter</h4>
+          <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+          <form action="" method="post">
+            <input type="email" name="email"><input type="submit" value="Subscribe">
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Gp</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">송찬우BootstrapMade</a>
+    </div>
+  </div>
+</footer><!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- vendor/main JS Files -->
+<script src="vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="vendor/main/aos/aos.js"></script>
+<script src="vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="js/main.js"></script>
+
 </body>
+
 </html>
