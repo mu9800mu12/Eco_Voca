@@ -477,7 +477,27 @@ public class UserController {
                 .build();
     }
 
+    /*
+     * 로그아웃
+     */
+    //todo 뷰는 개발 안함
+    @ResponseBody
+    @PostMapping(value = "logout")
+    public MsgDTO logout(HttpSession session) {
 
+        log.info(this.getClass().getName() + ".logout Start!");
+
+        session.setAttribute("SS_USER_ID", ""); // 세션 값 빈값으로 변경
+        session.removeAttribute("SS_USER_ID"); // 세션 값 지우기
+
+        // 결과 메시지 전달하기
+        MsgDTO dto = MsgDTO.builder().result(1).msg("로그아웃하였습니다").build();
+
+        log.info(this.getClass().getName() + ".logout End!");
+
+        return dto;
+    }
+}
 
     /*
      * 유저 삭제하기
