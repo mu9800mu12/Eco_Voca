@@ -497,7 +497,7 @@ public class UserController {
 
         return dto;
     }
-}
+
 
     /*
      * 유저 삭제하기
