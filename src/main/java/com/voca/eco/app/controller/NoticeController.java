@@ -50,7 +50,6 @@ public class NoticeController {
         return "notice/noticeList";
 
     }
-
     /*
         게시판 작성 페이지
      */
@@ -61,7 +60,6 @@ public class NoticeController {
 
         return "notice/noticeReg";
     }
-
     /**
      * 게시판 작성하기
      */

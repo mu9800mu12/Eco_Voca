@@ -35,6 +35,35 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript">
+
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+
+      // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      $("#btnLogout").on("click", function () {
+        // Ajax 호출해서 로그인하기
+        $.ajax({
+          url: "/user/logout",
+          type: "post", // 전송방식은 Post
+          dataType: "JSON", // 전송 결과는 JSON으로 받기
+          success: function (json) {
+
+            if (json.result === 1) { // 로그아웃 성공
+              alert(json.msg); // 메시지 띄우기
+              location.href = "/main"; // 메인화면으로 이동
+
+            } else { // 로그인 실패
+              alert(json.msg); // 메시지 띄우기
+            }
+          }
+        })
+      })
+    })
+
+  </script>
+
 </head>
 
 <body>
@@ -51,24 +80,25 @@
       <ul>
         <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
         <li><a class="nav-link scrollto" href="#services">커뮤니티</a></li>
-        <li><a class="nav-link scrollto " href="#portfolio">마이페이지</a></li>
+        <li><a class="nav-link scrollto " href="/user/myPageIndex">마이페이지</a></li>
         <li><a class="nav-link scrollto" href="#team">고객센터</a></li>
         <li class="dropdown"><a href="#"><span>공부하기</span> <i class="bi bi-chevron-down"></i></a>
           <ul>
             <li><a href="#">단어 기초학습</a></li>
-            <li><a href="#">단어 기본학습</a></li>
+            <li><a href="#">단어 뉴스학습</a></li>
             <li><a href="#">단어 심화학습</a></li>
-            <li><a href="#">최신 빈도 200제</a></li>
             <li><a href="#">나의 공부 일지</a></li>
           </ul>
         </li>
-        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+<!--        <li><btn class="btnLogout" id="btnLogout">로그아웃</btn></li>-->
+        <button id="btnLogout" type="button">로그아웃</button>
       </ul>
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav><!-- .navbar -->
 
-    <a href="/user/login" class="get-started-btn scrollto">Get Started</a>
-
+    <a href="/user/login" class="get-started-btn scrollto">Get Login</a>
+    <br>
+    <div class="divTableCell"  th:text="${session.SS_USER_ID +'님이 안녕하세요!'}" style="color: white"></div>
   </div>
 </header><!-- End Header -->
 
