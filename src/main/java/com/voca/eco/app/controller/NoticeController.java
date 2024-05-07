@@ -70,7 +70,7 @@ public class NoticeController {
         log.info(this.getClass().getName() + ".noticeInsert Start!");
 
         String msg = "";
-
+//
         MsgDTO dto;
 
         try {
