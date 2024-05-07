@@ -26,7 +26,6 @@ public class MainController {
 
         log.info(this.getClass().getName() + "main Start!");
 
-
         return "/main";
     }
 
