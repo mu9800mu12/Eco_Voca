@@ -88,6 +88,7 @@ public class NoticeController {
 
             msg = "등록되었습니다.";
 
+
         } catch (Exception e) {
 
             msg = "등록에 실패하였습니다. : " + e.getMessage();
