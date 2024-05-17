@@ -1,41 +1,85 @@
-.divTable.minimalistCustom {
-    border: 3px solid #FFA500; /* 주황색 선 */
+/*.divTable.minimalistCustom {*/
+/*    border: 3px solid #FFA500; !* 주황색 선 *!*/
+/*    width: 100%;*/
+/*    text-align: left;*/
+/*    border-collapse: collapse;*/
+/*}*/
+/*.divTable.minimalistCustom .divTableCell,*/
+/*.divTable.minimalistCustom .divTableHead {*/
+/*    border: 1px solid #000000;*/
+/*    padding: 5px 4px;*/
+/*}*/
+/*.divTable.minimalistCustom .divTableBody .divTableCell {*/
+/*    font-size: 13px;*/
+/*}*/
+/*.divTable.minimalistCustom .divTableHeading {*/
+/*    background: #2c2c2c; !* 검은색 계열의 바탕 *!*/
+/*    border-bottom: 3px solid #FFA500; !* 주황색 선 *!*/
+/*}*/
+/*.divTable.minimalistCustom .divTableHeading .divTableHead {*/
+/*    font-size: 15px;*/
+/*    font-weight: bold;*/
+/*    color: #FFFFFF; !* 흰색 텍스트 *!*/
+/*    text-align: left;*/
+/*}*/
+/*.minimalistCustom .tableFootStyle {*/
+/*    font-size: 14px;*/
+/*    font-weight: bold;*/
+/*    color: #000000;*/
+/*    border-top: 3px solid #FFA500; !* 주황색 선 *!*/
+/*}*/
+/*.minimalistCustom .tableFootStyle {*/
+/*    font-size: 14px;*/
+/*}*/
+/*!* DivTable.com *!*/
+/*.divTable { display: table; }*/
+/*.divTableRow { display: table-row; }*/
+/*.divTableHeading { display: table-header-group; }*/
+/*.divTableCell, .divTableHead { display: table-cell; }*/
+/*.divTableHeading { display: table-header-group; }*/
+/*.divTableFoot { display: table-footer-group; }*/
+/*.divTableBody { display: table-row-group; }*/
+
+div.minimalistBlack {
+    border: 3px solid #000000;
     width: 100%;
     text-align: left;
     border-collapse: collapse;
 }
-.divTable.minimalistCustom .divTableCell,
-.divTable.minimalistCustom .divTableHead {
+.divTable.minimalistBlack .divTableCell, .divTable.minimalistBlack .divTableHead {
     border: 1px solid #000000;
     padding: 5px 4px;
 }
-.divTable.minimalistCustom .divTableBody .divTableCell {
+.divTable.minimalistBlack .divTableBody .divTableCell {
     font-size: 13px;
 }
-.divTable.minimalistCustom .divTableHeading {
-    background: #2c2c2c; /* 검은색 계열의 바탕 */
-    border-bottom: 3px solid #FFA500; /* 주황색 선 */
+.divTable.minimalistBlack .divTableHeading {
+    background: #CFCFCF;
+    background: -moz-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+    background: -webkit-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+    background: linear-gradient(to bottom, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+    border-bottom: 3px solid #000000;
 }
-.divTable.minimalistCustom .divTableHeading .divTableHead {
+.divTable.minimalistBlack .divTableHeading .divTableHead {
     font-size: 15px;
     font-weight: bold;
-    color: #FFFFFF; /* 흰색 텍스트 */
+    color: #000000;
     text-align: left;
 }
-.minimalistCustom .tableFootStyle {
+.minimalistBlack .tableFootStyle {
     font-size: 14px;
     font-weight: bold;
     color: #000000;
-    border-top: 3px solid #FFA500; /* 주황색 선 */
+    border-top: 3px solid #000000;
 }
-.minimalistCustom .tableFootStyle {
+.minimalistBlack .tableFootStyle {
     font-size: 14px;
 }
 /* DivTable.com */
-.divTable { display: table; }
+.divTable{ display: table; }
 .divTableRow { display: table-row; }
-.divTableHeading { display: table-header-group; }
-.divTableCell, .divTableHead { display: table-cell; }
-.divTableHeading { display: table-header-group; }
-.divTableFoot { display: table-footer-group; }
-.divTableBody { display: table-row-group; }
+.divTableHeading { display: table-header-group;}
+.divTableCell, .divTableHead { display: table-cell;}
+.divTableHeading { display: table-header-group;}
+.divTableFoot { display: table-footer-group;}
+.divTableBody { display: table-row-group;}
