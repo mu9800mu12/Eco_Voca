@@ -62,6 +62,8 @@ public class NoticeController {
         return "notice/noticeReg";
     }
 
+
+
     /**
      * 게시판 작성하기
      */

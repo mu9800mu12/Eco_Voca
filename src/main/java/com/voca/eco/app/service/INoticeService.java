@@ -20,21 +20,6 @@ public interface INoticeService {
     NoticeDTO getNoticeInfo(NoticeDTO pDTO, boolean type) throws Exception;
 
     /**
-     * 게시판 업데이트
-     *
-     */
-    void updateNoticeInfo(final Long noticeSeq,
-            final String title,
-            final String contents,
-            final String userId,
-            final String noticeYn);
-
-    /**
-     * 해당 공지사항 삭제
-     */
-    void deleteNoticeInfo(final Long noticeSeq) throws Exception;
-
-    /**
      * 게시판 작성
      * @param title
      * @param noticeYn
@@ -47,4 +32,17 @@ public interface INoticeService {
             final String contents,
             final String userId) throws Exception;
 
+    /**
+     * 게시판 업데이트
+     *
+     */
+    void updateNoticeInfo(final Long noticeSeq,
+            final String title,
+            final String contents,
+            final String userId,
+            final String noticeYn);
+    /**
+     * 해당 공지사항 삭제
+     */
+    void deleteNoticeInfo(final Long noticeSeq) throws Exception;
 }

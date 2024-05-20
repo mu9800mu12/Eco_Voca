@@ -20,6 +20,10 @@ public class NoticeService implements INoticeService {
 
     private final NoticeRepository noticeRepository;
 
+    /**
+     *  게시판 전체보기
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public List<NoticeDTO> getNoticeList() {
@@ -41,6 +45,9 @@ public class NoticeService implements INoticeService {
         return nList;
     }
 
+    /**
+     * 게시판 상세보기
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public NoticeDTO getNoticeInfo(NoticeDTO pDTO, boolean type) throws Exception {
@@ -60,43 +67,9 @@ public class NoticeService implements INoticeService {
         return rDTO;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void updateNoticeInfo(
-            final Long noticeSeq,
-            final String title,
-            final String contents,
-            final String userId,
-            final String noticeYn
-    ) {
-
-        log.info(this.getClass().getName() + "[서비스] : .updateNoticeInfo Start!");
-
-        log.info("noticeSeq : " + noticeSeq);
-        log.info("title : " + title);
-        log.info("noticeYn : " + noticeYn);
-        log.info("contents : " + contents);
-        log.info("userId : " + userId);
-
-        NoticeEntity rEntity = noticeRepository.findByNoticeSeq(noticeSeq);
-
-        noticeRepository.save(rEntity.updateNoticeInfo(title, contents, noticeYn));
-
-    }
-
-    @Override
-    public void deleteNoticeInfo(final Long noticeSeq) throws Exception {
-
-        log.info(this.getClass().getName() + "[서비스] : .deleteNoticeInfo Start!");
-
-        log.info("noticeSeq : " + noticeSeq);
-
-        // 데이터 수정하기
-        noticeRepository.deleteById(noticeSeq);
-
-        log.info(this.getClass().getName() + "[서비스] : .deleteNoticeInfo End!");
-    }
-
+    /**
+     * 게시판 작성하기
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertNoticeInfo(
@@ -126,4 +99,48 @@ public class NoticeService implements INoticeService {
         log.info(this.getClass().getName() + "[서비스] : .InsertNoticeInfo End!");
 
     }
+
+    /**
+     * 게시판 수정하기
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateNoticeInfo(
+            final Long noticeSeq,
+            final String title,
+            final String contents,
+            final String userId,
+            final String noticeYn
+    ) {
+
+        log.info(this.getClass().getName() + "[서비스] : .updateNoticeInfo Start!");
+
+        log.info("noticeSeq : " + noticeSeq);
+        log.info("title : " + title);
+        log.info("noticeYn : " + noticeYn);
+        log.info("contents : " + contents);
+        log.info("userId : " + userId);
+
+        NoticeEntity rEntity = noticeRepository.findByNoticeSeq(noticeSeq);
+
+        noticeRepository.save(rEntity.updateNoticeInfo(title, contents, noticeYn));
+
+    }
+
+    /**
+     * 게시판 삭제하기
+     */
+    @Override
+    public void deleteNoticeInfo(final Long noticeSeq) throws Exception {
+
+        log.info(this.getClass().getName() + "[서비스] : .deleteNoticeInfo Start!");
+
+        log.info("noticeSeq : " + noticeSeq);
+
+        // 데이터 수정하기
+        noticeRepository.deleteById(noticeSeq);
+
+        log.info(this.getClass().getName() + "[서비스] : .deleteNoticeInfo End!");
+    }
+
 }
