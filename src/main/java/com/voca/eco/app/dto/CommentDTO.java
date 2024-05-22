@@ -11,6 +11,7 @@ import lombok.Builder;
 public record CommentDTO(
 
         Long commentSeq, //댓글 번호
+        Long noticeSeq, //게시글 번호
         String userId, //작성자 아이디
         String comment, //댓글 내용
         @JsonSerialize(using = LocalDateTimeSerializer.class)

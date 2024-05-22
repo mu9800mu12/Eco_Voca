@@ -124,6 +124,8 @@ public class UserController {
 
             if (res == 1) {
                 userService.updatePassword(userId, password);
+
+//                session.removeAttribute("NEW_PASSWORD");
             } else {
                 msg = "사용자가 존재하지 않습니다.";
 
