@@ -3,6 +3,7 @@ package com.voca.eco.app.controller;
 import com.voca.eco.app.dto.CommentDTO;
 import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.NoticeDTO;
+import com.voca.eco.app.service.ICommentService;
 import com.voca.eco.app.service.INoticeService;
 import com.voca.eco.common.util.CmmUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class NoticeController {
 
     private final INoticeService noticeService;
+
+    private final ICommentService commentService;
 
     /**
      * 게시판 전체보기
@@ -117,7 +120,7 @@ public class NoticeController {
      * 게시글 정보 & 게시글에 달린 댓글을 가져오는 기능
      * @param request 클라이언트에서 받아오는 값
      * @param model 클라이언트에게 보여줄 값을 담은 객체
-     * @return 보여줄 홈페이지
+     * @return 보여줄 페이지
      * @throws Exception
      */
     @GetMapping(value = "noticeInfo")
@@ -128,29 +131,35 @@ public class NoticeController {
         // 1. 클라이언트에게 받은 값
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0"); // 공지글번호(PK)
 
+
         log.info("nSeq : " + nSeq);
 
-        // 2. 받은 값을 게시글 불러오기와 댓글 리스트 불러오기에 각각 보내기 위한 DTO 선언 (Notice, comment)
+        // 2. 받은 값을 가지고 게시글 불러오기와 댓글 리스트 불러오기에 각각 보내기 위한 DTO 선언 (Notice, comment)
         NoticeDTO pDTO = NoticeDTO.builder()
                 .noticeSeq(Long.parseLong(nSeq)).build();
 
         CommentDTO cDTO = CommentDTO.builder()
                 .noticeSeq(Long.parseLong(nSeq)).build();
 
-        // 3. 값을 보내기 위해 만든 DTO를 Service 보내서 값을 받고 돌려줄 객체에 담기
+        //pDTO cDTO 로 주세요 요청
+        //rDTO rList로 받을게요 값 받기
+
+        // 3. 값을 보내기 위해 만든 DTO를 Service로 보내서 값을 받고 돌려줄 객체에 담기
         NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, true))
                 .orElseGet(() -> NoticeDTO.builder().build());
 
-//        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList(cDTO))
-//                        .orElseGet(ArrayList::new);
+        // 댓글 보기 호출
+        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList(cDTO))
+                        .orElseGet(ArrayList::new);
 
 
         // 4. 클라이언트에게 보여주기 위해 model객체에 service의 return값을 담기
         model.addAttribute("rDTO", rDTO);
-//        model.addAttribute("rList", rList);
+        model.addAttribute("rList", rList);
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
 
+        // 5. rDTO와 rList에 담긴 값을 타임리프나 js로 꺼내서 html에서 보여주기
         return "notice/noticeInfo";
     }
 

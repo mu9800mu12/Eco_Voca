@@ -27,35 +27,9 @@ public class CommentController {
 
     private final ICommentService commentService;
 
-    /**
-     * 댓글 리스트 가져오기
-     */
-    @PostMapping(value = "getCommentList")
-    public List<CommentDTO> getCommentList(HttpSession session, ModelMap model) throws Exception {
-
-        log.info("[ 컨트롤러 ] : 댓글 가져오기 시작!");
-
-        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-
-        List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList())
-                .orElseGet(ArrayList::new);
-
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rList", rList);
-
-        log.info("[ 컨트롤러 ] : 댓글 가져오기 끝!");
-
-        //todo 이거 값을 모델에 담아서 보내주는 건지 아니면 그냥 리스트로 보내는 건지 의문???
-        // 자바스크립트 섹세스부분으로 가기 때문에 맵에 담지 않아도 된다?
-
-        return rList;
-    }
-
-
-
 
     /**
-     * 댓글 달기
+     * 댓글 insert
      */
     @ResponseBody
     @PostMapping(value = "insertComment")
@@ -67,6 +41,7 @@ public class CommentController {
         //성공 : 1, 실패 :0
         int res = 1;
         try {
+            // 1. requeset로 값을 받기
             Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
             String comment = CmmUtil.nvl(request.getParameter("comment"));
@@ -75,6 +50,7 @@ public class CommentController {
             log.info("userId : " + userId);
             log.info("comment : " + comment);
 
+            // 2. insertComment 호출하여 데이터 삽입 시작
             commentService.insertComment(noticeSeq, userId, comment);
 
         } catch (Exception e) {
@@ -87,6 +63,7 @@ public class CommentController {
 
         log.info("[ 컨트롤러 ] : 댓글달기 끝!");
 
+            // 성공여부 res와 msg로 메세지 뷰로 전달
         return MsgDTO.builder()
                 .msg(msg)
                 .result(res)
@@ -94,7 +71,7 @@ public class CommentController {
     }
 
     /*
-     * 댓글 수정
+     * 댓글 update
      */
     @ResponseBody
     @PostMapping(value = "/updateComment")
@@ -125,7 +102,7 @@ public class CommentController {
                     .comment(comment)
                     .noticeSeq(noticeSeq).build();
 
-            commentService.updateComment(commentSeq, userId, comment, noticeSeq);
+            commentService.updateComment(userId, comment, noticeSeq, commentSeq);
 
             msg = "수정되었습니다";
             res = 1;
@@ -141,20 +118,21 @@ public class CommentController {
     }
 
     /**
-     * 댓글 삭제하기
+     * 댓글 삭제
      */
     @PostMapping(value = "deleteComment")
     public MsgDTO deleteComment(HttpServletRequest request, HttpSession session) throws Exception {
         log.info("[ 컨트롤러 ] :  댓글삭제 시작!");
 
         Long commentSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("commentSeq")));
+        Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         String msg = "삭제 되었습니다.";
         int res = 1;
 
         try {
-            commentService.deleteComment(commentSeq, userId);
+            commentService.deleteComment(commentSeq, userId, noticeSeq);
 
         } catch (Exception e) {
             log.info(e.toString());

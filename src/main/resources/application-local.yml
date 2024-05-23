@@ -1,6 +1,8 @@
 server:
   port: 8080
 
+## local 개발용
+
 
 spring:
   ## Profile Setting (is Default)

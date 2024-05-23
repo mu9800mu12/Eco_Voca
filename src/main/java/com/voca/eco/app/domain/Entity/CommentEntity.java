@@ -33,16 +33,22 @@ public class CommentEntity {
     private Long commentSeq;
 
     @NonNull
+    @Column(name = "NOTICE_SEQ")
+    private Long noticeSeq;
+
+    @NonNull
     @Column(name = "USER_ID")
     private String userId;
+
 
     @NonNull
     @Column(name = "comment")
     private String comment;
+
     @NonNull
     @Column(name = "regDt")
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class) //직렬화 역직렬화
     private LocalDateTime regDt;
 
     public CommentEntity updateComment(
