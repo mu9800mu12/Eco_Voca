@@ -65,7 +65,40 @@
       <i class="bi bi-list mobile-nav-toggle"></i>
     </nav><!-- .navbar -->
 
-    <a href="/user/login" class="get-started-btn scrollto">Get Started</a>
+    <a href="#" class="get-started-btn scrollto" id="btnLogout" th:if="${session.SS_USER_ID != null}">Logout</a>
+    <a href="/user/login" class="get-started-btn scrollto" th:unless="${session.SS_USER_ID != null}">Get Started</a>
+
+
+    <script type="text/javascript">
+
+      // 로그아웃 로직
+      document.getElementById("btnLogout").addEventListener("click", function (event) {
+        if (confirm("로그아웃 하시겠습니까?")) {
+
+          $.ajax({
+            url : "/user/logout",
+            type: "post",
+            dataType: "JSON",
+            success: function (json){
+
+              if (json.result === 1) {
+                alert(json.msg);
+                window.location.href = "/main";
+              } else {
+                alert(json.msg);
+              }
+            }
+          })
+
+
+        } else {
+
+          event.preventDefault();
+        }
+      });
+    </script>
+
+
 
   </div>
 </header><!-- End Header -->
@@ -85,7 +118,7 @@
       <div class="col-xl-2 col-md-4">
         <div class="icon-box">
           <i class="ri-store-line"></i>
-          <h3><a href="">경제단어 700선</a></h3>
+          <h3><a href="/word/word700List">경제단어 700선</a></h3>
         </div>
       </div>
       <div class="col-xl-2 col-md-4">

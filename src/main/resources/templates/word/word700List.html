@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>하루 경제 - 한국은행 700선</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main1.css" rel="stylesheet">
+    <style>
+        #content {
+            white-space: pre-line;
+        }
+    </style>
+
+    <!-- =======================================================
+    * Template Name: Gp
+    * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+    * Updated: Mar 17 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+                <div class="section-title">
+                    <h2>economy word 700</h2>
+                    <p>단어 학습</p>
+                </div>
+                <ol>
+                    <li><a href="/main">Home</a></li>
+                    <li>economy word 700</li>
+                </ol>
+            </div>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details" style="padding-top: 0px">
+        <div class="container">
+
+            <div class="php-email-form" style="padding-bottom: 10px; overflow: hidden;">
+                <button type="button" id="btnNews" style="float: right;">관련 뉴스 보기</button>
+            </div>
+            <div class="portfolio-info" style="min-height: 610px">
+                <div id="list" style="min-height: 500px">
+                    <div class="section-title">
+                        <p id="word"></p>
+                    </div>
+                    <span id="content"></span>
+                </div>
+                <div class="php-email-form mx-auto text-center" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="flex: 1;">
+
+                    </div>
+                    <div style="flex: 2; display: flex; justify-content: center; align-items: center;">
+                        <button type="button" id="minus">이전</button>
+                        <span style="padding: 0 7px;" id="seq"></span>
+                        <button type="button" id="plus">다음</button>
+                    </div>
+                    <div style="flex: 1; text-align: right;">
+                        <button type="button" id="btnSaveNote">단어 저장하기</button>
+                    </div>
+                </div>
+
+            </div>
+
+<!--            <div>-->
+<!--                <div class="input-group mb-3 php-email-form">-->
+<!--                    <input type="search"class="form-control" id="content" name="content" placeholder="검색할 단어를 입력해주세요."/>-->
+<!--                    <button id="btnSend" name="btnSend" type="button"><i class="bx bx-search"></i></button>-->
+<!--                </div>-->
+
+<!--                <div id="ytplayer-container"></div>-->
+<!--            </div>-->
+<!--            <div class="portfolio-info">-->
+<!--                <span>검색 결과가 이곳에 나타납니다.</span>-->
+<!--            </div>-->
+        </div>
+    </section><!-- End Portfolio Details Section -->
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+    let seq = 0
+    let data
+
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+        $("#btnSaveNote").on("click", function () {
+            saveNote()
+        })
+
+        $("#minus").on("click", function () {
+            seq--
+            if (seq < 0) seq = 0
+            insertData()
+        })
+
+        $("#plus").on("click", function () {
+            seq++
+            insertData()
+        })
+
+        $("#btnNews").on("click", function () {
+            location.href = "wordNews?word=" + document.getElementById("word").textContent
+        })
+
+        getWordList();
+
+        // 현재 페이지에 해당하는 네비게이션 활성화 설정
+        let currentPage = 'study';
+
+        // 각 페이지에 따라 해당 네비게이션 항목 활성화
+        if (currentPage === 'home') {
+            $("#nav-home").addClass("active");
+        } else if (currentPage === 'study') {
+            $("#nav-study").addClass("active");
+            // // 호버 효과를 유지할 요소 선택
+            // let elementsToHover = $("#nav-study700, #nav-study700-1");
+            //
+            // // 요소에 호버 효과 적용
+            // elementsToHover.css("background-color", "#ffc451");
+        } else if (currentPage === 'search') {
+            $("#nav-search").addClass("active");
+        } else if (currentPage === 'learning') {
+            $("#nav-learning").addClass("active");
+        } else if (currentPage === 'notice') {
+            $("#nav-notice").addClass("active");
+        } else if (currentPage === 'mypage') {
+            $("#nav-mypage").addClass("active");
+        }
+    })
+    function saveNote() {
+
+        let word = data[seq].word
+        let content = data[seq].contents.toString().split(".").join(".\n\n");
+
+        $.ajax({
+            url: "/learningList/insertWord",
+            type: "post",
+            dataType: "JSON",
+            data: { content : content,
+                    word :word
+            },
+            success: function (json) {
+                alert(json.msg);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error(xhr.statusText);
+            }
+        });
+    }
+
+    // 리스트 가져오기
+    function getWordList() {
+
+        $.ajax({
+            url: "/word/getWord700List",
+            type: "post",
+            dataType: "JSON",
+            success: function (json) {
+                data = json
+
+                insertData()
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error(xhr.statusText);
+            }
+        });
+    }
+
+    function insertData() {
+        document.getElementById("word").textContent = data[seq].word
+        document.getElementById("seq").textContent = (seq + 1) + '/700'
+        document.getElementById("content").textContent = data[seq].contents.toString().split(".").join(".\n\n");
+    }
+</script>
+</body>
+
+</html>

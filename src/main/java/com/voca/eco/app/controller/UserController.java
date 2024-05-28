@@ -482,22 +482,21 @@ public class UserController {
     /*
      * 로그아웃
      */
-    //todo 뷰는 개발 안함
     @ResponseBody
     @PostMapping(value = "logout")
     public MsgDTO logout(HttpSession session) {
 
-        log.info(this.getClass().getName() + ".logout Start!");
+        log.info(this.getClass().getName() + ".logout [controller] 로그아웃 실행");
 
-        session.setAttribute("SS_USER_ID", ""); // 세션 값 빈값으로 변경
-        session.removeAttribute("SS_USER_ID"); // 세션 값 지우기
+        session.setAttribute("SS_USER_ID", "");
 
-        // 결과 메시지 전달하기
-        MsgDTO dto = MsgDTO.builder().result(1).msg("로그아웃하였습니다").build();
+        session.removeAttribute("SS_USER_ID");
 
-        log.info(this.getClass().getName() + ".logout End!");
+        MsgDTO msgDTO = MsgDTO.builder().result(1).msg("로그아웃 하였습니다.").build();
 
-        return dto;
+        log.info(this.getClass().getName() + ".logout [controller] 로그아웃 종료");
+
+        return msgDTO;
     }
 
 

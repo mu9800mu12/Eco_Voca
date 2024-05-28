@@ -1,0 +1,74 @@
+<!-- ======= Header ======= -->
+<!-- 흰색 배경으로 시작하는 페이지들에 적용할 헤더임 !! 검은 이미지 배경으로 시작하는 페이지에선 적용되면 안됨 -->
+<header id="header" class="fixed-top header-inner-pages">
+    <div class="container d-flex align-items-center justify-content-lg-between">
+
+        <h1 class="logo me-auto me-lg-0"><a href="/main">하루 경제.</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="/imgMain/logo.png" alt="" class="img-fluid"></a>-->
+
+        <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul>
+                <li><a class="nav-link scrollto" id="nav-home" href="/main">Home</a></li>
+                <li class="dropdown"><a href="#" id="nav-study"><span>경제 단어</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li class="dropdown"><a href="#" id="nav-study700"><span>한국은행 700선</span> <i class="bi bi-chevron-right"></i></a>
+                            <ul>
+                                <li><a href="/word/word700List" id="nav-study700-1">700 단어 학습</a></li>
+                                <li><a href="/word/word700Quiz" id="nav-study700-2">700 문제 풀기</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown"><a href="#" id="nav-study3000"><span>경제시사 3000선</span> <i class="bi bi-chevron-right"></i></a>
+                            <ul>
+                                <li><a href="/word/word3000List" id="nav-study3000-1">3000 단어 학습</a></li>
+                                <li><a href="/word/word3000Quiz" id="nav-study3000-2">3000 문제 풀기</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown"><a href="#" id="nav-learning"><span>학습 일지</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        <li><a href="/calendar" id="nav-learning1">일자별 학습 기록</a></li>
+                        <li><a href="/learningList" id="nav-learning2">학습 단어 목록</a></li>
+                    </ul>
+                </li>
+                <li><a class="nav-link scrollto" id="nav-notice" href="/notice/noticeList">커뮤니티</a></li>
+                <li th:if="${session.SS_USER_ID != null}"><a class="nav-link scrollto" id="nav-mypage" href="/user/myPageIndex">마이페이지</a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+
+        <a href="#" class="get-started-btn scrollto" id="btnLogout" th:if="${session.SS_USER_ID != null}">Logout</a>
+        <a href="/user/login" class="get-started-btn scrollto" th:unless="${session.SS_USER_ID != null}">Get Started</a>
+
+    </div>
+</header><!-- End Header -->
+
+<script type="text/javascript">
+
+    // 로그아웃 로직
+    document.getElementById("btnLogout").addEventListener("click", function (event) {
+        if (confirm("로그아웃 하시겠습니까?")) {
+
+            $.ajax({
+                url : "/user/logout",
+                type: "post",
+                dataType: "JSON",
+                success: function (json){
+
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        window.location.href = "/main";
+                    } else {
+                        alert(json.msg);
+                    }
+                }
+            })
+
+
+        } else {
+
+            event.preventDefault();
+        }
+    });
+</script>
