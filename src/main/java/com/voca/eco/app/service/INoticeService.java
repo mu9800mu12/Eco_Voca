@@ -21,7 +21,7 @@ public interface INoticeService {
 
     /**
      * 게시판 작성
-     * @param title
+     * @param xtitle
      * @param noticeYn
      * @param contents
      * @param userId

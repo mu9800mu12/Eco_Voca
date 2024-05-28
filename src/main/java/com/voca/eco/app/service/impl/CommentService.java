@@ -55,15 +55,18 @@ public class CommentService implements ICommentService {
         log.info("pDTO의 noticeSeq값 : " + pDTO.noticeSeq());
 
         // 2. 받은 값을 가지고 DB를 조회하기 위해서 DTO의 값을 Entity로 변환
-        CommentEntity cEntity = CommentEntity.builder()
-                .noticeSeq(pDTO.noticeSeq())
-                .build();
+//        CommentEntity cEntity = CommentEntity.builder()
+//                .noticeSeq(pDTO.noticeSeq())
+//                .build();
+
+        log.info("나는 죄준상 입니다아아아아");
 
         // 3. Entity를 Repository에 정의해둔 함수에 넣어 DB에서 값을 조회한 뒤 돌려줄 객체에 담기
-        List<CommentEntity> rList = commentRepository.findAllByNoticeSeqAndOrderByCommentSeqDesc();
+        List<CommentEntity> rList = commentRepository.findAllByNoticeSeq(
+                pDTO.noticeSeq());
 
 
-        // 4. Controller와 Service간의 데이터이동은 무조건 DTO로 해야한다
+        // 4. Controller와 Service간의 데이터이동은 무조건 DTO로 해야한다 OR 사용할 녀석들을 따로 먼저 뽑아서 사용한다.
         // Entity의 존재의의는 DB에 직접 관여하기 위한 매개체일 뿐이다.
         // ObjectMapeer를 사용해서 Entity를 DTO로 변환
         List<CommentDTO> nList = new ObjectMapper().convertValue(rList,

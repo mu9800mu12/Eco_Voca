@@ -53,9 +53,9 @@ public class CommentController {
             // 2. insertComment 호출하여 데이터 삽입 시작
             commentService.insertComment(noticeSeq, userId, comment);
 
+        // catch는 뭐냐
         } catch (Exception e) {
             log.info(e.toString());
-            e.printStackTrace();
 
             msg = "댓글작성에 실패하였습니다.\n다시 실행 해주세요";
             res = 0;
@@ -96,13 +96,19 @@ public class CommentController {
             log.info("commentSeq : " + commentSeq);
             log.info("comment : " + comment);
 
-            pDTO = CommentDTO.builder()
-                    .userId(userId)
-                    .commentSeq(commentSeq)
-                    .comment(comment)
-                    .noticeSeq(noticeSeq).build();
 
-            commentService.updateComment(userId, comment, noticeSeq, commentSeq);
+            // DTO로 담아서 보낼 거면 이렇게 빌더로 pDTO에 담아서
+//            pDTO = CommentDTO.builder()
+//                    .userId(userId)
+//                    .commentSeq(commentSeq)
+//                    .comment(comment)
+//                    .noticeSeq(noticeSeq).build();
+
+
+            // 이런식으로 DTO에 담아서 보내면 된다
+//            commentService.updateComment(pDTO);
+
+            commentService.updateComment(userId, comment, commentSeq, noticeSeq);
 
             msg = "수정되었습니다";
             res = 1;
@@ -110,7 +116,6 @@ public class CommentController {
         } catch (Exception e) {
             msg = "실패하였습니다 : " + e;
             log.info(e.toString());
-            e.printStackTrace();
         } finally {
             log.info("[ 컨트롤러 ] :  댓글수정 시작!");
         }
@@ -136,7 +141,6 @@ public class CommentController {
 
         } catch (Exception e) {
             log.info(e.toString());
-            e.printStackTrace();
 
             msg = "오류로 인해 실패하였습니다. \n다시 시도해 주세요";
             res = 0;

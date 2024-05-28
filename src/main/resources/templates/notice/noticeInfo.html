@@ -114,5 +114,33 @@
     <button id="btnDelete" type="button">삭제</button>
     <button id="btnList" type="button">목록</button>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<div class="divTable minimalistBlack">
+    <div class="divTableBody">
+        </div>
+
+        <div class="divTableRow">
+            <div class="divTableCell">작성일@@이거 노티스regDt말고 댓글 regDt로 바꿔야 함</div>
+            <div class="divTableCell" th:text="${rDTO.regDt}"></div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">댓글 </div>
+            <div class="divTableCell" >
+                <input type="text" name="comment" maxlength="100" style="width: 95%"/>
+                <button id="btnComment" type="button">입력</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 </body>
 </html>

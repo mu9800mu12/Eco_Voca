@@ -20,13 +20,14 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     /**
      * 댓글 작성하기
      */
+
     /**
      * 댓글 수정하기
      */
     CommentEntity findByCommentSeq(Long commentSeq);
 
     // 게시글 번호화 댓글번호로 댓글 호출하기
-    List<CommentEntity> findAllByNoticeSeqAndOrderByCommentSeqDesc();
+    List<CommentEntity> findAllByNoticeSeq(Long noticeSeq);
 
     /**
      * 댓글 삭제하기
