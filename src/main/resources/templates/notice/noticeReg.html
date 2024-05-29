@@ -6,16 +6,15 @@
     <link rel="stylesheet" href="/css/ExList.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
             // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
             $("#btnSend").on("click", function () {
                 doSubmit(); // 공지사항 등록하기 실행
-            })
-        })
+            });
+        });
 
-        //글자 길이 바이트 단위로 체크하기(바이트값 전달)
+        // 글자 길이 바이트 단위로 체크하기(바이트값 전달)
         function calBytes(str) {
             let tcount = 0;
             let tmpStr = String(str);
@@ -34,7 +33,6 @@
 
         // 공지사항 저장하기
         function doSubmit() {
-
             let f = document.getElementById("f"); // form 태그
 
             if (f.title.value === "") {
@@ -72,61 +70,117 @@
 
             // Ajax 호출해서 글 등록하기
             $.ajax({
-                    url: "/notice/noticeInsert",
-                    type: "post", // 전송방식은 Post
-                    // contentType: "application/json",
-                    dataType: "JSON", // 전송 결과는 JSON으로 받기
-                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                    success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
-                        alert(json.msg); // 메시지 띄우기
-                        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-                    }
+                url: "/notice/noticeInsert",
+                type: "post", // 전송방식은 Post
+                // contentType: "application/json",
+                dataType: "JSON", // 전송 결과는 JSON으로 받기
+                data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
+                    alert(json.msg); // 메시지 띄우기
+                    location.href = "/notice/noticeList"; // 공지사항 리스트 이동
                 }
-            )
+            });
         }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #343a40;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .form-group input[type="radio"] {
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-actions button[type="reset"] {
+            background-color: #6c757d;
+        }
+
+        .form-actions button[type="reset"]:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
-<h2>공지사항 등록하기</h2>
-<hr/>
-<br/>
-<form name="f" id="f">
-    <div class="divTable minimalistBlack">
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <div class="divTableCell">제목
-                </div>
-                <div class="divTableCell">
-                    <input type="text" name="title" maxlength="100" style="width: 95%"/>
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">공지글 여부
-                </div>
-                <div class="divTableCell">
-                    예<input type="radio" name="noticeYn" value="Y"/>
-                    아니오<input type="radio" name="noticeYn" value="N"/>
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">조회수
-                </div>
-                <div class="divTableCell">
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">내용
-                </div>
-                <div class="divTableCell">
-                    <textarea name="contents" style="width: 95%; height: 400px"></textarea>
-                </div>
-            </div>
+<div class="container">
+    <h2>공지사항 등록하기</h2>
+    <hr/>
+    <br/>
+    <form name="f" id="f">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title" maxlength="100"/>
         </div>
-    </div>
-    <div>
-        <button id="btnSend" type="button">등록</button>
-        <button type="reset">다시 작성</button>
-    </div>
-</form>
+        <div class="form-group">
+            <label>공지글 여부</label>
+            <label><input type="radio" name="noticeYn" value="Y"/> 예</label>
+            <label><input type="radio" name="noticeYn" value="N"/> 아니오</label>
+        </div>
+        <div class="form-group">
+            <label for="contents">내용</label>
+            <textarea name="contents" id="contents" rows="10"></textarea>
+        </div>
+        <div class="form-actions">
+            <button id="btnSend" type="button">등록</button>
+            <button type="reset">다시 작성</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

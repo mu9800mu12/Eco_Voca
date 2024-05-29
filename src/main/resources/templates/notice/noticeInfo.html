@@ -1,146 +1,190 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <title>게시판 글보기</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    const session_user_id = /*[[${session.SS_USER_ID}]]*/ ''; // Controller에서 받은 세션에 저장된 값
+    const user_id = /*[[${rDTO.userId}]]*/ ''; // 공지사항 게시글 작성자 아이디
+    const nSeq = /*[[${rDTO.noticeSeq}]]*/ ''; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
 
-    <title>게시판 글보기</title>
-    <link rel="stylesheet" href="/css/ExList.css"/>
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        const session_user_id = [[${session.SS_USER_ID}]]; // Controller에서 받은 세션에 저장된 값
-        const user_id = [[${rDTO.userId}]]; // 공지사항 게시글 작성자 아이디
-        const nSeq = [[${rDTO.noticeSeq}]]; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+    $(document).ready(function () {
+      $("#btnEdit").on("click", function () {
+        doEdit(); // 공지사항 수정하기 실행
+      });
+      $("#btnDelete").on("click", function () {
+        doDelete(); // 공지사항 삭제하기 실행
+      });
+      $("#btnList").on("click", function () {
+        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+      });
+      $("#btnCommentInsert").on("click", function () {
+        doCommentInsert(); // 댓글 작성
+      });
+    });
 
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnEdit").on("click", function () {
-                doEdit(); // 공지사항 수정하기 실행
-            })
+    function doEdit() {
+      if (session_user_id === user_id) {
+        location.href = "/notice/noticeEditInfo?nSeq=" + nSeq;
+      } else if (session_user_id === "") {
+        alert("로그인 하시길 바랍니다.");
+      } else {
+        alert("본인이 작성한 글만 수정 가능합니다.");
+      }
+    }
 
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnDelete").on("click", function () {
-                doDelete(); // 공지사항 수정하기 실행
-            })
-
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnList").on("click", function () {
-                location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-            })
-        })
-
-        //수정하기
-        function doEdit() {
-            if (session_user_id === user_id) {
-                location.href = "/notice/noticeEditInfo?nSeq=" + nSeq;
-
-            } else if (session_user_id === "") {
-                alert("로그인 하시길 바랍니다.");
-
-            } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
-
+    function doDelete() {
+      if (session_user_id === user_id) {
+        if (confirm("작성한 글을 삭제하시겠습니까?")) {
+          $.ajax({
+            url: "/notice/noticeDelete",
+            type: "post",
+            dataType: "JSON",
+            data: {"nSeq": nSeq},
+            success: function (json) {
+              alert(json.msg);
+              location.href = "/notice/noticeList";
             }
+          });
         }
+      } else if (session_user_id === "") {
+        alert("로그인 하시길 바랍니다.");
+      } else {
+        alert("본인이 작성한 글만 삭제 가능합니다.");
+      }
+    }
 
-        //삭제하기
-        function doDelete() {
-            if (session_user_id === user_id) {
-                if (confirm("작성한 글을 삭제하시겠습니까?")) {
+    function doCommentInsert() {
+      let f = document.getElementById("f");
 
-                    // Ajax 호출해서 글 삭제하기
-                    $.ajax({
-                            url: "/notice/noticeDelete",
-                            type: "post", // 전송방식은 Post
-                            dataType: "JSON", // 전송 결과는 JSON으로 받기
-                            data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                            success:
-                                function (json) { // /notice/noticeDelete 호출이 성공했다면..
-                                    alert(json.msg); // 메시지 띄우기
-                                    location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-                                }
-                        }
-                    )
-                }
+      if (f.comment.value === "") {
+        alert("댓글을 입력하시기 바랍니다.");
+        f.comment.focus();
+        return;
+      }
 
-            } else if (session_user_id === "") {
-                alert("로그인 하시길 바랍니다.");
-
-            } else {
-                alert("본인이 작성한 글만 수정 가능합니다.");
-
-            }
+      $.ajax({
+        url: "/comment/insertComment",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+          alert(json.msg);
+          // 댓글 작성 후 동작 추가 필요 시 여기에 추가
         }
-
-        /*]]>*/
-    </script>
+      });
+    }
+    /*]]>*/
+  </script>
 </head>
 <body>
-<h2>공지사항 상세보기</h2>
-<hr/>
-<br/>
-<div class="divTable minimalistBlack">
-    <div class="divTableBody">
-        <div class="divTableRow">
-            <div class="divTableCell">제목
+
+<div class="container mt-5">
+  <h2>공지사항 상세보기</h2>
+  <hr/>
+  <form id="f">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 th:text="${rDTO.title}">제목</h5>
+      </div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">공지글 여부</label>
+          <div class="col-sm-10">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'Y'}" disabled>
+              <label class="form-check-label">예</label>
             </div>
-            <div class="divTableCell" th:text="${rDTO.title}"></div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">공지글 여부
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'N'}" disabled>
+              <label class="form-check-label">아니오</label>
             </div>
-            <div class="divTableCell">
-                예<input type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'Y'}"/>
-                아니오<input type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'N'}"/>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">작성일</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body" th:text="${rDTO.regDt}">작성일</div>
             </div>
+          </div>
         </div>
-        <div class="divTableRow">
-            <div class="divTableCell">작성일</div>
-            <div class="divTableCell" th:text="${rDTO.regDt}"></div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">조회수</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body" th:text="${rDTO.readCnt}">조회수</div>
+            </div>
+          </div>
         </div>
-        <div class="divTableRow">
-            <div class="divTableCell">조회수</div>
-            <div class="divTableCell" th:text="${rDTO.readCnt}"></div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">내용</label>
+          <div class="col-sm-10">
+            <div class="card">
+              <div class="card-body" th:text="${rDTO.contents}">내용</div>
+            </div>
+          </div>
         </div>
-        <div class="divTableRow">
-            <div class="divTableCell">내용</div>
-            <div class="divTableCell" th:text="${rDTO.contents}"></div>
-        </div>
+      </div>
     </div>
-</div>
-<div>
-    <button id="btnEdit" type="button">수정</button>
-    <button id="btnDelete" type="button">삭제</button>
-    <button id="btnList" type="button">목록</button>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
-
-<div class="divTable minimalistBlack">
-    <div class="divTableBody">
-        </div>
-
-        <div class="divTableRow">
-            <div class="divTableCell">작성일@@이거 노티스regDt말고 댓글 regDt로 바꿔야 함</div>
-            <div class="divTableCell" th:text="${rDTO.regDt}"></div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">댓글 </div>
-            <div class="divTableCell" >
-                <input type="text" name="comment" maxlength="100" style="width: 95%"/>
-                <button id="btnComment" type="button">입력</button>
-            </div>
-        </div>
+    <div class="text-right mb-4">
+      <button id="btnEdit" type="button" class="btn btn-warning">수정</button>
+      <button id="btnDelete" type="button" class="btn btn-danger">삭제</button>
+      <button id="btnList" type="button" class="btn btn-secondary">목록</button>
     </div>
+
+    <div class="card mb-4">
+      <div class="card-header">댓글 작성</div>
+      <div class="card-body">
+        <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}" />
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">작성자</label>
+          <div class="col-sm-10">
+            <p class="form-control-plaintext" th:text="${rDTO.userId()}">작성자</p>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">댓글</label>
+          <div class="col-sm-8">
+            <input type="text" name="comment" id="comment" class="form-control" maxlength="100" placeholder="댓글을 입력하세요...">
+          </div>
+          <div class="col-sm-2">
+            <button id="btnCommentInsert" type="button" class="btn btn-primary">작성</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">댓글 목록</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>작성자</th>
+              <th>댓글</th>
+              <th>작성시간</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cDTO : ${rList}">
+              <td th:text="${cDTO.userId()}">작성자</td>
+              <td th:text="${cDTO.comment()}">댓글 내용</td>
+              <td th:text="${cDTO.regDt()}">작성시간</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </form>
 </div>
-
-
 
 </body>
 </html>

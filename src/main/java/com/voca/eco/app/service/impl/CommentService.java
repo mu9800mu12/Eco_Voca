@@ -6,6 +6,9 @@ import com.voca.eco.app.domain.CommentRepository;
 import com.voca.eco.app.domain.Entity.CommentEntity;
 import com.voca.eco.app.dto.CommentDTO;
 import com.voca.eco.app.service.ICommentService;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +95,11 @@ public class CommentService implements ICommentService {
         log.info("[ 서비스 ] : 댓글 작성하기 시작");
 
         // 1. 값 제대로 받았는지 확인
-        log.info("noticeSeq" +noticeSeq);
-        log.info("userId" + userId);
-        log.info("comment" + comment);
+        log.info("noticeSeq :" +noticeSeq);
+        log.info("userId :" + userId);
+        log.info("comment :" + comment);
+
+        LocalDateTime regDt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // 현재 시간을 가져옵니다.
 
 
         // 2. 받은 값을 엔터티(DB)에 저장하기
@@ -103,6 +108,7 @@ public class CommentService implements ICommentService {
                         .noticeSeq(noticeSeq)
                         .comment(comment)
                         .userId(userId)
+                        .regDt(regDt)
                         .build()
 
         );

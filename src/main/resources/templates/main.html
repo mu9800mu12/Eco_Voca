@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
 
   <title>하루경제</title>
   <meta content="" name="description">
@@ -14,7 +15,9 @@
   <link href="/imgMainMain/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet">
 
   <!-- vendor/main CSS Files -->
   <link href="vendor/main/aos/aos.css" rel="stylesheet">
@@ -27,6 +30,7 @@
 
   <!-- Template Main CSS File -->
   <link href="/css/main.css" rel="stylesheet">
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
   <!-- =======================================================
   * Template Name: Gp
@@ -39,6 +43,9 @@
 
 <body>
 
+
+
+<!--<div th:replace="~{mainHeader}"></div>-->
 <!-- ======= Header ======= -->
 <header id="header" class="fixed-top ">
   <div class="container d-flex align-items-center justify-content-lg-between">
@@ -68,40 +75,38 @@
     <a href="#" class="get-started-btn scrollto" id="btnLogout" th:if="${session.SS_USER_ID != null}">Logout</a>
     <a href="/user/login" class="get-started-btn scrollto" th:unless="${session.SS_USER_ID != null}">Get Started</a>
 
-
-    <script type="text/javascript">
-
-      // 로그아웃 로직
-      document.getElementById("btnLogout").addEventListener("click", function (event) {
-        if (confirm("로그아웃 하시겠습니까?")) {
-
-          $.ajax({
-            url : "/user/logout",
-            type: "post",
-            dataType: "JSON",
-            success: function (json){
-
-              if (json.result === 1) {
-                alert(json.msg);
-                window.location.href = "/main";
-              } else {
-                alert(json.msg);
-              }
-            }
-          })
-
-
-        } else {
-
-          event.preventDefault();
-        }
-      });
-    </script>
-
-
-
   </div>
-</header><!-- End Header -->
+
+<script type="text/javascript">
+  let elements = document.getElementsByClassName("get-started-btn");
+  // 로그아웃 로직
+  document.getElementById("btnLogout").addEventListener("click", function (event) {
+    if (confirm("로그아웃 하시겠습니까?")) {
+
+      console.log("준수형다녀감 쓰ㅢ엣")
+
+      $.ajax({
+        url: "/user/logout",
+        type: "post",
+        dataType: "JSON",
+        success: function (json) {
+
+          if (json.result === 1) {
+            alert(json.msg);
+            window.location.href = "/main";
+          } else {
+            alert(json.msg);
+          }
+        }
+      })
+
+    } else {
+
+      event.preventDefault();
+    }
+  });
+</script>
+</header>
 
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center justify-content-center">
@@ -160,21 +165,28 @@
 
       <div class="clients-slider swiper">
         <div class="swiper-wrapper align-items-center">
-          <div class="swiper-slide"><img src="/imgMain/clients/client-1.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-2.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-3.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-4.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-5.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-6.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-7.png" class="img-fluid" alt=""></div>
-          <div class="swiper-slide"><img src="/imgMain/clients/client-8.png" class="img-fluid" alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-1.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-2.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-3.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-4.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-5.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-6.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-7.png" class="img-fluid"
+                                         alt=""></div>
+          <div class="swiper-slide"><img src="/imgMain/clients/client-8.png" class="img-fluid"
+                                         alt=""></div>
         </div>
         <div class="swiper-pagination"></div>
       </div>
 
     </div>
   </section><!-- End Clients Section -->
-
 
 
   <!-- ======= Testimonials Section ======= -->
@@ -338,7 +350,8 @@
 </footer><!-- End Footer -->
 
 <div id="preloader"></div>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
 
 <!-- vendor/main JS Files -->
 <script src="vendor/main/purecounter/purecounter_vanilla.js"></script>

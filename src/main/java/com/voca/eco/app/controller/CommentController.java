@@ -42,11 +42,13 @@ public class CommentController {
         int res = 1;
         try {
             // 1. requeset로 값을 받기
-            Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
+            String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0");
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
             String comment = CmmUtil.nvl(request.getParameter("comment"));
 
-            log.info("noticeSeq : " + noticeSeq);
+            Long noticeSeq = Long.parseLong(nSeq);
+
+            log.info("nSeq : " + nSeq);
             log.info("userId : " + userId);
             log.info("comment : " + comment);
 

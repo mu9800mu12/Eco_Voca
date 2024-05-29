@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/updateMyPage.css"/>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
 
@@ -26,6 +27,16 @@
         location.href = "deleteUser";
       });
 
+      // 우편번호 찾기
+      $("#btnAddr").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        kakaoPost(f);
+      })
+
+      // 닉네임 확인
+      $("#btnNickName").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        NickNameExists(f);
+      })
+
       function updateMyPage() {
 
         $.ajax({
@@ -47,8 +58,46 @@
 
       }
 
+      function NickNameExists(f) {
+        if (f.nickName.value === "") {
+          alert("닉네임을 입력하세요.");
+          f.nickName.focus();
+          return;
+        }
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+              url: "/user/NickNameExists",
+              type: "post", // 전송방식은 Post
+              dataType: "JSON", // 전송 결과는 JSON으로 받기
+              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+              success: function (json) { // 호출이 성공했다면..
+                console.log(json)
+                if (json === 1) {
+                  alert("이미 가입된 닉네임이 존재합니다.");
+                  f.nickName.focus();
+                } else {
+                  nickNameCheck = 0;
+                  alert("사용 가능한 닉네임입니다..");
+                }
+              }
+            }
+        )
+      }
 
-
+      // 카카오 우편번호 조회 API 호출
+      function kakaoPost(f) {
+        new daum.Postcode({
+          oncomplete: function (data) {
+            // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
+            // 주요 결과값
+            // 주소 : data.address
+            // 우편번호 : data.zonecode
+            let address = data.address; // 주소
+            let zonecode = data.zonecode; // 우편번호
+            f.address.value = "(" + zonecode + ")" + address
+          }
+        }).open();
+      }
 
       // 내 정보 가져오기
       function myPageIndex() {
@@ -101,42 +150,71 @@
 
   <div style="margin: auto">
     <div style="width: 100%">
-      <div> 아이디
-        <input type="text" class="form-control" id="userId" name="userId" value="" disabled="" style="width: 100%">
+      <div class="divTableRow"> 아이디</div>
+      <div>
+        <input type="text" class="form-control" id="userId" name="userId" value="" disabled=""
+               style="width: 100%">
       </div>
     </div>
 
     <div style="width: 100%">
-      <div > 이메일
-        <input type="email" class="form-control" id="email" name="email" disabled="" style="width: 100%">
+      <div class="divTableRow"> 이메일</div>
+      <div>
+        <input type="email" class="form-control" id="email" name="email" disabled=""
+               style="width: 100%">
       </div>
     </div>
 
     <div style="width: 100%">
-      <div > 이름
-        <input type="text" class="form-control" id="userName" name="userName" disabled="" style="width: 100%">
+      <div class="divTableRow"> 이름</div>
+      <div>
+        <input type="text" class="form-control" id="userName" name="userName" disabled=""
+               style="width: 100%">
       </div>
     </div>
 
-    <div style="width: 100%">
-      <div > 닉네임
+<!--    <div style="width: 100%">-->
+<!--      <div>-->
+<!--        <div class="divTableRow"> 닉네임</div>-->
+
+<!--        <input type="text" class="form-control" id="nickName" name="nickName" style="width: 100%">-->
+<!--        <button id="btnNickName" type="button" style="float: right;" >중복확인</button>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="divTableRow">닉네임
+      <div class="divTableCell">
         <input type="text" class="form-control" id="nickName" name="nickName" style="width: 100%">
+        <button id="btnNickName" type="button">확인</button>
       </div>
     </div>
 
-        <div style="width: 100%">
-      <div > 주소
-        <input type="text" class="form-control" id="address" name="address" style="width: 100%">
+<!--    <div style="width: 100%">-->
+<!--      <div class="divTableRow">주소</div>-->
+<!--      <div>-->
+<!--        <input type="text" class="address" id="address" name="address" style="width: 100%">-->
+<!--        <button id="btnAddr" type="button" style="float: right;">우편번호</button>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="divTableRow">
+      <div class="divTableRow"> 주소
+      </div>
+      <div class="divTableCell">
+        <input type="text" class="address" id="address" name="address" style="width:100%" placeholder="주소"/>
+        <button id="btnAddr" type="button">우편번호</button>
       </div>
     </div>
     <div style="width: 100%">
-      <div > 생년월일
-        <input type="text" class="form-control" id="birthday" name="birthday" disabled="" style="width: 100%">
+      <div class="divTableRow"> 생년월일</div>
+      <div>
+        <input type="text" class="form-control" id="birthday" name="birthday" disabled=""
+               style="width: 100%">
       </div>
     </div>
     <div style="width: 100%">
-      <div > 가입날짜
-        <input type="text" class="form-control" id="sinceDay" name="sinceDay" disabled="" style="width: 100%">
+      <div class="divTableRow"> 가입날짜</div>
+      <div>
+        <input type="text" class="form-control" id="sinceDay" name="sinceDay" disabled=""
+               style="width: 100%">
       </div>
     </div>
   </div>

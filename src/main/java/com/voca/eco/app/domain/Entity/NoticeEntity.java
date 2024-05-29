@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -82,8 +83,8 @@ public class NoticeEntity {
         this.readCnt = 0L;
         this.regId = regId;
         this.chgId = chgId;
-        this.chgDt = LocalDateTime.now();
-        this.regDt = LocalDateTime.now();
+        this.chgDt =  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // 나노초를 초 단위로 자름;
+        this.regDt =  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // 나노초를 초 단위로 자름;
     }
 
     public NoticeEntity updateNoticeInfo(
@@ -93,7 +94,7 @@ public class NoticeEntity {
         this.title = title;
         this.contents = contents;
         this.noticeYn = noticeYn;
-        this.chgDt = LocalDateTime.now();
+        this.chgDt =  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS); // 나노초를 초 단위로 자름;
         return this;
     }
 
