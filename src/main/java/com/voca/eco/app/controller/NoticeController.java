@@ -6,6 +6,7 @@ import com.voca.eco.app.dto.NoticeDTO;
 import com.voca.eco.app.service.ICommentService;
 import com.voca.eco.app.service.INoticeService;
 import com.voca.eco.common.util.CmmUtil;
+import jakarta.mail.Session;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -124,14 +125,14 @@ public class NoticeController {
      * @throws Exception
      */
     @GetMapping(value = "noticeInfo")
-    public String noticeInfo(HttpServletRequest request, ModelMap model) throws Exception {
+    public String noticeInfo(HttpSession session,HttpServletRequest request, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeInfo Start!");
 
         // 1. 클라이언트에게 받은 값
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0"); // 공지글번호(PK)
 
-
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         log.info("nSeq : " + nSeq);
 
         // 2. 받은 값을 가지고 게시글 불러오기와 댓글 리스트 불러오기에 각각 보내기 위한 DTO 선언 (Notice, comment)

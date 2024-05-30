@@ -43,6 +43,5 @@ public interface ICommentService {
      * 댓글 삭제하기
      */
     void deleteComment(final Long commentSeq,
-            final String userId,
             final Long noticeSeq) throws Exception;
 }

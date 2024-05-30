@@ -32,5 +32,5 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     /**
      * 댓글 삭제하기
      */
-    void deleteByNoticeSeqAndCommentSeqAndUserId(Long commentSeq, Long noticeSeq, String userId);
+    void deleteByNoticeSeqAndCommentSeq(Long noticeSeq, Long commentSeq);
 }

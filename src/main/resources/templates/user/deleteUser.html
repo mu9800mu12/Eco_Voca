@@ -10,6 +10,22 @@
     $(document).ready(function() {
       myPageIndex();
 
+      // 아이디 띄워주기
+      function myPageIndex() {
+
+        $.ajax({
+          url: "/user/myPageIndex",
+          type: "post",
+          dataType: "JSON",
+          data: $("#f").serialize(),
+          success: function (json) {
+
+            $("#userId").val(json.userId + " 님의 계정을 삭제하시겠습니까?")
+
+          }
+        })
+      }
+
       // 회원탈퇴 로직 호출
       $("#btnDeleteUser").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
         let deleteText = document.getElementById("deleteText"); // form 태그
@@ -19,29 +35,17 @@
           return;
         }
 
-
+        // 삭제 로직 호출
         removeUser();
+        location.href = "login";
 
         alert("계정 삭제가 완료되었습니다.");
 
-        location.href = "/user/login";
+
       })
 
-    // 아이디 띄워주기
-    function myPageIndex() {
 
-      $.ajax({
-        url: "/user/myPageIndex",
-        type: "post",
-        dataType: "JSON",
-        data: $("#f").serialize(),
-        success: function (json) {
 
-          $("#userId").val(json.userId + " 님의 계정을 삭제하시겠습니까?")
-
-        }
-      })
-    }
       function removeUser() {
         let f = document.getElementById("f"); // form 태그
         // let f;
@@ -58,8 +62,7 @@
           data: $("#f").serialize(),
           success: function () {
 
-            alert("계정 삭제가 완료되었습니다.");
-
+            // location.href = "/main";
           }
         })
       }

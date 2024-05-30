@@ -256,6 +256,7 @@ public class UserService implements IUserService {
         rDTO = new ObjectMapper().convertValue(rEntity.get(),
                 UserDTO.class);
         // 복호화 어케하는지 모르겠음
+        //todo 이메일 복호화 하자 -이 교수님-
         return rDTO;
     }
 

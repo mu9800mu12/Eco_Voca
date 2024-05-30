@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>게시판 글보기</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
     /*<![CDATA[*/
     const session_user_id = /*[[${session.SS_USER_ID}]]*/ ''; // Controller에서 받은 세션에 저장된 값
     const user_id = /*[[${rDTO.userId}]]*/ ''; // 공지사항 게시글 작성자 아이디
     const nSeq = /*[[${rDTO.noticeSeq}]]*/ ''; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+    const cSeq = /*[[${rDTO.noticeSeq}]]*/ ''; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
+    const ssUserId = /*[[${rDTO.noticeSeq}]]*/ ''; // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
 
     $(document).ready(function () {
       $("#btnEdit").on("click", function () {
@@ -24,6 +27,18 @@
       $("#btnCommentInsert").on("click", function () {
         doCommentInsert(); // 댓글 작성
       });
+      $("#btnCommentUpdate").on("click", function () {
+        doCommentUpdate(); // 댓글 수정
+      });
+      $("#btnCommentDelte").on("click", function () {
+        doCommentDelete(); // 댓글 삭제
+      });
+
+
+
+
+
+
     });
 
     function doEdit() {
@@ -40,10 +55,10 @@
       if (session_user_id === user_id) {
         if (confirm("작성한 글을 삭제하시겠습니까?")) {
           $.ajax({
-            url: "/notice/noticeDelete",
-            type: "post",
-            dataType: "JSON",
-            data: {"nSeq": nSeq},
+            url: "/notice/noticeDelete", // 호출할 메서드의 url
+            type: "post", // 방식
+            dataType: "JSON", // 데이터타입
+            data: {"nSeq": nSeq}, //이게 컨트롤러에 보낼 데이터 저 메서드를 호출할 때 이 데이터를 보내겠다. nSeq를 notice
             success: function (json) {
               alert(json.msg);
               location.href = "/notice/noticeList";
@@ -73,15 +88,68 @@
         data: $("#f").serialize(),
         success: function (json) {
           alert(json.msg);
+          window.location.reload();
           // 댓글 작성 후 동작 추가 필요 시 여기에 추가
         }
       });
     }
+
+    // 댓글 수정
+    function doCommentUpdate() {
+      let f = document.getElementById("f");
+
+      $.ajax({
+        url: "/comment/updateComment?",
+        type: "post",
+        dataType: "JSON",
+        data: {"nSeq": nSeq, "cSeq" : cSeq, "ssUserId" : ssUserId},
+        success: function (json) {
+          alert(json.msg);
+          window.location.reload();
+          // 댓글 작성 후 동작 추가 필요 시 여기에 추가
+        }
+      });
+    }
+
+    // 댓글 삭제
+    function doCommentDelete() {
+      let f = document.getElementById("f");
+
+
+      $.ajax({
+        url: "/comment/deleteComment",
+        type: "post",
+        dataType: "JSON",
+        data: {"nSeq": nSeq, "cSeq" : cSeq, "ssUserId" : ssUserId},
+        success: function (json) {
+          console.log(json)
+          alert(json.msg);
+          window.location.reload();
+          // 댓글 작성 후 동작 추가 필요 시 여기에 추가
+        }
+      });
+    }
+
     /*]]>*/
   </script>
+
+  <style>
+    .comment {
+      margin-bottom: 10px;
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .comment-list {
+      padding: 10px;
+      overflow-y: auto;
+      max-height: 300px; /* 원하는 높이로 설정하세요 */
+    }
+  </style>
+
 </head>
 <body>
-
 <div class="container mt-5">
   <h2>공지사항 상세보기</h2>
   <hr/>
@@ -95,11 +163,13 @@
           <label class="col-sm-2 col-form-label">공지글 여부</label>
           <div class="col-sm-10">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'Y'}" disabled>
+              <input class="form-check-input" type="radio" name="noticeYn"
+                     th:checked="${rDTO.noticeYn eq 'Y'}" disabled>
               <label class="form-check-label">예</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="noticeYn" th:checked="${rDTO.noticeYn eq 'N'}" disabled>
+              <input class="form-check-input" type="radio" name="noticeYn"
+                     th:checked="${rDTO.noticeYn eq 'N'}" disabled>
               <label class="form-check-label">아니오</label>
             </div>
           </div>
@@ -140,17 +210,21 @@
     <div class="card mb-4">
       <div class="card-header">댓글 작성</div>
       <div class="card-body">
-        <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}" />
+        <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}"/>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">작성자</label>
           <div class="col-sm-10">
-            <p class="form-control-plaintext" th:text="${rDTO.userId()}">작성자</p>
+            <a>
+              <div class="1" th:each="cDTO : ${rList}"></div>
+            </a>
+            <p class="form-control-plaintext" th:name="ssUserId" th:value="${session.SS_USER_ID}">[[${session.SS_USER_ID}]]</p>
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">댓글</label>
           <div class="col-sm-8">
-            <input type="text" name="comment" id="comment" class="form-control" maxlength="100" placeholder="댓글을 입력하세요...">
+            <input type="text" name="comment" id="comment" class="form-control" maxlength="100"
+                   placeholder="댓글을 입력하세요...">
           </div>
           <div class="col-sm-2">
             <button id="btnCommentInsert" type="button" class="btn btn-primary">작성</button>
@@ -162,29 +236,25 @@
     <div class="card">
       <div class="card-header">댓글 목록</div>
       <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
-            <tr>
-              <th>작성자</th>
-              <th>댓글</th>
-              <th>작성시간</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="cDTO : ${rList}">
-              <td th:text="${cDTO.userId()}">작성자</td>
-              <td th:text="${cDTO.comment()}">댓글 내용</td>
-              <td th:text="${cDTO.regDt()}">작성시간</td>
-            </tr>
-            </tbody>
-          </table>
+        <div class="comment-list">
+          <div class="comment" th:each="cDTO : ${rList}">
+            <div class="row">
+              <div th:name="cSeq" th:value="${cDTO.commentSeq()}" style="display: none"></div>  <!--댓글 삭제 수정을 위해 댓글 번호를 가져오기 위해 작성-->
+              <div class="col-md-4"><strong>작성자: </strong><span
+                  th:text="${cDTO.userId()}">작성자</span></div>
+              <div class="col-md-6"><strong>댓글: </strong><span
+                  th:text="${cDTO.comment()}">댓글 내용</span></div>
+              <div class="col-md-2 text-left"><strong>작성시간: </strong><span
+                  th:text="${cDTO.regDt()}">작성시간</span></div>
+              <button id="btnCommentUpdate" type="button" class="btn btn-warning">수정</button>
+              <button id="btnCommentDelte" type="button" class="btn btn-danger">삭제</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
   </form>
 </div>
-
 </body>
 </html>

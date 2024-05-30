@@ -127,19 +127,33 @@ public class CommentController {
     /**
      * 댓글 삭제
      */
+    @ResponseBody
     @PostMapping(value = "deleteComment")
     public MsgDTO deleteComment(HttpServletRequest request, HttpSession session) throws Exception {
         log.info("[ 컨트롤러 ] :  댓글삭제 시작!");
 
-        Long commentSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("commentSeq")));
-        Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
-        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        // json 으로 보내거나 받는 것은 String으로 받아야 한다. -소영누나- //오브젝트도 된다
+//        Long commentSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("commentSeq")));
+//        Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
+        String nSeq = CmmUtil.nvl(request.getParameter("nSeq"));
+        String cSeq = CmmUtil.nvl(request.getParameter("cSeq"));
+
+        Long noticeSeq = Long.parseLong(nSeq);
+        Long commentSeq = Long.parseLong(cSeq);
+
+
+        log.info("noticeSeq : " + noticeSeq);
+        log.info("commentSeq : " + commentSeq);
 
         String msg = "삭제 되었습니다.";
         int res = 1;
 
         try {
-            commentService.deleteComment(commentSeq, userId, noticeSeq);
+
+            log.info("댓글 삭제 되냐??????");
+            commentService.deleteComment(commentSeq, noticeSeq);
+            log.info("댓글 삭제 되냐??????");
 
         } catch (Exception e) {
             log.info(e.toString());
@@ -148,7 +162,7 @@ public class CommentController {
             res = 0;
 
         }
-
+        log.info(" msg와 res"+res + msg);
         log.info("[ 컨트롤러 ] :  댓글삭제 끝!");
 
         return MsgDTO.builder()

@@ -152,16 +152,23 @@ public class CommentService implements ICommentService {
      */
     @Override
     public void deleteComment(final Long commentSeq,
-            final String userId,
             final Long noticeSeq) throws Exception {
 
         log.info("[ 서비스 ] :  댓글삭제 시작!" );
 
         log.info("noticeSeq : " + noticeSeq);
         log.info("comment : " + commentSeq);
-        log.info("userId : " + userId);
 
-        commentRepository.deleteByNoticeSeqAndCommentSeqAndUserId(commentSeq, noticeSeq, userId);
+        // 2. Repository에서 댓글번호로 조회해서 엔터티에 담기
+//        CommentEntity cEntity = CommentEntity.builder()
+//                .noticeSeq(noticeSeq)
+//                .commentSeq(commentSeq)
+//                .userId(userId)
+//                .build();
+
+        log.info("최준상 어디갔어!!!!!!!!!!!!!!!!!" );
+
+        commentRepository.deleteByNoticeSeqAndCommentSeq(noticeSeq, commentSeq);
 
         log.info("[ 서비스 ] :  댓글삭제 끝!" );
 
