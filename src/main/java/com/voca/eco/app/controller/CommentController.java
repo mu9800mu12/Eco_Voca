@@ -88,14 +88,15 @@ public class CommentController {
         CommentDTO pDTO = null;
 
         try {
-            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER"));
             String comment = CmmUtil.nvl(request.getParameter("comment"));
-            Long commentSeq = Long.valueOf(request.getParameter("commentSeq"));
-            Long noticeSeq = Long.valueOf(request.getParameter("noticeSeq"));
+            String cSeq = CmmUtil.nvl(request.getParameter("cSeq"));
+            String nSeq = CmmUtil.nvl(request.getParameter("nSeq"));
 
-            log.info("userId : " + userId);
-            log.info("noticeSeq : " + noticeSeq);
-            log.info("commentSeq : " + commentSeq);
+            Long noticeSeq = Long.parseLong(nSeq);
+            Long commentSeq = Long.parseLong(cSeq);
+
+            log.info("nSeq : " + nSeq);
+            log.info("cSeq : " + cSeq);
             log.info("comment : " + comment);
 
 
@@ -110,7 +111,7 @@ public class CommentController {
             // 이런식으로 DTO에 담아서 보내면 된다
 //            commentService.updateComment(pDTO);
 
-            commentService.updateComment(userId, comment, commentSeq, noticeSeq);
+            commentService.updateComment(comment, commentSeq, noticeSeq);
 
             msg = "수정되었습니다";
             res = 1;
@@ -119,7 +120,7 @@ public class CommentController {
             msg = "실패하였습니다 : " + e;
             log.info(e.toString());
         } finally {
-            log.info("[ 컨트롤러 ] :  댓글수정 시작!");
+            log.info("[ 컨트롤러 ] :  댓글수정 끝!");
         }
         return MsgDTO.builder().msg(msg).result(res).build();
     }
@@ -162,7 +163,8 @@ public class CommentController {
             res = 0;
 
         }
-        log.info(" msg와 res"+res + msg);
+        log.info(" msg :" + msg);
+        log.info(" res :" + res);
         log.info("[ 컨트롤러 ] :  댓글삭제 끝!");
 
         return MsgDTO.builder()

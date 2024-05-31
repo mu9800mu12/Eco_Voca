@@ -123,22 +123,23 @@ public class CommentService implements ICommentService {
          댓글 수정하기
          */
     @Override
-    public void updateComment(final String userId,
+    @Transactional(rollbackFor = Exception.class)
+    public void updateComment(
             final String comment,
-            final Long noticeSeq,
-            final Long commentSeq
-    ) throws Exception {
+            final Long commentSeq,
+            final Long noticeSeq
+            ) throws Exception {
 
         // 1. 값을 제대로 받았는지 확인하기
         log.info("[ 서비스 ] : 댓글 수정하기 시작");
-        log.info("commentSeq" +commentSeq);
-        log.info("noticeSeq" +noticeSeq);
-        log.info("userId" + userId);
-        log.info("comment" + comment);
+        log.info("commentSeq : " +commentSeq);
+        log.info("noticeSeq : " +noticeSeq);
+        log.info("comment : " + comment);
 
         // 2. Repository에서 댓글번호로 조회해서 엔터티에 담기
         CommentEntity rEntity = commentRepository.findByCommentSeq(commentSeq);
 
+        log.info(rEntity.getComment());
         // 3. 받은 댓글 내용을 엔터티에 보내 save로 저장하여 변경하기
         commentRepository.save(rEntity.updateComment(comment));
 
@@ -151,6 +152,7 @@ public class CommentService implements ICommentService {
      댓글 삭제
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteComment(final Long commentSeq,
             final Long noticeSeq) throws Exception {
 

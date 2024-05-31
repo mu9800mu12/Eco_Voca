@@ -125,6 +125,7 @@ public class NoticeService implements INoticeService {
 
         noticeRepository.save(rEntity.updateNoticeInfo(title, contents, noticeYn));
 
+
     }
 
     /**
@@ -137,7 +138,7 @@ public class NoticeService implements INoticeService {
 
         log.info("noticeSeq : " + noticeSeq);
 
-        // 데이터 수정하기
+        // 데이터 삭제하기
         noticeRepository.deleteById(noticeSeq);
 
         log.info(this.getClass().getName() + "[서비스] : .deleteNoticeInfo End!");

@@ -22,10 +22,11 @@ public interface ICommentService {
     /**
      * 댓글 수정하기
      */
-    void updateComment(final String userId,
+    void updateComment(
             final String comment,
-            final Long noticeSeq,
-            final Long commentSeq) throws Exception;
+            final Long commentSeq,
+            final Long noticeSeq
+            ) throws Exception;
 
     /**
      * 댓글 작성
