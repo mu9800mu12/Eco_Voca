@@ -32,9 +32,28 @@ public class WordController {
         return word700Service.getWord700List();
     }
 
+    // 기초 문제 페이지 호출
     @GetMapping(value = "word700List")
     public String word700List() {
         return "word/word700List";
+    }
+
+    // 중간 문제 페이지 호출
+    @GetMapping(value = "word700Normal")
+    public String word700Normal() {
+        return "word/word700Normal";
+    }
+
+    // 심화 문제 페이지 호출
+    @GetMapping(value = "word700Hard")
+    public String word700Hard() {
+        return "word/word700Hard";
+    }
+
+    // 난이도 선택 페이지
+    @GetMapping(value = "wordSelect")
+    public String wordSelect() {
+        return "word/wordSelect";
     }
 
 

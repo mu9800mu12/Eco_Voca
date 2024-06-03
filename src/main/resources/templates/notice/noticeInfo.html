@@ -26,15 +26,6 @@
         doCommentInsert(); // 댓글 작성
       });
 
-      // $("#btnCommentDelte").on("click", function () {
-      //   doDeleteComment(); // 댓글 삭제
-      // });
-
-
-
-
-
-
     });
 
     function doEdit() {
@@ -90,23 +81,20 @@
       });
     }
 
-
-
     // 댓글 삭제
     function doDeleteComment(cSeq) {
-      console.log("cSeq : ", cSeq);
-      $.ajax({
-        url: "/comment/deleteComment",
-        type: "post",
-        dataType: "JSON",
-        data: {"cSeq" : cSeq, "nSeq" : nSeq},
-        success: function (json) {
-          console.log(json)
-          alert(json.msg);
-          window.location.reload();
-          // 댓글 작성 후 동작 추가 필요 시 여기에 추가
-        }
-      });
+      if (confirm("댓글을 삭제하시겠습니까?")) {
+        $.ajax({
+          url: "/comment/deleteComment",
+          type: "post",
+          dataType: "JSON",
+          data: {"cSeq": cSeq, "nSeq": nSeq},
+          success: function (json) {
+            alert(json.msg);
+            window.location.reload();
+          }
+        });
+      }
     }
 
     function doEditComment(cSeq, btn) {
@@ -114,6 +102,7 @@
       var commentText = row.find('.comment-text');
       var editComment = row.find('.edit-comment');
       var saveButton = row.find('.btnSaveComment');
+      var deleteButton = row.find('.btnCommentUpdate');
 
       // 현재 댓글 내용을 input 필드로 변경
       editComment.val(commentText.text());
@@ -121,35 +110,29 @@
       editComment.show();
       $(btn).hide();
       saveButton.show();
+      deleteButton.hide(); // 삭제 버튼 숨기기
     }
 
     function doSaveComment(cSeq, btn) {
       var row = $(btn).closest('.row');
       var editComment = row.find('.edit-comment').val();
 
-
-      console.log("이시현 : " +editComment)
       // AJAX 호출로 수정된 댓글 서버에 전송
       $.ajax({
         url: "/comment/updateComment",
         type: "post",
         dataType: "JSON",
-        data: { "cSeq": cSeq, "comment": editComment ,"nSeq" : nSeq},
-        success: function(json) {
-
-            alert('댓글이 수정되었습니다.');
-            window.location.reload();
-
+        data: {"cSeq": cSeq, "comment": editComment, "nSeq": nSeq},
+        success: function (json) {
+          alert('댓글이 수정되었습니다.');
+          window.location.reload();
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
           console.error('Error editing comment:', error);
           alert('댓글 수정 중 오류가 발생했습니다.');
         }
       });
     }
-
-
-
 
     /*]]>*/
   </script>
@@ -164,8 +147,9 @@
 
     .comment-list {
       padding: 10px;
-      overflow-y: auto;
-      max-height: 300px; /* 원하는 높이로 설정하세요 */
+      /* 컨테이너 안에서 크롤링 하게 창을 설정해두는 코드*/
+      /*overflow-y: auto;*/
+      /*max-height: 300px; !* 원하는 높이로 설정하세요 *!*/
     }
   </style>
 
@@ -238,7 +222,8 @@
             <a>
               <div class="1" th:each="cDTO : ${rList}"></div>
             </a>
-            <p class="form-control-plaintext" th:name="ssUserId" th:text="${session.SS_USER_ID}">[[${session.SS_USER_ID}]]</p>
+            <p class="form-control-plaintext" th:name="ssUserId" th:text="${session.SS_USER_ID}">
+              [[${session.SS_USER_ID}]]</p>
           </div>
         </div>
         <div class="form-group row">
@@ -260,17 +245,26 @@
         <div class="comment-list">
           <div class="comment" th:each="cDTO : ${rList}">
             <div class="row">
-              <div th:name="cSeq" th:value="${cDTO.commentSeq()}" style="display: none"></div> <!--댓글 삭제 수정을 위해 댓글 번호를 가져오기 위해 작성-->
-              <div class="col-md-4"><strong>댓글 번호: </strong><span th:text="${cDTO.commentSeq()}" id="cSeq">댓글 번호</span></div>
-              <div class="col-md-4"><strong>작성자: </strong><span th:text="${cDTO.userId()}">작성자</span></div>
+              <div th:name="cSeq" th:value="${cDTO.commentSeq()}" style="display: none"></div>
+              <!--댓글 삭제 수정을 위해 댓글 번호를 가져오기 위해 작성-->
+              <div class="col-md-4"><strong>작성자: </strong><span
+                  th:text="${cDTO.userId()}">작성자</span></div>
               <div class="col-md-6 comment-content">
-                <strong>댓글: </strong><span th:text="${cDTO.comment()}" class="comment-text">댓글 내용</span>
+                <strong>댓글: </strong><span th:text="${cDTO.comment()}"
+                                           class="comment-text">댓글 내용</span>
                 <input type="text" class="form-control edit-comment" style="display:none;">
               </div>
-              <div class="col-md-2 text-left"><strong>작성시간: </strong><span th:text="${cDTO.regDt()}">작성시간</span></div>
-              <button type="button" th:onclick="'doEditComment(' + ${cDTO.commentSeq()} + ', this)'" class="btn btn-warning btnCommentUpdate">수정</button>
-              <button type="button" th:onclick="'doDeleteComment(' + ${cDTO.commentSeq()} + ')'" class="btn btn-danger">삭제</button>
-              <button type="button" th:onclick="'doSaveComment(' + ${cDTO.commentSeq()} + ', this)'" class="btn btn-success btnSaveComment" style="display:none;">저장</button>
+              <div class="col-md-2 text-left"><strong>작성시간: </strong><span
+                  th:text="${cDTO.regDt()}">작성시간</span></div>
+              <button type="button" th:onclick="'doEditComment(' + ${cDTO.commentSeq()} + ', this)'"
+                      class="btn btn-warning btnCommentUpdate">수정
+              </button>
+              <button type="button" th:onclick="'doDeleteComment(' + ${cDTO.commentSeq()} + ')'"
+                      class="btn btn-danger btnCommentDelete">삭제
+              </button>
+              <button type="button" th:onclick="'doSaveComment(' + ${cDTO.commentSeq()} + ', this)'"
+                      class="btn btn-success btnSaveComment" style="display:none;">저장
+              </button>
             </div>
           </div>
         </div>
@@ -281,3 +275,4 @@
 </div>
 </body>
 </html>
+
