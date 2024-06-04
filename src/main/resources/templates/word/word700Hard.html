@@ -14,7 +14,9 @@
   <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet">
 
   <!-- vendor/main CSS Files -->
   <link href="/vendor/main/aos/aos.css" rel="stylesheet">
@@ -83,9 +85,14 @@
           </div>
           <span id="content"></span>
         </div>
-        <div class="php-email-form mx-auto text-center" style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <input type="text" id="userInput">
+          <button type="button" id="submit">입력</button>
+        </div>
+        <div class="php-email-form mx-auto text-center"
+             style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="flex: 1;">
-
+            <button type="button" id="btnSaveNote">단어 저장하기</button>
           </div>
           <div style="flex: 2; display: flex; justify-content: center; align-items: center;">
             <button type="button" id="minus">이전</button>
@@ -93,23 +100,11 @@
             <button type="button" id="plus">다음</button>
           </div>
           <div style="flex: 1; text-align: right;">
-            <button type="button" id="btnSaveNote">단어 저장하기</button>
+            <button type="button" id="btnSaveNote1">모르겠어요 <br> 정답 확인 !</button>
           </div>
         </div>
 
       </div>
-
-      <!--            <div>-->
-      <!--                <div class="input-group mb-3 php-email-form">-->
-      <!--                    <input type="search"class="form-control" id="content" name="content" placeholder="검색할 단어를 입력해주세요."/>-->
-      <!--                    <button id="btnSend" name="btnSend" type="button"><i class="bx bx-search"></i></button>-->
-      <!--                </div>-->
-
-      <!--                <div id="ytplayer-container"></div>-->
-      <!--            </div>-->
-      <!--            <div class="portfolio-info">-->
-      <!--                <span>검색 결과가 이곳에 나타납니다.</span>-->
-      <!--            </div>-->
     </div>
   </section><!-- End Portfolio Details Section -->
 
@@ -120,7 +115,8 @@
 <!-- End Footer -->
 
 <div id="preloader"></div>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
 
 
 <!-- vendor/main JS Files -->
@@ -148,7 +144,9 @@
 
     $("#minus").on("click", function () {
       seq--
-      if (seq < 0) seq = 0
+      if (seq < 0) {
+        seq = 0
+      }
       insertData()
     })
 
@@ -161,6 +159,14 @@
       location.href = "wordNews?word=" + document.getElementById("word").textContent
     })
 
+    $("#submit").on("click", function () {
+      checkAnswer()
+    })
+
+    $("#btnSaveNote1").on("click", function () {
+      showAnswer()
+    })
+
     getWordList();
 
     // 현재 페이지에 해당하는 네비게이션 활성화 설정
@@ -171,11 +177,6 @@
       $("#nav-home").addClass("active");
     } else if (currentPage === 'study') {
       $("#nav-study").addClass("active");
-      // // 호버 효과를 유지할 요소 선택
-      // let elementsToHover = $("#nav-study700, #nav-study700-1");
-      //
-      // // 요소에 호버 효과 적용
-      // elementsToHover.css("background-color", "#ffc451");
     } else if (currentPage === 'search') {
       $("#nav-search").addClass("active");
     } else if (currentPage === 'learning') {
@@ -186,6 +187,7 @@
       $("#nav-mypage").addClass("active");
     }
   })
+
   function saveNote() {
 
     let word = data[seq].word
@@ -195,8 +197,9 @@
       url: "/learningList/insertWord",
       type: "post",
       dataType: "JSON",
-      data: { content : content,
-        word :word
+      data: {
+        content: content,
+        word: word
       },
       success: function (json) {
         alert(json.msg);
@@ -226,10 +229,55 @@
   }
 
   function insertData() {
-    document.getElementById("word").textContent = data[seq].word
-    document.getElementById("seq").textContent = (seq + 1) + '/700'
-    document.getElementById("content").textContent = data[seq].contents.toString().split(".").join(".\n\n");
+    let wordElement = document.getElementById("word");
+    wordElement.textContent = "문제"  + [seq + 1] + ". 빈칸에 맞는 단어를 작성하시오" ;
+    document.getElementById("seq").textContent = (seq + 1) + '/700';
+
+    // 단어와 괄호 부분 분리
+    let word = data[seq].word;
+    let wordWithoutParentheses = word.replace(/\(.*?\)/g, "").trim();
+    let parenthesesContent = word.match(/\(.*?\)/);
+
+    // 단어를 대체하는 로직
+    let contentWithBlank = data[seq].contents.split(wordWithoutParentheses).join("<strong>[ 빈칸 ]</strong>");
+    if (parenthesesContent) {
+      contentWithBlank = contentWithBlank.replace(new RegExp(wordWithoutParentheses, "g"), "<strong>[ 빈칸 ]</strong>");
+    }
+
+    // 괄호 내용 유지
+    if (parenthesesContent) {
+      contentWithBlank = contentWithBlank.replace(new RegExp(parenthesesContent[0], "g"), parenthesesContent[0]);
+    }
+
+    // 줄바꿈과 띄어쓰기 유지
+    document.getElementById("content").innerHTML = contentWithBlank.split('\n').join('<br>');
   }
+
+  function checkAnswer() {
+    let userAnswer = document.getElementById("userInput").value.trim()
+    let correctAnswer = data[seq].word.trim()
+
+    if (userAnswer === correctAnswer) {
+      alert("정답입니다!")
+      document.getElementById("word").textContent = data[seq].word
+
+      // 정답이 맞으면 원래 문장으로 복원
+      let contentWithAnswer = data[seq].contents;
+      document.getElementById("content").innerHTML = contentWithAnswer.split('\n').join('<br>');
+    } else {
+      alert("오답입니다!")
+    }
+  }
+
+  function showAnswer() {
+    document.getElementById("word").textContent = data[seq].word
+    alert("다음에 맞춰보세요!")
+
+    // 정답을 보여주기 위해 원래 문장으로 복원
+    let contentWithAnswer = data[seq].contents;
+    document.getElementById("content").innerHTML = contentWithAnswer.split('\n').join('<br>');
+  }
+
 </script>
 </body>
 

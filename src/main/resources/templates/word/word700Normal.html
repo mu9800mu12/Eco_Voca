@@ -176,12 +176,10 @@
     })
 
     $("#btnSaveNote1").on("click", function () {
-      showAnswerNo()
+      showAnswer()
     })
 
-    $("#btnSaveNote2").on("click", function () {
-      showAnswerYes()
-    })
+
 
     getWordList();
 
@@ -261,20 +259,16 @@
 
     if (userAnswer === correctAnswer) {
       alert("정답입니다!")
-      saveNoteYes()
+      document.getElementById("word").textContent = data[seq].word
 
     } else {
       alert("오답입니다!")
     }
   }
 
-  function showAnswerNo() {
+  function showAnswer() {
     document.getElementById("word").textContent = data[seq].word
     alert("다음에 맞춰보세요!")
-  }
-
-  function showAnswerYes() {
-    document.getElementById("word").textContent = data[seq].word
   }
 
 
