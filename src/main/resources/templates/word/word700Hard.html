@@ -249,8 +249,9 @@
       contentWithBlank = contentWithBlank.replace(new RegExp(parenthesesContent[0], "g"), parenthesesContent[0]);
     }
 
-    // 줄바꿈과 띄어쓰기 유지
-    document.getElementById("content").innerHTML = contentWithBlank.split('\n').join('<br>');
+    // 줄바꿈과 띄어쓰기 유지 및 문장 간 두 줄 띄우기
+    contentWithBlank = contentWithBlank.split(".").join(".\n\n").split('\n').join('<br>');
+    document.getElementById("content").innerHTML = contentWithBlank;
   }
 
   function checkAnswer() {
@@ -263,7 +264,8 @@
 
       // 정답이 맞으면 원래 문장으로 복원
       let contentWithAnswer = data[seq].contents;
-      document.getElementById("content").innerHTML = contentWithAnswer.split('\n').join('<br>');
+      contentWithAnswer = contentWithAnswer.split(".").join(".\n\n").split('\n').join('<br>');
+      document.getElementById("content").innerHTML = contentWithAnswer;
     } else {
       alert("오답입니다!")
     }
@@ -275,7 +277,8 @@
 
     // 정답을 보여주기 위해 원래 문장으로 복원
     let contentWithAnswer = data[seq].contents;
-    document.getElementById("content").innerHTML = contentWithAnswer.split('\n').join('<br>');
+    contentWithAnswer = contentWithAnswer.split(".").join(".\n\n").split('\n').join('<br>');
+    document.getElementById("content").innerHTML = contentWithAnswer;
   }
 
 </script>
