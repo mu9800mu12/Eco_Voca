@@ -46,68 +46,68 @@
 
 
 
-<!--<div th:replace="~{mainHeader}"></div>-->
+<div th:replace="~{innerHeader}"></div>
 <!-- ======= Header ======= -->
-<header id="header" class="fixed-top ">
-  <div class="container d-flex align-items-center justify-content-lg-between">
+<!--<header id="header" class="fixed-top ">-->
+<!--  <div class="container d-flex align-items-center justify-content-lg-between">-->
 
-    <h1 class="logo me-auto me-lg-0"><a href="main">하루 경제<span>.</span></a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="/imgMain/logo.png" alt="" class="img-fluid"></a>-->
+<!--    <h1 class="logo me-auto me-lg-0"><a href="main">하루 경제<span>.</span></a></h1>-->
+<!--    &lt;!&ndash; Uncomment below if you prefer to use an image logo &ndash;&gt;-->
+<!--    &lt;!&ndash; <a href="index.html" class="logo me-auto me-lg-0"><img src="/imgMain/logo.png" alt="" class="img-fluid"></a>&ndash;&gt;-->
 
-    <nav id="navbar" class="navbar order-last order-lg-0">
-      <ul>
-        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-        <li><a class="nav-link scrollto" href="/notice/noticeList">커뮤니티</a></li>
-        <li><a class="nav-link scrollto " href="/user/myPageIndex">마이페이지</a></li>
-        <li><a class="nav-link scrollto" href="/chat/intro">고객센터</a></li>
-        <li class="dropdown"><a href="#"><span>학습하기</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            <li><a href="/word/word700List">단어 기초학습</a></li>
-            <li><a href="/word/word700Normal">단어 기본학습</a></li>
-            <li><a href="/word/word700Hard">단어 심화학습</a></li>
-            <li><a href="#">학습 일지</a></li>
-          </ul>
-        </li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
+<!--    <nav id="navbar" class="navbar order-last order-lg-0">-->
+<!--      <ul>-->
+<!--        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>-->
+<!--        <li class="dropdown"><a href="#"><span>학습하기</span> <i class="bi bi-chevron-down"></i></a>-->
+<!--          <ul>-->
+<!--            <li><a href="/word/word700List">단어 기초학습</a></li>-->
+<!--            <li><a href="/word/word700Normal">단어 기본학습</a></li>-->
+<!--            <li><a href="/word/word700Hard">단어 심화학습</a></li>-->
+<!--            <li><a href="#">학습 일지</a></li>-->
+<!--          </ul>-->
+<!--        </li>-->
+<!--        <li><a class="nav-link scrollto" href="/chat/intro">고객센터</a></li>-->
+<!--        <li><a class="nav-link scrollto" href="/notice/noticeList">커뮤니티</a></li>-->
+<!--        <li><a class="nav-link scrollto " href="/user/myPageIndex">마이페이지</a></li>-->
+<!--      </ul>-->
+<!--      <i class="bi bi-list mobile-nav-toggle"></i>-->
+<!--    </nav>&lt;!&ndash; .navbar &ndash;&gt;-->
 
-    <a href="#" class="get-started-btn scrollto" id="btnLogout" th:if="${session.SS_USER_ID != null}">Logout</a>
-    <a href="/user/login" class="get-started-btn scrollto" th:unless="${session.SS_USER_ID != null}">Get Started</a>
+<!--    <a href="#" class="get-started-btn scrollto" id="btnLogout" th:if="${session.SS_USER_ID != null}">Logout</a>-->
+<!--    <a href="/user/login" class="get-started-btn scrollto" th:unless="${session.SS_USER_ID != null}">Get Started</a>-->
 
-  </div>
+<!--  </div>-->
 
-<script type="text/javascript">
-  let elements = document.getElementsByClassName("get-started-btn");
-  // 로그아웃 로직
-  document.getElementById("btnLogout").addEventListener("click", function (event) {
-    if (confirm("로그아웃 하시겠습니까?")) {
+<!--<script type="text/javascript">-->
+<!--  let elements = document.getElementsByClassName("get-started-btn");-->
+<!--  // 로그아웃 로직-->
+<!--  document.getElementById("btnLogout").addEventListener("click", function (event) {-->
+<!--    if (confirm("로그아웃 하시겠습니까?")) {-->
 
-      console.log("준수형다녀감 쓰ㅢ엣")
+<!--      console.log("준수형다녀감 쓰ㅢ엣")-->
 
-      $.ajax({
-        url: "/user/logout",
-        type: "post",
-        dataType: "JSON",
-        success: function (json) {
+<!--      $.ajax({-->
+<!--        url: "/user/logout",-->
+<!--        type: "post",-->
+<!--        dataType: "JSON",-->
+<!--        success: function (json) {-->
 
-          if (json.result === 1) {
-            alert(json.msg);
-            window.location.href = "/main";
-          } else {
-            alert(json.msg);
-          }
-        }
-      })
+<!--          if (json.result === 1) {-->
+<!--            alert(json.msg);-->
+<!--            window.location.href = "/main";-->
+<!--          } else {-->
+<!--            alert(json.msg);-->
+<!--          }-->
+<!--        }-->
+<!--      })-->
 
-    } else {
+<!--    } else {-->
 
-      event.preventDefault();
-    }
-  });
-</script>
-</header>
+<!--      event.preventDefault();-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+<!--</header>-->
 
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center justify-content-center">
