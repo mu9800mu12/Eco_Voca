@@ -14,7 +14,7 @@
     <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- vendor/main CSS Files -->
     <link href="/vendor/main/aos/aos.css" rel="stylesheet">
@@ -75,27 +75,27 @@
                 <div id="newsList">
 
                 </div>
-<!--                <div class="php-email-form mx-auto text-center" style="margin-top: 20px; justify-items: center">-->
-<!--                    <button type="button">이전</button>-->
-<!--                    <span style="padding: 0 7px">1/700</span>-->
-<!--                    <button type="button">다음</button>-->
-<!--                </div>-->
+                <!--                <div class="php-email-form mx-auto text-center" style="margin-top: 20px; justify-items: center">-->
+                <!--                    <button type="button">이전</button>-->
+                <!--                    <span style="padding: 0 7px">1/700</span>-->
+                <!--                    <button type="button">다음</button>-->
+                <!--                </div>-->
             </div>
-<!--            <div class="php-email-form" style="margin-top: 20px; float: right">-->
-<!--                <button type="button">학습 끝내기</button>-->
-<!--            </div>-->
+            <!--            <div class="php-email-form" style="margin-top: 20px; float: right">-->
+            <!--                <button type="button">학습 끝내기</button>-->
+            <!--            </div>-->
 
-<!--            <div>-->
-<!--                <div class="input-group mb-3 php-email-form">-->
-<!--                    <input type="search"class="form-control" id="content" name="content" placeholder="검색할 단어를 입력해주세요."/>-->
-<!--                    <button id="btnSend" name="btnSend" type="button"><i class="bx bx-search"></i></button>-->
-<!--                </div>-->
+            <!--            <div>-->
+            <!--                <div class="input-group mb-3 php-email-form">-->
+            <!--                    <input type="search"class="form-control" id="content" name="content" placeholder="검색할 단어를 입력해주세요."/>-->
+            <!--                    <button id="btnSend" name="btnSend" type="button"><i class="bx bx-search"></i></button>-->
+            <!--                </div>-->
 
-<!--                <div id="ytplayer-container"></div>-->
-<!--            </div>-->
-<!--            <div class="portfolio-info">-->
-<!--                <span>검색 결과가 이곳에 나타납니다.</span>-->
-<!--            </div>-->
+            <!--                <div id="ytplayer-container"></div>-->
+            <!--            </div>-->
+            <!--            <div class="portfolio-info">-->
+            <!--                <span>검색 결과가 이곳에 나타납니다.</span>-->
+            <!--            </div>-->
         </div>
     </section><!-- End Portfolio Details Section -->
 
@@ -163,7 +163,7 @@
         $.ajax({
             url: "/news/getNewsList",
             type: "post",
-            dataType: "JSON", // "JSON" 대신 "json"으로 수정
+            dataType: "json",
             data: {word: word},
             success: function (json) {
                 console.log(json);
@@ -183,16 +183,16 @@
             let listOne = $("<div>");
 
             let title = $("<div>")
-                .html(data.title);
+            .html(data.title);
 
             let a = $("<a>")
-                .attr({"href": data.link})
-                .append(title)
-                .css({
-                    "font-weight": "bold",
-                    "text-decoration": "none",
-                    "color": "inherit"
-                });
+            .attr({"href": data.link, "target": "_blank"})
+            .append(title)
+            .css({
+                "font-weight": "bold",
+                "text-decoration": "none",
+                "color": "inherit"
+            });
 
             // 호버 시에 텍스트 스타일 변경
             a.hover(
@@ -213,7 +213,7 @@
             listOne.append(a);
 
             let description = $("<div>")
-                .html(data.description);
+            .html(data.description);
             description.find("b").css("background-color", "#ffc451");
             listOne.append(description);
 

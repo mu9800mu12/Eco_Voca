@@ -1,5 +1,5 @@
 package com.voca.eco.app.service.impl;
 
-public class OcrSerivce {
+public class CardPaymentInfoOcrSerivce {
 
 }
