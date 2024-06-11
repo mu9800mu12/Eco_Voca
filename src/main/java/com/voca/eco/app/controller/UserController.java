@@ -43,6 +43,14 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "cardInfo")
+    public String cardInfo() {
+
+        log.info(this.getClass().getName() + ": cardInfo Start And End!");
+
+        return "/cardInfo";
+    }
+
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
 
