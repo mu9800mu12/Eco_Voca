@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카드 정보 등록</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">카드 정보 등록</h2>
+  <form id="cardForm" method="post" enctype="multipart/form-data" action="/upload">
+    <div class="mb-3">
+      <label for="cardNumber" class="form-label">카드 번호</label>
+      <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+    </div>
+    <div class="mb-3">
+      <label for="cardHolder" class="form-label">카드 소유자 이름</label>
+      <input type="text" class="form-control" id="cardHolder" name="cardHolder" required>
+    </div>
+    <div class="mb-3">
+      <label for="expiryDate" class="form-label">만료 날짜</label>
+      <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+    </div>
+    <div class="mb-3">
+      <label for="cvc" class="form-label">CVC</label>
+      <input type="text" class="form-control" id="cvc" name="cvc" required>
+    </div>
+    <div class="mb-3">
+      <label for="cardImage" class="form-label">카드 이미지 업로드</label>
+      <input type="file" class="form-control" id="cardImage" name="cardImage" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">등록</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById("cardNumber").addEventListener("input", function(event) {
+    var input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+    var formattedInput = input.match(/.{1,4}/g)?.join('-') || input;
+    event.target.value = formattedInput;
+  });
+
+  document.getElementById("cardForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+
+    fetch("/upload", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // OCR 결과를 입력 필드에 채워 넣기
+        document.getElementById("cardNumber").value = data.cardNumber || "";
+        document.getElementById("cardHolder").value = data.cardHolder || "";
+        document.getElementById("expiryDate").value = data.expiryDate || "";
+        document.getElementById("cvc").value = data.cvc || "";
+      } else {
+        alert("OCR 처리에 실패했습니다. 직접 입력해주세요.");
+      }
+    })
+    .catch(error => console.error("Error:", error));
+  });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

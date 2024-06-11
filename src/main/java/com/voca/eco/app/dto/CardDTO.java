@@ -2,7 +2,7 @@ package com.voca.eco.app.dto;
 
 import java.util.Date;
 
-public record CardPaymentInfoOcrDTO(
+public record CardDTO(
         String cardNumber, // 카드 번호
         String userId, // 사용자 ID
         String expirationDate, // 유효 기간
