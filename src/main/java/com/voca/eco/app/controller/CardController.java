@@ -19,7 +19,7 @@ public class CardController {
 
     private ICardService cardService;
 
-    @ResponseBody
+//    @ResponseBody
     @PostMapping("/upload")
     public Map<String, Object> uploadCard(@RequestParam("file") MultipartFile file) {
         return cardService.processCardUpload(file);

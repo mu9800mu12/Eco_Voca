@@ -6,10 +6,35 @@
     <title th:text="${roomName + ' 채팅방'}">고객센터</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/chat-style.css">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main1.css" rel="stylesheet">
     <style>
+        #content {
+            white-space: pre-line;
+        }
+
         .chat-card-body {
-            height: 400px;
+            height: 450px;
             overflow-y: auto;
         }
 
@@ -48,7 +73,15 @@
             font-size: 0.8em;
             color: gray;
         }
+
+        .chat-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -68,7 +101,7 @@
                 if (event.data === undefined)
                     return;
 
-                console.log(event.data)
+                console.log(event.data);
             };
 
             ws.onmessage = function (msg) {
@@ -112,8 +145,9 @@
     </script>
 </head>
 <body>
+<div th:replace="~{innerHeader}"></div>
 
-<div class="container mt-5">
+<div class="container mt-5 chat-container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
@@ -137,4 +171,5 @@
 </div>
 
 </body>
+
 </html>

@@ -1,111 +1,136 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
     <title>공지 리스트</title>
-    <link rel="stylesheet" href="/css/ExList.css"/>
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        // 상세보기 이동
-        function doDetail(seq) {
-            location.href = "/notice/noticeInfo?nSeq=" + seq;
-        }
-    </script>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
+        #content {
+            white-space: pre-line;
         }
 
-        h2 {
-            text-align: center;
-            color: #343a40;
-            margin-top: 20px;
-        }
-
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .table {
-            display: flex;
-            flex-direction: column;
-            margin: 20px 0;
-        }
-
-        .table .row {
-            display: flex;
-            padding: 12px;
-            border: 1px solid #dee2e6;
-            text-align: center;
-        }
-
-        .table .header {
-            background-color: #007bff;
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        .table .row:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .table .row:hover {
-            background-color: #e9ecef;
-            cursor: pointer;
-        }
-
-        .cell {
-            flex: 1;
-        }
-
-        .btnWrite {
-            display: block;
-            width: 100px;
-            margin: 20px auto;
-            padding: 10px;
-            background-color: #007bff;
-            color: #ffffff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .btnWrite:hover {
-            background-color: #0056b3;
-        }
     </style>
 </head>
+
 <body>
-<div class="container">
-    <h2>공지사항</h2>
-    <hr/>
-    <div class="table">
-        <div class="row header">
-            <div class="cell">순번</div>
-            <div class="cell">제목</div>
-            <div class="cell">조회수</div>
-            <div class="cell">등록자</div>
-            <div class="cell">등록일</div>
+
+<!-- 공통 헤더 -->
+<div th:replace="~{innerHeader}"></div>
+
+<!-- Main -->
+<main id="main">
+
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="section-title">
+                    <br>
+                    <h2>notice</h2>
+                    <p>커뮤니티</p>
+                </div>
+                <ol>
+                    <li><a href="/main">Home</a></li>
+                    <li>notice</li>
+                </ol>
+            </div>
+
         </div>
-        <div class="row" th:each="dto : ${rList}" th:onclick="'doDetail(' + ${dto.noticeSeq} + ')'">
-            <div class="cell" th:if="${dto.noticeYn=='Y'}" th:text="'공지사항'"></div>
-            <div class="cell" th:unless="${dto.noticeYn=='Y'}" th:text="${dto.noticeSeq}"></div>
-            <div class="cell" th:text="${dto.title}"></div>
-            <div class="cell" th:text="${dto.readCnt}"></div>
-            <div class="cell" th:text="${dto.userId}"></div>
-            <div class="cell" th:text="${dto.regDt}"></div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page">
+        <div class="container">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width: 60%">제목</th>
+                    <th style="width: 20%">조회수</th>
+                    <th style="width: 20%">등록일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="dto: ${rList}" th:onclick="|location.href='/notice/noticeInfo?nSeq=' + ${dto.noticeSeq}|">
+                    <td th:text="${dto.title}"></td>
+                    <td th:text="${dto.readCnt}"></td>
+                    <td th:text="${#temporals.format(dto.regDt, 'yyyy-MM-dd')}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div style="float: right">
+                <a href="/notice/noticeReg">글쓰기</a>
+            </div>
         </div>
-    </div>
-    <a href="/notice/noticeReg" class="btnWrite">글쓰기</a>
-</div>
+    </section>
+
+</main><!-- End Main -->
+
+<!-- 공통 푸터 -->
+<div th:replace="~{footer}"></div>
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // 현재 페이지에 해당하는 네비게이션 활성화 설정
+        var currentPage = 'notice';
+
+        // 각 페이지에 따라 해당 네비게이션 항목 활성화
+        if (currentPage === 'home') {
+            $("#nav-home").addClass("active");
+        } else if (currentPage === 'study') {
+            $("#nav-study").addClass("active");
+        } else if (currentPage === 'search') {
+            $("#nav-search").addClass("active");
+        } else if (currentPage === 'learning') {
+            $("#nav-learning").addClass("active");
+        } else if (currentPage === 'notice') {
+            $("#nav-notice").addClass("active");
+        } else if (currentPage === 'mypage') {
+            $("#nav-mypage").addClass("active");
+        }
+    });
+</script>
 </body>
+
 </html>

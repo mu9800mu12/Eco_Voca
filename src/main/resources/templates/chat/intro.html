@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>채팅방 입장 및 채팅 리스트</title>
-    <link rel="stylesheet" href="/css/table.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main1.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,6 +127,12 @@
     </script>
 </head>
 <body>
+<div th:replace="~{innerHeader}"></div>
+<br>
+<br>
+<br>
+<br>
+<br>
 <div class="container">
     <h1>채팅방 전체 리스트</h1>
     <div class="card">
@@ -126,10 +152,11 @@
                     <label for="userName">대화명(별명)</label>
                     <input type="text" id="userName" name="userName" required>
                 </div>
-                <button type="submit">입장하기</button>
+                <button type="submit">문의 시작</button>
             </div>
         </form>
     </div>
 </div>
+
 </body>
 </html>

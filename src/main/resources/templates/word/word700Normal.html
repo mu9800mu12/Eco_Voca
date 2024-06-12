@@ -33,6 +33,15 @@
     #content {
       white-space: pre-line;
     }
+
+    #submit {
+      background: #ffc451;
+      border: 0;
+      padding: 10px 15px;
+      color: #151515;
+      transition: 0.4s;
+      border-radius: 4px;
+    }
   </style>
 
   <!-- =======================================================
@@ -86,13 +95,14 @@
           <span id="content"></span>
         </div>
         <div style="display: flex; justify-content: center; align-items: center;">
-          <input type="text" id="userInput">
+          <input type="text" id="userInput" style="width: 300px; height: 35px"  placeholder="정답을 입력하세요" >
+
           <button type="button" id="submit">입력</button>
         </div>
         <div class="php-email-form mx-auto text-center"
              style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="flex: 1;">
-            <button type="button" id="btnSaveNote">단어 저장하기</button>
+<!--            <button type="button" id="btnSaveNote">단어 저장하기</button>-->
           </div>
           <div style="flex: 2; display: flex; justify-content: center; align-items: center;">
             <button type="button" id="minus">이전</button>
