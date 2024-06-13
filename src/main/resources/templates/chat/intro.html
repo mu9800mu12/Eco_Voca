@@ -25,19 +25,14 @@
     <!-- Template Main CSS File -->
     <link href="/css/main1.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 20px;
-        }
+        /*body {*/
+        /*    font-family: Arial, sans-serif;*/
+        /*    background-color: #f8f9fa;*/
+        /*    margin: 20px;*/
+        /*}*/
 
         h1 {
             text-align: center;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
         }
 
         .card {
@@ -128,35 +123,58 @@
 </head>
 <body>
 <div th:replace="~{innerHeader}"></div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<div class="container">
-    <h1>채팅방 전체 리스트</h1>
-    <div class="card">
-        <div class="card-header">대화 가능한 고객센터</div>
-        <div class="card-body" id="room_list"></div>
-    </div>
 
-    <h1>고객센터 입장 정보</h1>
-    <div class="card">
-        <form name="f" id="f" method="post" action="/chat/chatroom">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="roomName">고객센터 이름</label>
-                    <input type="text" id="roomName" name="roomName" required>
+<main id="main">
+
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="section-title">
+                    <br>
+                    <h2>community</h2>
+                    <p>커뮤니티</p>
                 </div>
-                <div class="form-group">
-                    <label for="userName">대화명(별명)</label>
-                    <input type="text" id="userName" name="userName" required>
-                </div>
-                <button type="submit">문의 시작</button>
+                <ol>
+                    <li><a href="/main">Home</a></li>
+                    <li>community</li>
+                </ol>
             </div>
-        </form>
-    </div>
-</div>
 
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <section class="inner-page">
+        <div class="container">
+            <div class="container">
+                <h1>채팅방 전체 리스트</h1>
+                <div class="card">
+                    <div class="card-header">대화 가능한 고객센터</div>
+                    <div class="card-body" id="room_list"></div>
+                </div>
+
+                <h1>고객센터 입장 정보</h1>
+                <div class="card">
+                    <form name="f" id="f" method="post" action="/chat/chatroom">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="roomName">고객센터 이름</label>
+                                <input type="text" id="roomName" name="roomName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userName">대화명(별명)</label>
+                                <input type="text" id="userName" name="userName" required>
+                            </div>
+                            <button type="submit">문의 시작</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- 공통 푸터 -->
+<div th:replace="~{footer}"></div>
 </body>
 </html>

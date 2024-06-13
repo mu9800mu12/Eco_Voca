@@ -1,91 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>로그인 화면</title>
-  <link rel="stylesheet" href="/css/login.css"/>
-  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript" src="/js/login.js"></script>
-  <script type="text/javascript">
-    // HTML로딩이 완료되고, 실행됨
-    $(document).ready(function () {
-      // 회원가입
-      $("#btnUserReg").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "userRegForm";
-      });
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-      // 메인화면
-      $("#btnMain").on("click", function () {
-        location.href = "/main";
-      });
+  <title>하루 경제 - 로그인</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-      // 로그인
-      $("#btnLogin").on("click", function () {
-        let f = document.getElementById("f"); //form 태그
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-        if (f.userId.value === "") {
-          alert("아이디를 입력하세요.");
-          f.userId.focus();
-          return;
-        }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-        if (f.password.value === "") {
-          alert("비밀번호를 입력하세요.");
-          f.password.focus();
-          return;
-        }
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        // Ajax 호출해서 로그인하기
-        $.ajax({
-          url: "/user/loginProc",
-          type: "post",               //전송방식
-          dataType: "JSON",           //전송 결과 JSON으로 받기
-          data: $("#f").serialize(),  // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경
-          success: function (json) {
-            if (json.result === 1) { //로그인 성공
-              alert(json.msg); //메시지띄우기
-              location.href = "/main"; //로그인 성공페이지 이동
-            } else {                //로그인 실패
-              alert(json.msg);    //메시지 띄우기
-              $("#userId").focus();   //아이디 입력 항목에 마우스 커서 이동
-            }
-          }
-        });
-      });
-    });
-  </script>
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Gp
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Updated: Mar 17 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
+
 <body>
 
-<div class="wrapper" style="background-color: #ffffff">
-  <div class="container">
-    <div class="sign-up-container">
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
 
-    </div>
-    <div class="sign-in-container">
-      <form id="f">
-        <h1 style="color: white">로그인</h1>
-        <span style="color: white">Challenge! To my world</span>
-        <input type="text" name="userId" id="userId" style="width:90%" placeholder="아이디"/>
-        <input type="password" name="password" id="password" style="width:90%" placeholder="비밀번호">
-        <br>
-        <button class="btnLogin" id="btnLogin" type="button">로그인</button>
-        <br>
-        <div>
-          <a href="/user/findId" style="font-size: 10px; margin-right: 7px; color: white;">아이디 찾기</a>
-          <a href="/user/findPassword" style="font-size: 10px; margin-left: 15px; color: white;">비밀번호 찾기</a>
+<!-- ======= Login Section ======= -->
+<section id="hero" class="d-flex align-items-center justify-content-center">
+  <div class="container" data-aos="fade-up">
+
+    <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
+      <div class="col-xl-6 col-lg-8">
+        <h1>LOGIN<span>.</span></h1>
+      </div>
+      <form id="f" role="form" class="php-email-form">
+        <div class="section-title" style="margin-top: 15px; padding-bottom: 5px; display: flex; justify-content: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="width: 70%">
+              <div class="col-md-6 form-group mx-auto" style="margin-top: 15px; width: 100%">
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="ID" required style="padding: 16px; width: 100%;">
+              </div>
+              <div class="col-md-6 form-group mx-auto" style="margin: 15px; width: 100%">
+                <input type="password" name="password" class="form-control" id="password" placeholder="PASSWORD" required style="padding: 16px; width: 100%;">
+              </div>
+            </div>
+            <div class="text-center" style="width: 30%; margin-left: 10px">
+              <button type="button" id="btnLogin" style="padding: 52px 25px; width: 100%; text-align: center">LOGIN</button>
+            </div>
+          </div>
         </div>
-        <br>
       </form>
-    </div>
-    <div class="overlay-container">
-      <div class="overlay-right">
-        <h1>계정을 원하시나요?</h1>
-        <p>Enter your personal details and start journey with us</p>
-        <button id="btnUserReg" class="overlay_btn">회원가입</button>
+      <div class="section-title" style="display: flex; justify-content: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <a href="/user/userRegForm" style=" font-size: 12px; margin-right: 60px; color: white;">회원가입</a>
+          <a href="/user/findId" style=" font-size: 12px; margin-right: 60px; color: white;">아이디 찾기</a>
+          <a href="/user/findPassword" style=" font-size: 12px; color: white;">비밀번호 찾기</a>
+        </div>
+      </div>
+      <div class="section-title" style="display: flex; justify-content: center;">
+        </div>
+      </div>
+      <div class="section-title">
+        <!--        <div style="display: flex; justify-content: space-between; align-items: center;">-->
+        <!--          <a href="/user/userRegForm" style=" font-size: 12px; color: white;"><img src="/img/Kakao.png" style="width: 60%"></a>-->
+        <!--          <a href="/user/findId" style=" font-size: 12px; color: white;"><img src="/img/Naver.png" style="width: 60%"></a>-->
+        <!--        </div>-->
+        <!-- TODO 이미지 통일시켜야함 -->
+
+
       </div>
     </div>
   </div>
-</div>
+</section><!-- End Login -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+  const naverHref = 'https://nid.naver.com/oauth2.0/authorize?response_type=code' +
+      '&client_id=AxiMupBjpBNeTFkrAldA' +
+      '&state=DailyEco' +
+      '&redirect_uri=http://localhost:12000/auth/naver/callback'
+
+  const kakaoHref = 'https://kauth.kakao.com/oauth/authorize' +
+      '?client_id=31f068fc07ad97fd586683cf4b607793' +
+      '&redirect_uri=http://localhost:12000/auth/kakao/callback' +
+      '&response_type=code'
+
+  // HTML로딩이 완료되고, 실행됨
+  $(document).ready(function () {
+
+    // 네이버 로그인
+    $("#btnNaverLogin").on("click", function () {
+      location.href = naverHref;
+    })
+
+    // 카카오 로그인
+    $("#btnKakaoLogin").on("click", function () {
+      location.href = kakaoHref;
+    })
+
+
+    // 로그인
+    $("#btnLogin").on("click", function () {
+      let f = document.getElementById("f"); //form 태그
+
+      if (f.userId.value === "") {
+        alert("아이디를 입력하세요.");
+        f.userId.focus();
+        return;
+      }
+
+      if (f.password.value === "") {
+        alert("비밀번호를 입력하세요.");
+        f.password.focus();
+        return;
+      }
+
+      // Ajax 호출해서 로그인하기
+      $.ajax({
+        url: "/user/loginProc",
+        type: "post",               //전송방식
+        dataType: "JSON",           //전송 결과 JSON으로 받기
+        data: $("#f").serialize(),  // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경
+        success: function (json) {
+          if (json.result === 1) { //로그인 성공
+            alert(json.msg); //메시지띄우기
+            location.href = "/main"; //로그인 성공페이지 이동
+          } else {                //로그인 실패
+            alert(json.msg);    //메시지 띄우기
+            $("#userId").focus();   //아이디 입력 항목에 마우스 커서 이동
+          }
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>

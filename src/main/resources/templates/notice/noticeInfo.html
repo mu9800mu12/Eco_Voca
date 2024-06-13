@@ -6,7 +6,31 @@
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
+  <style>
+    #content {
+      white-space: pre-line;
+    }
+  </style>
   <script th:inline="javascript">
+
     /*<![CDATA[*/
     const session_user_id = /*[[${session.SS_USER_ID}]]*/ ''; // Controller에서 받은 세션에 저장된 값
     const user_id = /*[[${rDTO.userId}]]*/ ''; // 공지사항 게시글 작성자 아이디
@@ -155,89 +179,92 @@
 
 </head>
 <body>
-<div class="container mt-5">
-  <h2>공지사항 상세보기</h2>
-  <hr/>
-  <form id="f">
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 th:text="${rDTO.title}">제목</h5>
-      </div>
-      <div class="card-body">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">공지글 여부</label>
-          <div class="col-sm-10">
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="noticeYn"
-                     th:checked="${rDTO.noticeYn eq 'Y'}" disabled>
-              <label class="form-check-label">예</label>
-            </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="noticeYn"
-                     th:checked="${rDTO.noticeYn eq 'N'}" disabled>
-              <label class="form-check-label">아니오</label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">작성일</label>
-          <div class="col-sm-10">
-            <div class="card">
-              <div class="card-body" th:text="${rDTO.regDt}">작성일</div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">조회수</label>
-          <div class="col-sm-10">
-            <div class="card">
-              <div class="card-body" th:text="${rDTO.readCnt}">조회수</div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">내용</label>
-          <div class="col-sm-10">
-            <div class="card">
-              <div class="card-body" th:text="${rDTO.contents}">내용</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="text-right mb-4">
-      <button id="btnEdit" type="button" class="btn btn-warning">수정</button>
-      <button id="btnDelete" type="button" class="btn btn-danger">삭제</button>
-      <button id="btnList" type="button" class="btn btn-secondary">목록</button>
-    </div>
+<!-- 공통 헤더 -->
+<div th:replace="~{innerHeader}"></div>
 
-    <div class="card mb-4">
-      <div class="card-header">댓글 작성</div>
-      <div class="card-body">
-        <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}"/>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">작성자</label>
-          <div class="col-sm-10">
-            <a>
-              <div class="1" th:each="cDTO : ${rList}"></div>
-            </a>
-            <p class="form-control-plaintext" th:name="ssUserId" th:text="${session.SS_USER_ID}">
-              [[${session.SS_USER_ID}]]</p>
-          </div>
+<!-- Main -->
+<main id="main">
+
+  <!-- Breadcrumbs -->
+  <section class="breadcrumbs">
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="section-title">
+          <br>
+          <h2>community</h2>
+          <p>커뮤니티 글 보기</p>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">댓글</label>
-          <div class="col-sm-8">
-            <input type="text" name="comment" id="comment" class="form-control" maxlength="100"
-                   placeholder="댓글을 입력하세요...">
+        <ol>
+          <li><a href="/main">Home</a></li>
+          <li>community</li>
+        </ol>
+      </div>
+
+    </div>
+  </section><!-- End Breadcrumbs -->
+
+
+  <div class="container mt-5">
+
+    <section id="portfolio-details" class="portfolio-details" style="padding-top: 0px;">
+      <div class="container">
+
+        <div class="portfolio-info" style="min-height: 500px">
+          <div class="row">
+            <div class="row">
+              <div class="col-md-8"></div>
+
+              <div class="col-md-4 text-right">
+                <span><strong>작성일:</strong> [[${#temporals.format(rDTO.regDt, 'yyyy-MM-dd HH:mm')}]]</span>
+                <span style="margin: 0 10px"> | </span>
+                <span><strong>조회수:</strong> [[${rDTO.readCnt}]]</span>
+              </div>
+            </div>
           </div>
-          <div class="col-sm-2">
-            <button id="btnCommentInsert" type="button" class="btn btn-primary">작성</button>
+          <h4>제목</h4>
+          <h3 th:text="${rDTO.title}"></h3>
+          <h5>내용</h5>
+          <p>
+            <textarea readonly="" class="readTextarea" th:text="${rDTO.contents}" style="width: 100%; overflow-y: hidden; border: none; resize: none; outline: none; cursor: default"></textarea>
+          </p>
+        </div>
+        <div class="php-email-form" style="text-align: right; margin-top: 10px">
+          <button id="btnEdit" type="button" th:if="${session.SS_USER_ID == rDTO.userId}">수정</button>
+          <button id="btnDelete" type="button" th:if="${session.SS_USER_ID == rDTO.userId}">삭제</button>
+          <button id="btnList" type="button">목록</button>
+        </div>
+      </div>
+    </section><!-- End Portfolio Details Section -->
+    <form name="f" id="f">
+      <div class="card mb-4">
+        <div class="card-header">댓글 작성</div>
+        <div class="card-body">
+          <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}"/>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">작성자</label>
+            <div class="col-sm-10">
+              <a>
+                <div class="1" th:each="cDTO : ${rList}"></div>
+              </a>
+              <p class="form-control-plaintext" th:name="ssUserId" th:text="${session.SS_USER_ID}">
+                [[${session.SS_USER_ID}]]</p>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">댓글</label>
+            <div class="col-sm-8">
+              <input type="text" name="comment" id="comment" class="form-control" maxlength="100"
+                     placeholder="댓글을 입력하세요...">
+            </div>
+            <div class="col-sm-2">
+              <button id="btnCommentInsert" type="button" class="btn btn-primary">작성</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="card">
       <div class="card-header">댓글 목록</div>
@@ -257,22 +284,28 @@
               <div class="col-md-2 text-left"><strong>작성시간: </strong><span
                   th:text="${cDTO.regDt()}">작성시간</span></div>
               <button type="button" th:onclick="'doEditComment(' + ${cDTO.commentSeq()} + ', this)'"
-                      class="btn btn-warning btnCommentUpdate">수정
+                      class="btn btn-warning btnCommentUpdate" th:if="${session.SS_USER_ID == cDTO.userId()}"
+                      style="width: 70px"
+              >수정
               </button>
               <button type="button" th:onclick="'doDeleteComment(' + ${cDTO.commentSeq()} + ')'"
-                      class="btn btn-danger btnCommentDelete">삭제
+                      class="btn btn-danger btnCommentDelete" th:if="${session.SS_USER_ID == cDTO.userId()}"
+              style="width: 70px">삭제
               </button>
+
               <button type="button" th:onclick="'doSaveComment(' + ${cDTO.commentSeq()} + ', this)'"
-                      class="btn btn-success btnSaveComment" style="display:none;">저장
+                      class="btn  btnSaveComment" style="display:none; width: 70px; background-color: #FFC107">저장
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <br>
+  </div>
+</main>
 
-  </form>
-</div>
+<!-- 공통 푸터 -->
+<div th:replace="~{footer}"></div>
 </body>
 </html>
-

@@ -1,130 +1,252 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/myPageIndex.css"/>
-  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    $(document).ready(function () {
-      myPageIndex();
+  <title>하루 경제 - 마이페이지</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-      $("#btnUpdateMypage").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "updateMyPage";
-      });
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-      $("#btnUpdatePassword").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "findUpdatePassword";
-      });
-      $("#btnDeleteUser").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "deleteUser";
-      });
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-      // 내 정보 가져오기
-      function myPageIndex() {
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        $.ajax({
-          url: "/user/myPageIndex",
-          type: "post",
-          dataType: "JSON",
-          data: $("#f").serialize(),
-          success: function (json) {
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
 
-            $("#userId").val(json.userId)
-            $("#email").val(json.email)
-            $("#userName").val(json.userName)
-            $("#nickName").val(json.nickName)
-            $("#address").val(json.address)
-            $("#birthday").val(json.birthday)
-            $("#sinceDay").val(json.sinceDay)
-          }
-        })
-      }
-    });
-
-  </script>
+  <!-- =======================================================
+  * Template Name: Gp
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Updated: Mar 17 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
-
-<style>
-  .divTableCell {
-    display: flex;
-    align-items: center;
-  / 수직 가운데 정렬 /
-  }
-</style>
-
-<style>
-  h2 {
-    text-align: center;
-  / 가운데 정렬 / font-weight: bold;
-  / 굵은 글꼴 / margin-top: 20 px;
-  / 위쪽 여백 추가 / margin-bottom: 20 px;
-  / 아래쪽 여백 추가 /
-  }
-</style>
-
 
 <body>
 
-<h2>마이 페이지</h2>
-<br/>
-<form id="f">
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
 
-  <div style="margin: auto">
-    <div style="width: 100%">
-      <div> 아이디
-        <input type="text" class="form-control" id="userId" name="userId" value="" disabled="" style="width: 100%">
-      </div>
-    </div>
+<!-- ======= Main ======= -->
+<main id="main">
 
-    <div style="width: 100%">
-      <div > 이메일
-        <input type="email" class="form-control" id="email" name="email" disabled="" style="width: 100%">
-      </div>
-    </div>
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
 
-    <div style="width: 100%">
-      <div > 이름
-        <input type="text" class="form-control" id="userName" name="userName" disabled="" style="width: 100%">
+      <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+        <div class="section-title">
+          <h2>mypage</h2>
+          <p>내 정보</p>
+        </div>
+        <ol>
+          <li><a href="/main">Home</a></li>
+          <li>mypage</li>
+        </ol>
       </div>
-    </div>
-    <div style="width: 100%">
-      <div > 닉네임
-        <input type="text" class="form-control" id="nickName" name="nickName" disabled="" style="width: 100%">
-      </div>
-    </div>
-
-    <div style="width: 100%">
-      <div > 주소
-        <input type="text" class="form-control" id="address" name="address" disabled="" style="width: 100%">
-      </div>
-    </div>
-    <div style="width: 100%">
-      <div > 생년월일
-        <input type="text" class="form-control" id="birthday" name="birthday" disabled="" style="width: 100%">
-      </div>
-    </div>
-    <div style="width: 100%">
-      <div > 가입날짜
-        <input type="text" class="form-control" id="sinceDay" name="sinceDay" disabled="" style="width: 100%">
-      </div>
-    </div>
-  </div>
-  <div class="divTable minimalistBlack">
-    <div class="divTableBody">
-      <div class="divTableRow">
-
-
-      </div>
-    </div>
-    <div>
-      <button id="btnUpdateMypage" name="btnFindId" type="button">정보 수정하기</button>
-      <button id="btnUpdatePassword" name="btnFindId" type="button">비밀번호 변경</button>
-      <button id="btnDeleteUser" name="btnFindId" type="button">회원 탈퇴</button>
-      <button id="btnPayment" name="btnFindId" type="button">결제 정보 등록</button>
 
     </div>
-  </div>
-</form>
+  </section><!-- End Breadcrumbs -->
+
+  <section class="inner-page" style="padding-top: 0px">
+    <div class="container">
+      <!-- ======= Features Section ======= -->
+      <section id="features" class="features">
+        <div class="container" data-aos="fade-up">
+          <form id="f">
+            <div class="row">
+              <div class="image col-lg-6" style='background-image: url("/img/features.jpg");' data-aos="fade-right"></div>
+              <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
+
+
+                <div class="icon-box mt-5 mt-lg-0" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-user"></i>
+                  <h4>아이디</h4>
+                  <p id="userId"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-id-card"></i>
+                  <h4>이름</h4>
+                  <p id="userName"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-user-circle"></i>
+                  <h4>닉네임</h4>
+                  <p id="nickname"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-world"></i>
+                  <h4>이메일</h4>
+                  <p id="email"></p>
+                </div>
+
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-car"></i>
+                  <h4>주소</h4>
+                  <p id="address"></p>
+                </div>
+
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                    <i class="bx bx-cake"></i>
+                    <h4>생년월일</h4>
+                    <p id="birthday"></p>
+                </div>
+
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-calendar"></i>
+                  <h4>가입일자</h4>
+                  <p id="sinceDay"></p>
+                </div>
+                <div class="row text-center php-email-form" style="padding-top: 25px; padding-left: 15px">
+                  <div class="col-md-4">
+                    <button id="btnUpdateMypage" name="btnFindId" type="button" style="">정보 수정하기</button>
+                  </div>
+                  <div class="col-md-4">
+                    <button id="btnUpdatePassword" name="btnFindId" type="button">비밀번호 변경</button>
+                  </div>
+                  <div class="col-md-4">
+                    <button id="btnDeleteUser" name="btnFindId" type="button">회원 탈퇴</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section><!-- End Features Section -->
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+
+  //todo 준상이가 짜준 접근자 제한 전부 걸어야 함
+  let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+  if(userId == undefined) {
+    alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+    location.href="/user/login"
+  }
+
+</script>
+<script type="text/javascript">
+
+
+  $(document).ready(function () {
+    getSsUserId();
+    myPageIndex();
+
+    $("#btnUpdateMypage").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "updateMyPage";
+    });
+
+    $("#btnUpdatePassword").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "findUpdatePassword";
+    });
+    $("#btnDeleteUser").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "deleteUser";
+    });
+
+    // 내 정보 가져오기
+    function myPageIndex() {
+
+      $.ajax({
+        url: "/user/myPageIndex",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+
+          document.getElementById("userId").textContent = json.userId;
+          document.getElementById("userName").textContent = json.userName;
+          document.getElementById("nickname").textContent = json.nickName;
+          document.getElementById("email").textContent = json.email;
+          document.getElementById("sinceDay").textContent = json.sinceDay;
+          document.getElementById("birthday").textContent = json.birthday;
+          document.getElementById("address").textContent = json.address;
+
+          // 1. 아이디 이름 닉네임 이메일 주소 생년월일 가입일자
+        }
+      })
+    }
+
+    // 현재 페이지에 해당하는 네비게이션 활성화 설정
+    var currentPage = 'mypage';
+
+    // 각 페이지에 따라 해당 네비게이션 항목 활성화
+    if (currentPage === 'home') {
+      $("#nav-home").addClass("active");
+    } else if (currentPage === 'study') {
+      $("#nav-study").addClass("active");
+    } else if (currentPage === 'search') {
+      $("#nav-search").addClass("active");
+    } else if (currentPage === 'learning') {
+      $("#nav-learning").addClass("active");
+    } else if (currentPage === 'notice') {
+      $("#nav-notice").addClass("active");
+    } else if (currentPage === 'mypage') {
+      $("#nav-mypage").addClass("active");
+    }
+
+    function getSsUserId() {
+      $.ajax({
+        url: "/getSsUserId",
+        type: "post", // 전송방식은 Post
+        dataType: "JSON", // 전송 결과는 JSON으로 받기
+        success: function (json) { // 호출이 성공했다면..
+
+          console.log(json);
+
+          if (!(json.userId.length > 0)) {
+            // userId가 없으면 (로그인 정보가 없으면)
+            alert("로그인 정보가 없습니다. 로그인 후 이용해 주세요.");
+            window.location.href = "/user/login"; // 로그인 페이지로 리다이렉트
+
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("AJAX 호출 중 에러 발생:", error);
+        }
+      });
+    }
+  });
+</script>
 </body>
+
 </html>

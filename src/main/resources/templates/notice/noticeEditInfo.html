@@ -1,132 +1,252 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>공지사항 수정하기</title>
-    <link rel="stylesheet" href="/css/ExList.css"/>
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnSend").on("click", function () {
-                doSubmit(); // 공지사항 수정하기 실행
+    <title>하루 경제 - 공지사항</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
-            })
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main1.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Gp
+    * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+    * Updated: Mar 17 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+                <div class="section-title">
+                    <h2>community</h2>
+                    <p>게시글 수정</p>
+                </div>
+                <ol>
+                    <li><a href="/main">Home</a></li>
+                    <li>community</li>
+                </ol>
+            </div>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+    <section id="portfolio-details" class="portfolio-details" style="padding-top: 0px">
+        <div class="container">
+
+            <form id="f">
+                <input type="hidden" name="nSeq" id="nSeq" th:value="${rDTO.noticeSeq}"/>
+                <input type="hidden" id="userId" th:value="${rDTO.userId}"/>
+                <div class="portfolio-info">
+                    <div class="col-md-12 form-group mx-auto" style="margin-top: 15px;">
+                        <h5 style="padding-bottom: 7px; padding-left:2px; text-align: left">제목</h5>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요." th:value="${rDTO.title}" required style="padding: 12px;">
+                    </div>
+                    <h3></h3>
+                    <p>
+                    <div class="col-md-12 form-group mx-auto" style="margin-top: 15px;">
+                        <h5 style="padding-bottom: 7px; padding-left:2px; text-align: left">내용</h5>
+                        <textarea name="contents" class="form-control" id="contents" rows="15" placeholder="내용을 입력하세요." th:text="${rDTO.contents}" required style="padding: 12px;"></textarea>
+                    </div>
+                    </p>
+                </div>
+                <div class="php-email-form" style="text-align: right; margin-top: 10px">
+                    <button id="btnSend" type="button">수정</button>
+                    <button type="reset">다시 작성</button>
+                    <button id="btnInfo" type="button">나가기</button>
+                </div>
+            </form>
+        </div>
+    </section><!-- End Portfolio Details Section -->
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+
+        getSsUserId();
+
+        let nSeq = document.getElementById("nSeq").value;
+
+        // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        $("#btnSend").on("click", function () {
+            doSubmit(); // 공지사항 수정하기 실행
         })
 
-        //글자 길이 바이트 단위로 체크하기(바이트값 전달)
-        function calBytes(str) {
-            let tcount = 0;
-            let tmpStr = String(str);            let strCnt = tmpStr.length;
-            let onechar;
-            for (let i = 0; i < strCnt; i++) {
-                onechar = tmpStr.charAt(i);
-                if (escape(onechar).length > 4) {
-                    tcount += 2;
-                } else {
-                    tcount += 1;
-                }
-            }
-            return tcount;
-        }
+        // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        $("#btnInfo").on("click", function () {
+            if (confirm("글 수정을 취소하시겠습니까?")) {
 
-        // 공지사항 저장하기
-        function doSubmit() {
+                location.href = "/notice/noticeInfo?nSeq=" + nSeq;
+            }
+        })
 
-            let f = document.getElementById("f"); // form 태그
+        function getSsUserId() {
+            let noticeId = document.getElementById("userId").value;
+            let nSeq = document.getElementById("nSeq").value;
 
-            if (f.title.value === "") {
-                alert("제목을 입력하시기 바랍니다.");
-                f.title.focus();
-                return;
-            }
-            if (calBytes(f.title.value) > 200) {
-                alert("최대 200Bytes까지 입력 가능합니다.");
-                f.title.focus();
-                return;
-            }
-            let noticeCheck = false; //체크 여부 확인 변수
-            for (let i = 0; i < f.noticeYn.length; i++) {
-                if (f.noticeYn[i].checked) {
-                    noticeCheck = true;
-                    break;
-                }
-            }
-            if (noticeCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.noticeYn[0].focus();
-                return;
-            }
-            if (f.contents.value === "") {
-                alert("내용을 입력하시기 바랍니다.");
-                f.contents.focus();
-                return;
-            }
-            if (calBytes(f.contents.value) > 4000) {
-                alert("최대 4000Bytes까지 입력 가능합니다.");
-                f.contents.focus();
-                return;
-            }
-
-            // Ajax 호출해서 글 등록하기
             $.ajax({
-                    url: "/notice/noticeUpdate",
-                    type: "post", // 전송방식은 Post
-                    dataType: "JSON", // 전송 결과는 JSON으로 받기
-                    data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                    success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
-                        alert(json.msg); // 메시지 띄우기
+                url: "/getSsUserId",
+                type: "post", // 전송방식은 Post
+                dataType: "JSON", // 전송 결과는 JSON으로 받기
+                success: function (json) { // 호출이 성공했다면..
 
-                        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+                    console.log(json);
+
+                    if (!(json.userId.length > 0)) {
+                        // userId가 없으면 (로그인 정보가 없으면)
+                        alert("로그인 정보가 없습니다. 로그인 후 이용해 주세요.");
+                        window.location.href = "/user/login"; // 로그인 페이지로 리다이렉트
+
+                    } else if (json.userId != noticeId) {
+                        alert(("본인이 쓴 글만 수정 가능합니다."));
+                        window.location.href = "/notice/noticeInfo?nSeq=" + nSeq;
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX 호출 중 에러 발생:", error);
                 }
-            )
+            });
         }
-    </script>
-</head>
-<body>
-<h2>공지사항 수정하기</h2>
-<hr/>
-<br/>
-<form name="f" id="f">
-    <input type="hidden" name="nSeq" th:value="${rDTO.noticeSeq}"/>
-    <div class="divTable minimalistBlack">
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <div class="divTableCell">제목</div>
-                <div class="divTableCell">
-                    <input type="text" name="title" maxlength="100" th:value="${rDTO.title}"
-                           style="width: 95%"/>
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">공지글 여부</div>
-                <div class="divTableCell">
-                    예<input type="radio" name="noticeYn" value="Y" th:checked="${rDTO.noticeYn eq 'Y'}"/>
-                    아니오<input type="radio" name="noticeYn" value="N" th:checked="${rDTO.noticeYn eq 'N'}"/>
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">조회수</div>
-                <div class="divTableCell" th:text="${rDTO.readCnt}">
-                </div>
-            </div>
-            <div class="divTableRow">
-                <div class="divTableCell">내용</div>
-                <div class="divTableCell">
-                    <textarea name="contents"
-                              style="width: 95%; height: 400px" th:text="${rDTO.contents}"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <button id="btnSend" type="button">수정</button>
-        <button type="reset">다시 작성</button>
-    </div>
-</form>
+    })
+
+    //글자 길이 바이트 단위로 체크하기(바이트값 전달)
+    function calBytes(str) {
+        let tcount = 0;
+        let tmpStr = String(str);
+        let strCnt = tmpStr.length;
+        let onechar;
+        for (let i = 0; i < strCnt; i++) {
+            onechar = tmpStr.charAt(i);
+            if (escape(onechar).length > 4) {
+                tcount += 2;
+            } else {
+                tcount += 1;
+            }
+        }
+        return tcount;
+    }
+
+    // 공지사항 저장하기
+    function doSubmit() {
+
+        let f = document.getElementById("f"); // form 태그
+        let nSeq = document.getElementById("nSeq").value;
+
+        if (f.title.value === "") {
+            alert("제목을 입력하시기 바랍니다.");
+            f.title.focus();
+            return;
+        }
+        if (calBytes(f.title.value) > 200) {
+            alert("최대 200Bytes까지 입력 가능합니다.");
+            f.title.focus();
+            return;
+        }
+        if (f.contents.value === "") {
+            alert("내용을 입력하시기 바랍니다.");
+            f.contents.focus();
+            return;
+        }
+        if (calBytes(f.contents.value) > 4000) {
+            alert("최대 4000Bytes까지 입력 가능합니다.");
+            f.contents.focus();
+            return;
+        }
+
+        // Ajax 호출해서 글 등록하기
+        $.ajax({
+                url: "/notice/noticeUpdate",
+                type: "post", // 전송방식은 Post
+                dataType: "JSON", // 전송 결과는 JSON으로 받기
+                data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                success: function (json) { // /notice/noticeUpdate 호출이 성공했다면..
+                    alert(json.msg); // 메시지 띄우기
+                    location.href = "/notice/noticeInfo?nSeq=" + nSeq;
+                }
+            }
+        )
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // 현재 페이지에 해당하는 네비게이션 활성화 설정
+        var currentPage = 'notice';
+
+        // 각 페이지에 따라 해당 네비게이션 항목 활성화
+        if (currentPage === 'home') {
+            $("#nav-home").addClass("active");
+        } else if (currentPage === 'study') {
+            $("#nav-study").addClass("active");
+        } else if (currentPage === 'search') {
+            $("#nav-search").addClass("active");
+        } else if (currentPage === 'learning') {
+            $("#nav-learning").addClass("active");
+        } else if (currentPage === 'notice') {
+            $("#nav-notice").addClass("active");
+        } else if (currentPage === 'mypage') {
+            $("#nav-mypage").addClass("active");
+        }
+    });
+</script>
 </body>
+
 </html>
 

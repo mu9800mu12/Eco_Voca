@@ -96,6 +96,9 @@ public class UserController {
         String email = (CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
+        session.setAttribute("SS_USER_ID", userId);
+
+
         log.info("userId :" + userId);
         log.info("email :" + email);
         log.info("userName :" + userName);
@@ -113,12 +116,17 @@ public class UserController {
      * 비밀번호 업데이트
      */
     @PostMapping(value = "updatePassword")
-    public String updatePassword(HttpSession session, HttpServletRequest request) throws Exception {
+    @ResponseBody
+    public MsgDTO updatePassword(HttpSession session, HttpServletRequest request) throws Exception {
 
         log.info(" 비밀번호 업데이트 시~~작");
 
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String password = CmmUtil.nvl(EncryptUtil.encHashSHA256(request.getParameter("password")));
+
+
+        int res = 0;
+        String msg = "";
 
         //toDo if 문 사용해서 세션값이 있을 때만 비밀번호 재설정할 수 있게 만들어라~          - 이교수님
         //  그런데 데브툴 쓰고 있어서 세션값이 안날라 간거다? 아무튼 쓰자 4줄도 안된다고 하신다~
@@ -127,11 +135,11 @@ public class UserController {
             log.info("userId : " + userId);
             log.info("password : " + password);
 
-            int res = userService.userIdExists(userId);
-            String msg = "";
+            res = userService.userIdExists(userId);
 
             if (res == 1) {
                 userService.updatePassword(userId, password);
+                msg = "비밀번호가 변경이 되었습니다";
 
 //                session.removeAttribute("NEW_PASSWORD");
             } else {
@@ -140,7 +148,14 @@ public class UserController {
             }
         }
 
-        return "user/findUpdatePassword";
+
+        MsgDTO dto = MsgDTO.builder()
+                .result(res)
+                .msg(msg)
+                .build();
+
+
+        return dto;
 
     }
 

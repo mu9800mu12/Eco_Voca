@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>공지 리스트</title>
+    <title>커뮤니티</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -26,10 +26,51 @@
     <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/main1.css" rel="stylesheet">
     <style>
         #content {
             white-space: pre-line;
+        }
+
+        /* 테이블 스타일 */
+        .custom-table {
+            display: grid;
+            grid-template-columns: 60% 20% 20%;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .custom-table-header {
+            border-bottom: 2px solid #222;
+        }
+
+        .custom-table-header,
+        .custom-table-body {
+            display: contents;
+        }
+
+        .custom-table-cell {
+            padding: 8px;
+            /*text-align: center;*/
+        }
+
+        /*.custom-table-cell:nth-child(odd) {*/
+        /*    background-color: #f2f2f2;*/
+        /*}*/
+
+        .custom-table-header .custom-table-cell {
+            font-weight: bold;
+            /*background-color: #ddd;*/
+            border-bottom: 2px solid #222;
+        }
+
+        .custom-table-row {
+            display: contents;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .custom-table-row .custom-table-cell {
+            border-bottom: 1px solid #e0e0e0;
         }
 
     </style>
@@ -50,12 +91,12 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="section-title">
                     <br>
-                    <h2>notice</h2>
+                    <h2>community</h2>
                     <p>커뮤니티</p>
                 </div>
                 <ol>
                     <li><a href="/main">Home</a></li>
-                    <li>notice</li>
+                    <li>community</li>
                 </ol>
             </div>
 
@@ -65,28 +106,27 @@
     <section class="inner-page">
         <div class="container">
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th style="width: 60%">제목</th>
-                    <th style="width: 20%">조회수</th>
-                    <th style="width: 20%">등록일</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="dto: ${rList}" th:onclick="|location.href='/notice/noticeInfo?nSeq=' + ${dto.noticeSeq}|">
-                    <td th:text="${dto.title}"></td>
-                    <td th:text="${dto.readCnt}"></td>
-                    <td th:text="${#temporals.format(dto.regDt, 'yyyy-MM-dd')}"></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="custom-table">
+                <div class="custom-table-header">
+                    <div class="custom-table-cell">제목</div>
+                    <div class="custom-table-cell">조회수</div>
+                    <div class="custom-table-cell">등록일</div>
+                </div>
+                <div class="custom-table-body">
+                    <div class="custom-table-row" th:each="dto: ${rList}" th:onclick="|location.href='/notice/noticeInfo?nSeq=' + ${dto.noticeSeq}|" style="cursor: pointer;">
+                        <div class="custom-table-cell open-modal" th:text="${dto.title}"></div>
+                        <div class="custom-table-cell" th:text="${dto.readCnt}"></div>
+                        <div class="custom-table-cell" th:text="${#temporals.format(dto.regDt, 'yyyy-MM-dd')}"></div>
+                    </div>
+                </div>
+            </div>
 
-            <div style="float: right">
+            <div style="float: right; margin-top: 10px;">
                 <a href="/notice/noticeReg">글쓰기</a>
             </div>
         </div>
     </section>
+
 
 </main><!-- End Main -->
 

@@ -1,186 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>게시판 글쓰기</title>
-    <link rel="stylesheet" href="/css/ExList.css"/>
-    <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        // HTML로딩이 완료되고, 실행됨
-        $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnSend").on("click", function () {
-                doSubmit(); // 공지사항 등록하기 실행
-            });
-        });
+  <meta charset="UTF-8">
+  <title>게시판 글쓰기</title>
+  <link rel="stylesheet" href="/css/ExList.css"/>
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-        // 글자 길이 바이트 단위로 체크하기(바이트값 전달)
-        function calBytes(str) {
-            let tcount = 0;
-            let tmpStr = String(str);
-            let strCnt = tmpStr.length;
-            let onechar;
-            for (let i = 0; i < strCnt; i++) {
-                onechar = tmpStr.charAt(i);
-                if (escape(onechar).length > 4) {
-                    tcount += 2;
-                } else {
-                    tcount += 1;
-                }
-            }
-            return tcount;
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet">
+
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
+  <style>
+    #content {
+      white-space: pre-line;
+    }
+  </style>
+  <script type="text/javascript">
+    // HTML로딩이 완료되고, 실행됨
+    $(document).ready(function () {
+      // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      $("#btnSend").on("click", function () {
+        doSubmit(); // 공지사항 등록하기 실행
+      });
+
+    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+    $("#btnList").on("click", function () {
+      if (confirm("글 작성을 취소하시겠습니까?")) {
+
+        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+      }
+    })
+    });
+
+
+    // 글자 길이 바이트 단위로 체크하기(바이트값 전달)
+    function calBytes(str) {
+      let tcount = 0;
+      let tmpStr = String(str);
+      let strCnt = tmpStr.length;
+      let onechar;
+      for (let i = 0; i < strCnt; i++) {
+        onechar = tmpStr.charAt(i);
+        if (escape(onechar).length > 4) {
+          tcount += 2;
+        } else {
+          tcount += 1;
         }
+      }
+      return tcount;
+    }
 
-        // 공지사항 저장하기
-        function doSubmit() {
-            let f = document.getElementById("f"); // form 태그
+    // 공지사항 저장하기
+    function doSubmit() {
+      let f = document.getElementById("f"); // form 태그
 
-            if (f.title.value === "") {
-                alert("제목을 입력하시기 바랍니다.");
-                f.title.focus();
-                return;
-            }
-            if (calBytes(f.title.value) > 200) {
-                alert("최대 200Bytes까지 입력 가능합니다.");
-                f.title.focus();
-                return;
-            }
-            let noticeCheck = false; //체크 여부 확인 변수
-            for (let i = 0; i < f.noticeYn.length; i++) {
-                if (f.noticeYn[i].checked) {
-                    noticeCheck = true;
-                    break;
-                }
-            }
-            if (noticeCheck === false) {
-                alert("공지글 여부를 선택하시기 바랍니다.");
-                f.noticeYn[0].focus();
-                return;
-            }
-            if (f.contents.value === "") {
-                alert("내용을 입력하시기 바랍니다.");
-                f.contents.focus();
-                return;
-            }
-            if (calBytes(f.contents.value) > 4000) {
-                alert("최대 4000Bytes까지 입력 가능합니다.");
-                f.contents.focus();
-                return;
-            }
+      if (f.title.value === "") {
+        alert("제목을 입력하시기 바랍니다.");
+        f.title.focus();
+        return;
+      }
+      if (calBytes(f.title.value) > 200) {
+        alert("최대 200Bytes까지 입력 가능합니다.");
+        f.title.focus();
+        return;
+      }
 
-            // Ajax 호출해서 글 등록하기
-            $.ajax({
-                url: "/notice/noticeInsert",
-                type: "post", // 전송방식은 Post
-                // contentType: "application/json",
-                dataType: "JSON", // 전송 결과는 JSON으로 받기
-                data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
-                    alert(json.msg); // 메시지 띄우기
-                    location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-                }
-            });
+      if (f.contents.value === "") {
+        alert("내용을 입력하시기 바랍니다.");
+        f.contents.focus();
+        return;
+      }
+      if (calBytes(f.contents.value) > 4000) {
+        alert("최대 4000Bytes까지 입력 가능합니다.");
+        f.contents.focus();
+        return;
+      }
+
+      // Ajax 호출해서 글 등록하기
+      $.ajax({
+        url: "/notice/noticeInsert",
+        type: "post", // 전송방식은 Post
+        // contentType: "application/json",
+        dataType: "JSON", // 전송 결과는 JSON으로 받기
+        data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+        success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
+          alert(json.msg); // 메시지 띄우기
+          location.href = "/notice/noticeList"; // 공지사항 리스트 이동
         }
-    </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
+      });
+    }
+  </script>
 
-        h2 {
-            text-align: center;
-            color: #343a40;
-            margin-top: 20px;
-        }
-
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .form-group input[type="text"],
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-        }
-
-        .form-group input[type="radio"] {
-            margin-left: 10px;
-            margin-right: 5px;
-        }
-
-        .form-actions {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .form-actions button {
-            padding: 10px 20px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .form-actions button:hover {
-            background-color: #0056b3;
-        }
-
-        .form-actions button[type="reset"] {
-            background-color: #6c757d;
-        }
-
-        .form-actions button[type="reset"]:hover {
-            background-color: #5a6268;
-        }
-    </style>
 </head>
 <body>
-<div class="container">
-    <h2>공지사항 등록하기</h2>
-    <hr/>
-    <br/>
-    <form name="f" id="f">
-        <div class="form-group">
-            <label for="title">제목</label>
-            <input type="text" name="title" id="title" maxlength="100"/>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+        <div class="section-title">
+          <h2>community</h2>
+          <p>커뮤니티 글 작성</p>
         </div>
-        <div class="form-group">
-            <label>공지글 여부</label>
-            <label><input type="radio" name="noticeYn" value="Y"/> 예</label>
-            <label><input type="radio" name="noticeYn" value="N"/> 아니오</label>
-        </div>
-        <div class="form-group">
-            <label for="contents">내용</label>
-            <textarea name="contents" id="contents" rows="10"></textarea>
-        </div>
-        <div class="form-actions">
-            <button id="btnSend" type="button">등록</button>
-            <button type="reset">다시 작성</button>
-        </div>
-    </form>
-</div>
+        <ol>
+          <li><a href="/main">Home</a></li>
+          <li>community</li>
+        </ol>
+      </div>
+
+    </div>
+  </section><!-- End Breadcrumbs -->
+
+  <section class="inner-page">
+    <div class="container">
+      <div class="container">
+        <h2></h2>
+        <form name="f" id="f">
+          <div class="portfolio-info">
+            <div class="form-group col-md-12 mx-auto" style="margin-top: 15px;">
+              <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">제목</h5>
+              <input type="text" name="title" id="title" class="form-control" maxlength="100" placeholder="제목을 입력하세요.">
+              <hr>
+            </div>
+            <div class="form-group col-md-12 mx-auto" style="margin-top: 15px;">
+<!--              <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">공지글 여부</h5>-->
+<!--              <label><input type="radio" name="noticeYn" value="Y"/> 예</label>-->
+<!--              <label><input type="radio" name="noticeYn" value="N"/> 아니오</label>-->
+            </div>
+            <div class="form-group">
+              <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">내용</h5>
+              <textarea name="contents" class="form-control" id="contents" rows="15"
+                        placeholder="내용을 입력하세요." required style="padding: 12px;"></textarea>
+            </div>
+            <div class="php-email-form" style="text-align: right; margin-top: 10px;">
+
+              <button id="btnSend" type="button">등록</button>
+              <button type="reset">다시 작성</button>
+              <button id="btnList" type="button">목록</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </section>
+</main><!-- End Main -->
+<!-- 공통 푸터 -->
+<div th:replace="~{footer}"></div>
 </body>
 </html>

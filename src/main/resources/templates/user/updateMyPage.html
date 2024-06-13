@@ -2,237 +2,348 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/updateMyPage.css"/>
-  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <script type="text/javascript">
+  <title>하루 경제 - 정보 수정</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet">
+
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Gp
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Updated: Mar 17 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+        <div class="section-title">
+          <h2>mypage</h2>
+          <p>내 정보 수정</p>
+        </div>
+        <ol>
+          <li><a href="/main">Home</a></li>
+          <li>mypage</li>
+        </ol>
+      </div>
+
+    </div>
+  </section><!-- End Breadcrumbs -->
+
+  <section class="inner-page" style="padding-top: 0px">
+    <div class="container">
+      <!-- ======= Features Section ======= -->
+      <section id="features" class="features">
+        <div class="container" data-aos="fade-up">
+          <form id="f">
+            <div class="row">
+              <div class="image col-lg-6" style='background-image: url("/img/features.jpg");'
+                   data-aos="fade-right"></div>
+              <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
+                <div class="icon-box mt-5 mt-lg-0" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-user"></i>
+                  <h4>아이디</h4>
+                  <p id="userId"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-id-card"></i>
+                  <h4>이름</h4>
+                  <p id="userName"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-user-circle"></i>
+                  <h4>닉네임</h4>
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="nickName" id="nickName" placeholder="">
+                    <button class="btn btn-secondary" id="btnNickName" type="button">중복 확인</button>
+                  </div>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-world"></i>
+                  <h4>이메일</h4>
+                  <p id="email"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-car"></i>
+                  <h4>주소</h4>
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="address" id="address" placeholder="">
+                    <button class="btn btn-secondary" id="btnAddr" type="button">우편번호</button>
+                  </div>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-cake"></i>
+                  <h4>생년월일</h4>
+                  <p id="birthday"></p>
+                </div>
+                <div class="icon-box mt-5" data-aos="zoom-in" data-aos-delay="150">
+                  <i class="bx bx-calendar"></i>
+                  <h4>가입일자</h4>
+                  <p id="sinceDay"></p>
+                </div>
+                <div class="row text-center php-email-form"
+                     style="padding-top: 25px; padding-left: 15px">
+                  <div class="col-md-6">
+                    <button id="btnMypage" name="btnMypage" type="button" style="">뒤로</button>
+                  </div>
+                  <div class="col-md-6">
+                    <button id="btnUpdate" name="btnFindId" type="button">정보 수정하기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section><!-- End Features Section -->
+    </div>
+  </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
 
 
-    $(document).ready(function () {
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-      myPageIndex();
 
-      $("#btnUpdate").on("click", function () {
-        let f = document.getElementById("f"); //form 태그
-        updateMyPage();
-      })
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
 
-      $("#btnUpdateMypage").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "updateMyPage";
-      });
+<script th:inline="javascript">
 
-      $("#btnUpdatePassword").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "findUpdatePassword";
-      });
-      $("#btnDeleteUser").on("click", function () { //버튼 클릭 시 발생 이벤트
-        location.href = "deleteUser";
-      });
+  let userId = /*[[${session.SS_USER_ID}]]*/ '';
 
-      // 우편번호 찾기
-      $("#btnAddr").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        kakaoPost(f);
-      })
+  if (userId == undefined) {
+    alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+    location.href = "/user/login"
+  }
 
-      // 닉네임 확인
-      $("#btnNickName").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        NickNameExists(f);
-      })
+</script>
 
-      function updateMyPage() {
+<script type="text/javascript">
 
-        $.ajax({
-              url: "/user/updateMyPage",
-              type: "post", // 전송방식은 Post
-              dataType: "JSON", // 전송 결과는 JSON으로 받기
-              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-              success: function (json) { // 호출이 성공했다면..
-                console.log(json)
-                if (json.result === 1) {
-                  alert(json.msg)
-                  location.href = "/user/myPageIndex"; // myPage로 이동
-                } else {
-                  alert("");
-                }
-              }
-            }
-        )
+  var olderNickName = "";
 
-      }
+  var nickNameCheck = "";
 
-      function NickNameExists(f) {
-        if (f.nickName.value === "") {
-          alert("닉네임을 입력하세요.");
-          f.nickName.focus();
-          return;
+  $(document).ready(function () {
+
+    getSsUserId();
+    myPageIndex();
+
+    // 닉네임 확인
+    $("#btnNickName").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      NickNameExists();
+    })
+
+    $("#btnUpdate").on("click", function () {
+      updateMyPage();
+    })
+
+    $("#btnMypage").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "/user/myPageIndex";
+    });
+    // 우편번호 찾기
+    $("#btnAddr").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      kakaoPost(f);
+    })
+
+    // 내 정보 가져오기
+    function myPageIndex() {
+      $.ajax({
+        url: "/user/myPageIndex",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+          console.log(json); // 서버에서 응답 확인
+
+          document.getElementById("userId").textContent = json.userId;
+          document.getElementById("userName").textContent = json.userName;
+          document.getElementById("nickName").value = json.nickName;
+          document.getElementById("email").textContent = json.email;
+          document.getElementById("sinceDay").textContent = json.sinceDay;
+          document.getElementById("birthday").textContent = json.birthday;
+          document.getElementById("address").value = json.address;
+
+          olderNickName = json.nickName;
         }
-        // Ajax 호출해서 회원가입하기
-        $.ajax({
-              url: "/user/NickNameExists",
-              type: "post", // 전송방식은 Post
-              dataType: "JSON", // 전송 결과는 JSON으로 받기
-              data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-              success: function (json) { // 호출이 성공했다면..
-                console.log(json)
-                if (json === 1) {
-                  alert("이미 가입된 닉네임이 존재합니다.");
-                  f.nickName.focus();
-                } else {
-                  nickNameCheck = 0;
-                  alert("사용 가능한 닉네임입니다..");
-                }
-              }
-            }
-        )
+      })
+    }
+
+    // 카카오 우편번호 조회 API 호출
+    function kakaoPost(f) {
+      new daum.Postcode({
+        oncomplete: function (data) {
+          // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
+          // 주요 결과값
+          // 주소 : data.address
+          // 우편번호 : data.zonecode
+          let address = data.address; // 주소
+          let zonecode = data.zonecode; // 우편번호
+          f.address.value = "(" + zonecode + ")" + address
+        }
+      }).open();
+    }
+
+    // 닉네임 중복확인 호출
+    function NickNameExists() {
+      let f = document.getElementById("f");
+      if (f.nickName.value === "") {
+        alert("닉네임을 입력하세요.");
+        f.nickName.focus();
+        return;
       }
 
-      // 카카오 우편번호 조회 API 호출
-      function kakaoPost(f) {
-        new daum.Postcode({
-          oncomplete: function (data) {
-            // Kakao에서 제공하는 data는 JSON구조로 주소 조회 결과값을 전달함
-            // 주요 결과값
-            // 주소 : data.address
-            // 우편번호 : data.zonecode
-            let address = data.address; // 주소
-            let zonecode = data.zonecode; // 우편번호
-            f.address.value = "(" + zonecode + ")" + address
-          }
-        }).open();
-      }
+      console.log("옛날 닉네임 : " + olderNickName)
+      console.log(" 입력 받은 닉네임 : " + f.nickName.value)
 
-      // 내 정보 가져오기
-      function myPageIndex() {
-
+      if (olderNickName !== f.nickName.value) {
         $.ajax({
-          url: "/user/myPageIndex",
+          url: "/user/NickNameExists",
           type: "post",
           dataType: "JSON",
           data: $("#f").serialize(),
           success: function (json) {
-
-            $("#userId").val(json.userId)
-            $("#email").val(json.email)
-            $("#userName").val(json.userName)
-            $("#nickName").val(json.nickName)
-            $("#address").val(json.address)
-            $("#birthday").val(json.birthday)
-            $("#sinceDay").val(json.sinceDay)
+            console.log(json);
+            if (json === 1) {
+              alert("이미 가입된 닉네임이 존재합니다.");
+              f.nickName.focus();
+            } else {
+              alert("사용 가능한 닉네임입니다.");
+              nickNameCheck = 0;
+            }
           }
         })
+      } else {
+        alert("동일한 닉네임을 사용합니다.");
+        nickNameCheck = 0;
       }
-    });
+    }
 
-  </script>
-</head>
+    // 내정보 업데이트 로직
+    function updateMyPage() {
+      let f = document.getElementById("f");
 
-<style>
-  .divTableCell {
-    display: flex;
-    align-items: center;
-  / 수직 가운데 정렬 /
-  }
-</style>
+      if (f.nickName.value === "") {
+        alert("닉네임을 입력하세요.");
+        f.nickName.focus();
+        return;
+      }
 
-<style>
-  h2 {
-    text-align: center;
-  / 가운데 정렬 / font-weight: bold;
-  / 굵은 글꼴 / margin-top: 20 px;
-  / 위쪽 여백 추가 / margin-bottom: 20 px;
-  / 아래쪽 여백 추가 /
-  }
-</style>
+      if (f.address.value === "") {
+        alert("주소를 입력하세요.");
+        f.address.focus();
+        return;
+      }
 
-
-<body>
-<h2>내 정보 수정</h2>
-<br/>
-<form id="f">
-
-  <div style="margin: auto">
-    <div style="width: 100%">
-      <div class="divTableRow"> 아이디</div>
-      <div>
-        <input type="text" class="form-control" id="userId" name="userId" value="" disabled=""
-               style="width: 100%">
-      </div>
-    </div>
-
-    <div style="width: 100%">
-      <div class="divTableRow"> 이메일</div>
-      <div>
-        <input type="email" class="form-control" id="email" name="email" disabled=""
-               style="width: 100%">
-      </div>
-    </div>
-
-    <div style="width: 100%">
-      <div class="divTableRow"> 이름</div>
-      <div>
-        <input type="text" class="form-control" id="userName" name="userName" disabled=""
-               style="width: 100%">
-      </div>
-    </div>
-
-<!--    <div style="width: 100%">-->
-<!--      <div>-->
-<!--        <div class="divTableRow"> 닉네임</div>-->
-
-<!--        <input type="text" class="form-control" id="nickName" name="nickName" style="width: 100%">-->
-<!--        <button id="btnNickName" type="button" style="float: right;" >중복확인</button>-->
-<!--      </div>-->
-<!--    </div>-->
-    <div class="divTableRow">닉네임
-      <div class="divTableCell">
-        <input type="text" class="form-control" id="nickName" name="nickName" style="width: 100%">
-        <button id="btnNickName" type="button">확인</button>
-      </div>
-    </div>
-
-<!--    <div style="width: 100%">-->
-<!--      <div class="divTableRow">주소</div>-->
-<!--      <div>-->
-<!--        <input type="text" class="address" id="address" name="address" style="width: 100%">-->
-<!--        <button id="btnAddr" type="button" style="float: right;">우편번호</button>-->
-<!--      </div>-->
-<!--    </div>-->
-    <div class="divTableRow">
-      <div class="divTableRow"> 주소
-      </div>
-      <div class="divTableCell">
-        <input type="text" class="address" id="address" name="address" style="width:100%" placeholder="주소"/>
-        <button id="btnAddr" type="button">우편번호</button>
-      </div>
-    </div>
-    <div style="width: 100%">
-      <div class="divTableRow"> 생년월일</div>
-      <div>
-        <input type="text" class="form-control" id="birthday" name="birthday" disabled=""
-               style="width: 100%">
-      </div>
-    </div>
-    <div style="width: 100%">
-      <div class="divTableRow"> 가입날짜</div>
-      <div>
-        <input type="text" class="form-control" id="sinceDay" name="sinceDay" disabled=""
-               style="width: 100%">
-      </div>
-    </div>
-  </div>
-  <div class="divTable minimalistBlack">
-    <div class="divTableBody">
-      <div class="divTableRow">
+      if (nickNameCheck !== 0) {
+        alert(" 닉네임을 다른 이름으로 작성 바랍니다.");
+        f.nickName.focus();
+        return;
+      }
 
 
-      </div>
-    </div>
-    <div>
-      <button id="btnUpdate" name="btnUpdate" type="button">정보 수정하기</button>
-      <button id="btnUpdatePassword" name="btnUpdatePassword" type="button">비밀번호 변경</button>
-    </div>
-  </div>
-</form>
+      $.ajax({
+        url: "/user/updateMyPage",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+          console.log(json)
+          if (json.result === 1) {
+            alert(json.msg)
+            location.href = "/user/myPageIndex"; // myPage로 이동
+          } else {
+            alert("정보 수정에 실패했습니다.");
+          }
+        }
+      })
+    }
+
+    function getSsUserId() {
+      $.ajax({
+        url: "/getSsUserId",
+        type: "post",
+        dataType: "JSON",
+        success: function (json) {
+          console.log(json);
+
+          if (!(json.userId.length > 0)) {
+            alert("로그인 정보가 없습니다. 로그인 후 이용해 주세요.");
+            window.location.href = "/user/login";
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("AJAX 호출 중 에러 발생:", error);
+        }
+      });
+    }
+
+    function activateNav(currentPage) {
+      const navIds = ["home", "study", "search", "learning", "notice", "mypage"];
+      navIds.forEach(navId => {
+        if (currentPage === navId) {
+          $("#nav-" + navId).addClass("active");
+        }
+      });
+    }
+
+    activateNav('mypage');
+  });
+
+</script>
 </body>
+
 </html>
