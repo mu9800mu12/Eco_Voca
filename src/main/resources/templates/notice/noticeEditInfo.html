@@ -25,6 +25,19 @@
     <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
     <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <script th:inline="javascript">
+
+        let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+        if(userId == undefined) {
+            alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+            location.href="/notice/noticeList"
+        }
+
+        //todo 세션 아이디와 작성자 아이디가 같지 않다면 접근 못하게 해야함
+
+    </script>
+
     <!-- Template Main CSS File -->
     <link href="/css/main1.css" rel="stylesheet">
 
@@ -237,7 +250,7 @@
             $("#nav-study").addClass("active");
         } else if (currentPage === 'search') {
             $("#nav-search").addClass("active");
-        } else if (currentPage === 'learning') {
+        } else if (currentPage === 'chat') {
             $("#nav-learning").addClass("active");
         } else if (currentPage === 'notice') {
             $("#nav-notice").addClass("active");

@@ -26,6 +26,17 @@
 
   <!-- Template Main CSS File -->
   <link href="/css/main1.css" rel="stylesheet">
+
+  <script th:inline="javascript">
+
+    let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+    if(userId == undefined) {
+      alert("로그인 정보가 없어 글을 작성할 수 없습니다.")
+      location.href="/notice/noticeList"
+    }
+
+  </script>
   <style>
     #content {
       white-space: pre-line;
