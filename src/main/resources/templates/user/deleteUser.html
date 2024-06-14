@@ -1,128 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>회원 탈퇴하기</title>
-  <link rel="stylesheet" href="/css/deleteUser.css"/>
-  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript">
-    // HTML로딩이 완료되고, 실행됨
-    $(document).ready(function() {
-      myPageIndex();
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-      // 아이디 띄워주기
-      function myPageIndex() {
+  <title>하루 경제 - 회원 탈퇴</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
 
-        $.ajax({
-          url: "/user/myPageIndex",
-          type: "post",
-          dataType: "JSON",
-          data: $("#f").serialize(),
-          success: function (json) {
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-            $("#userId").val(json.userId + " 님의 계정을 삭제하시겠습니까?")
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-          }
-        })
-      }
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-      // 회원탈퇴 로직 호출
-      $("#btnDeleteUser").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        let deleteText = document.getElementById("deleteText"); // form 태그
-        if (deleteText.value !== "계정 삭제") {
-          alert("올바른 문구를 입력하세요");
-          deleteText.focus();
-          return;
-        }
+  <!-- Template Main CSS File -->
+  <link href="/css/main1.css" rel="stylesheet">
 
-        // 삭제 로직 호출
-        removeUser();
-        location.href = "login";
-
-        alert("계정 삭제가 완료되었습니다.");
-
-
-      })
-
-
-
-      function removeUser() {
-        let f = document.getElementById("f"); // form 태그
-        // let f;
-        // if (f.userDelete.value !== "계정 삭제") {
-        //   alert("구문을 올바르게 작성바랍니다");
-        //   f.userDelete.focus();
-        //   return;
-        // }
-
-        $.ajax({
-          url: "/user/removeUser",
-          type: "post",
-          dataType: "JSON",
-          data: $("#f").serialize(),
-          success: function () {
-
-            // location.href = "/main";
-          }
-        })
-      }
-
-    });
-
-  </script>
+  <!-- =======================================================
+  * Template Name: Gp
+  * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+  * Updated: Mar 17 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
 </head>
 
-<style>
-  .divTableCell {
-    display: flex;
-    align-items: center;
-  / 수직 가운데 정렬 /
-  }
-</style>
-
-<style>
-  h2 {
-    text-align: center;
-  / 가운데 정렬 / font-weight: bold;
-  / 굵은 글꼴 / margin-top: 20 px;
-  / 위쪽 여백 추가 / margin-bottom: 20 px;
-  / 아래쪽 여백 추가 /
-  }
-</style>
-
-
 <body>
-<h2>회원 탈퇴</h2>
-<br/>
-<form id="f">
-  <div class="divTable minimalistBlack">
-    <div class="divTableBody">
-      <div class="divTableRow">
 
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= updatePassword Section ======= -->
+<section id="hero" class="d-flex align-items-center justify-content-center">
+  <div class="container" data-aos="fade-up">
+
+    <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
+      <div class="col-xl-6 col-lg-8">
+        <h1>회원 탈퇴<span>.</span></h1>
       </div>
-      <div class="divTableRow">
-        <div class="divTableCell">
+      <form id="f" role="form" class="php-email-form">
+        <div class="section-title" style="margin-top: 15px; padding-bottom: 14px">
+          <p class="fst-italic" id="deleteMsg" style="color: white; font-size: 24px"></p>
+          <h6 style="color: lightgrey">"계정 삭제" 입력시 계정이 삭제됩니다.</h6>
         </div>
-        <div class="divTableCell">
-          <input type="text" name="userDelete" id="userId" disabled="" width="100%">
+        <div style="margin-top: 0px;">
+          <div class="col-md-6 form-group mx-auto" style="margin: 15px;">
+            <input type="text" name="deleteText" class="form-control" id="deleteText" placeholder="계정삭제" required style="padding: 12px;">
+          </div>
+          <div class="text-center" style="padding: 20px">
+            <button id="btnDeleteUser" name="btnDeleteUser" type="button">탈퇴하기</button>
+          </div>
+          <a href="/user/myPageIndex" style="color: lightgrey">뒤로</a>
         </div>
-      </div>
-
-      <div class="divTableRow">
-        <div class="divTableCell">
-        </div>
-        <div class="divTableCell">
-          <input type="text" id="deleteText" name="deleteText" placeholder="계정 삭제">
-          <h5>"계정 삭제" 입력시 계정이 삭제됩니다</h5>
-        </div>
-      </div>
-
-
+      </form>
     </div>
   </div>
-  <div>
-    <button id="btnDeleteUser" name="btnDeleteUser">회원탈퇴하기</button>
+</section><!-- End updatePassword -->
 
-  </div>
-</form>
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+  // HTML로딩이 완료되고, 실행됨
+  $(document).ready(function() {
+    getSsUserId();
+    myPageIndex();
+
+    // 회원탈퇴 로직 호출
+    $("#btnDeleteUser").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      let deleteText = document.getElementById("deleteText"); // form 태그
+      if (deleteText.value !== "계정 삭제") {
+        alert("올바른 문구를 입력하세요.");
+        deleteText.focus();
+        return;
+      }
+
+      removeUser();
+
+      alert("계정 삭제가 완료되었습니다.");
+
+      location.href = "/user/login";
+    })
+
+    // 아이디 띄워주기
+    function myPageIndex() {
+
+      $.ajax({
+        url: "/user/myPageIndex",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function (json) {
+
+          document.getElementById("deleteMsg").textContent = json.userId + " 님의 계정을 삭제하시겠습니까?";
+
+        }
+      })
+    }
+    function removeUser() {
+      let f = document.getElementById("f"); // form 태그
+      // let f;
+      // if (f.userDelete.value !== "계정 삭제") {
+      //   alert("구문을 올바르게 작성바랍니다");
+      //   f.userDelete.focus();
+      //   return;
+      // }
+
+      $.ajax({
+        url: "/user/removeUser",
+        type: "post",
+        dataType: "JSON",
+        data: $("#f").serialize(),
+        success: function () {
+
+          alert("계정 삭제가 완료되었습니다.");
+
+        }
+      })
+    }
+
+    function getSsUserId() {
+      $.ajax({
+        url: "/getSsUserId",
+        type: "post", // 전송방식은 Post
+        dataType: "JSON", // 전송 결과는 JSON으로 받기
+        success: function (json) { // 호출이 성공했다면..
+
+          console.log(json);
+
+          if (!(json.userId.length > 0)) {
+            // userId가 없으면 (로그인 정보가 없으면)
+            alert("로그인 정보가 없습니다. 로그인 후 이용해 주세요.");
+            window.location.href = "/user/login"; // 로그인 페이지로 리다이렉트
+
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("AJAX 호출 중 에러 발생:", error);
+        }
+      });
+    }
+  });
+</script>
+</script>
 </body>
+</html>

@@ -26,6 +26,17 @@
     <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
     <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <script th:inline="javascript">
+
+        let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+        if(userId == undefined) {
+            alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+            location.href="/user/login"
+        }
+
+    </script>
+
     <!-- Template Main CSS File -->
     <link href="/css/main1.css" rel="stylesheet">
     <style>
@@ -152,7 +163,7 @@
         <div class="col-md-8 offset-md-2">
             <div class="card">
                 <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0" th:text="${roomName + ' 채팅 고객센터'}">채팅 고객센터</h5>
+                    <h5 class="mb-0" th:text="${'문의 제목 : ' + roomName}">채팅 고객센터</h5>
                 </div>
                 <div class="card-body chat-card-body" id="chat">
                     <!-- 채팅 메시지가 여기에 표시됩니다 -->

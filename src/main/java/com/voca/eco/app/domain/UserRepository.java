@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     // 아이디 찾기
     Optional<UserEntity> findByEmailAndUserName(String email, String userName);
     // 비밀번호 찾기
-    Optional<UserEntity> findByUserNameAndEmailAndUserId(String userName, String email, String userId);
+    Optional<UserEntity> findByNickNameAndEmailAndUserId(String nickName, String email, String userId);
 
     // 비밀번호 업데이트
     @Modifying

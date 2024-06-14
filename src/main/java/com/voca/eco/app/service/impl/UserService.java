@@ -31,8 +31,14 @@ public class UserService implements IUserService {
      */
     @Override
     public int nickNameExists(String nickName) throws Exception {
+
+        log.info("입력받은 닉네임 값은 : " + nickName );
+
         Optional<UserEntity> rEntity = userRepository.findByNickName(nickName);
+        log.info("엔터티 값은 : " + rEntity );
+
         int existsYn = rEntity.isPresent() ? 1 : 0;
+        log.info(this.getClass().getName() + "닉네임이 중복이면 1 아니면 0인 나는 : " + existsYn );
         log.info(this.getClass().getName() + "NickNameExists End!");
         return existsYn;
     }
@@ -103,7 +109,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public UserDTO getUserPassword(
-            String userName,
+            String nickName,
             String email,
             String userId) throws Exception {
 
@@ -111,7 +117,7 @@ public class UserService implements IUserService {
 
         log.info(this.getClass().getName() + "비밀번호 찾기 서비스 시작");
 
-        Optional<UserEntity> rEntity = userRepository.findByUserNameAndEmailAndUserId(userName, email, userId);
+        Optional<UserEntity> rEntity = userRepository.findByNickNameAndEmailAndUserId(nickName, email, userId);
 
         log.info("rEntity : " + rEntity);
 

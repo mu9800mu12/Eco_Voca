@@ -22,6 +22,17 @@
     <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
     <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+    <script th:inline="javascript">
+
+        let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+        if(userId == undefined) {
+            alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+            location.href="/user/login"
+        }
+
+    </script>
+
     <!-- Template Main CSS File -->
     <link href="/css/main1.css" rel="stylesheet">
     <style>
@@ -90,6 +101,9 @@
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
 
+
+
+
             //화면 로딩이 완료되면 첫번째로 실행함
             getRoomList(); //전체 채팅방 리스트 가져오기
 
@@ -133,12 +147,12 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="section-title">
                     <br>
-                    <h2>community</h2>
-                    <p>커뮤니티</p>
+                    <h2>Customer Service</h2>
+                    <p>고객센터</p>
                 </div>
                 <ol>
                     <li><a href="/main">Home</a></li>
-                    <li>community</li>
+                    <li>Customer Service</li>
                 </ol>
             </div>
 
@@ -148,23 +162,23 @@
     <section class="inner-page">
         <div class="container">
             <div class="container">
-                <h1>채팅방 전체 리스트</h1>
-                <div class="card">
-                    <div class="card-header">대화 가능한 고객센터</div>
-                    <div class="card-body" id="room_list"></div>
-                </div>
+<!--                <h1>고객 문의 전체 리스트</h1>-->
+<!--                <div class="card">-->
+<!--                    <div class="card-header">고객센터 리스트</div>-->
+<!--                    <div class="card-body" id="room_list"></div>-->
+<!--                </div>-->
 
-                <h1>고객센터 입장 정보</h1>
+                <h1>어떤 문제가 있으십니까?</h1>
                 <div class="card">
                     <form name="f" id="f" method="post" action="/chat/chatroom">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="roomName">고객센터 이름</label>
-                                <input type="text" id="roomName" name="roomName" required>
+                                <label for="roomName">고객문의 제목</label>
+                                <input type="text" id="roomName" name="roomName" placeholder="문의 제목을 적어주세요" required >
                             </div>
                             <div class="form-group">
-                                <label for="userName">대화명(별명)</label>
-                                <input type="text" id="userName" name="userName" required>
+                                <label for="userName">문의 사용자 아이디</label>
+                                <input type="text" id="userName" name="userName" th:value="${session.SS_USER_ID}" required>
                             </div>
                             <button type="submit">문의 시작</button>
                         </div>

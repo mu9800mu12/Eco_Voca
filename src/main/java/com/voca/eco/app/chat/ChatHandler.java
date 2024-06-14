@@ -124,6 +124,7 @@ public class ChatHandler extends TextWebSocketHandler {
                     cDTO.setMsg(userName + "님이 " + roomName + " 채팅방에 입장하셨습니다.");
                     cDTO.setDate(DateUtil.getDateTime("yyyyMMdd hh:mm:ss"));
 
+
                     String json = new ObjectMapper().writeValueAsString(cDTO);
                     log.info("json : " + json);
 

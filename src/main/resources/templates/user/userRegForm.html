@@ -3,21 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <title>회원가입 화면</title>
-  <link rel="stylesheet" href="/css/regForm.css"/>
+  <link rel="stylesheet" href="/css/main1.css"/>
+
+  <!-- Favicons -->
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet">
+
+  <!-- vendor/main CSS Files -->
+  <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+
+  <!-- vendor/main JS Files -->
+  <script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+  <script src="/vendor/main/aos/aos.js"></script>
+  <script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+  <script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+  <script src="/vendor/main/php-email-form/validate.js"></script>
+  <script src="/js/main.js"></script>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
   <script type="text/javascript">
 
     // 아이디 확인여부 (중복 1 / 중복아님 : 0)
-    let userIdCheck = "0";
+    let userIdCheck = "";
     // 이메일 확인여부 (중복 1 / 중복아님 : 0)
     let emailCheck = "0";
     // 닉네임 확인여부 (중복 1 / 중복 아님: 0)
-    let nickNameCheck =  "0";
+    let nickNameCheck = "";
     // 이메일 인증번호 보내기 (성공 :0 / 실패 : 1)
-    let doSendMail =  "0";
+    let doSendMail = "0";
 
     let emailAuthNumber = 0;
+
+    let checkedUserId = ""; // 중복확인 시 입력된 아이디를 저장할 변수
+
+    let checkedNickName = ""; // 중복확인 시 입력된 닉네임을 저장할 변수
 
     // 이메일 정규식
     let emailFormat = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
@@ -70,18 +103,20 @@
         return;
       }
 
-      // Ajax 호출해서 회원가입하기
+      // Ajax 호출해서 이메일 중복확인 및 메일 전송
       $.ajax({
-        url:"/user/getEmailExists",
+        url: "/user/getEmailExists",
         type: "post",
         datatype: "JSON",
         data: $("#f").serialize(),
         success: function (json) {
-          if(json.existsYn === 1) {
+          if (json.existsYn === 1) {
+
             alert("이미 가입된 이메일 주소가 존재합니다.");
             f.email.focus();
           } else {
-            alert("이메일로 인증번호가 발송되었습니다. \n받은 메일의 인증번호를 입력하시기 바랍니다.")
+            alert(json.msg)
+            console.log("1 아니면 0 :"  + json.existsYn)
             console.log(json.authNumber)
             emailAuthNumber = json.authNumber;
           }
@@ -98,27 +133,25 @@
         f.userId.focus();
         return;
       }
-      // Ajax 호출해서 회원가입하기
+      // Ajax 호출해서 아이디중복확인
       $.ajax({
-            url: "/user/UserIdExists",
-            type: "post", // 전송방식은 Post
-            dataType: "JSON", // 전송 결과는 JSON으로 받기
-            data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-            success: function (json) { // 호출이 성공했다면..
-              console.log(json)
-              if (json === 1) {
-                alert("이미 가입된 아이디가 존재합니다.");
-                f.userId.focus();
-              } else {
-                userIdCheck = 0;
-                alert("가입 가능한 아이디입니다.");
-              }
-            }
+        url: "/user/UserIdExists",
+        type: "post", // 전송방식은 Post
+        dataType: "JSON", // 전송 결과는 JSON으로 받기
+        data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+        success: function (json) { // 호출이 성공했다면..
+          if (json === 1) {
+            alert("이미 가입된 아이디가 존재합니다.");
+            f.userId.focus();
+            userIdCheck = 1;
+          } else {
+            userIdCheck = 0;
+            checkedUserId = f.userId.value; // 중복확인 시 입력된 아이디 저장
+            alert("가입 가능한 아이디입니다.");
           }
-      )
+        }
+      })
     }
-
-
 
     function NickNameExists(f) {
       if (f.nickName.value === "") {
@@ -136,10 +169,12 @@
             success: function (json) { // 호출이 성공했다면..
               console.log(json)
               if (json === 1) {
+                console.log(json)
                 alert("이미 가입된 닉네임이 존재합니다.");
                 f.nickName.focus();
               } else {
                 nickNameCheck = 0;
+                checkedNickName = f.nickName.value; // 중복확인 시 입력된 닉네임 저장
                 alert("사용 가능한 닉네임입니다..");
               }
             }
@@ -175,7 +210,9 @@
         f.userId.focus();
         return;
       }
-      if (userIdCheck !== 0) {
+
+      // value가 인풋 값, userId가 중복검사 한 값
+      if (userIdCheck !== 0 || checkedUserId !== f.userId.value) {
         alert("아이디 중복 체크 및 중복되지 않은 아이디로 가입 바랍니다.");
         f.userId.focus();
         return;
@@ -215,6 +252,7 @@
         f.nickName.focus();
         return;
       }
+
       if (f.birthday.value === "") {
         alert("생년월일을 입력하세요.");
         f.birthday.focus();
@@ -226,7 +264,13 @@
         f.nickName.focus();
         return;
       }
-           if (f.authNumber.value === "") {
+      // value가 인풋 값, userId가 중복검사 한 값
+      if (nickNameCheck !== 0 || checkedNickName !== f.nickName.value) {
+        alert("닉네임 중복 체크 및 중복되지 않은 닉네임으로 가입 바랍니다.");
+        f.nickName.focus();
+        return;
+      }
+      if (f.authNumber.value === "") {
         alert("이메일 인증번호를 입력하세요.");
         f.authNumber.focus();
         return;
@@ -259,93 +303,119 @@
   <style>
     .divTableCell {
       display: flex;
-      align-items: center; / 수직 가운데 정렬 /
+      align-items: center;
+    / 수직 가운데 정렬 /
     }
   </style>
 
   <style>
     h2 {
-      text-align: center; / 가운데 정렬 /
-      font-weight: bold; / 굵은 글꼴 /
-      margin-top: 20px; / 위쪽 여백 추가 /
-      margin-bottom: 20px; / 아래쪽 여백 추가 /
+      text-align: center;
+    / 가운데 정렬 / font-weight: bold;
+    / 굵은 글꼴 / margin-top: 20 px;
+    / 위쪽 여백 추가 / margin-bottom: 20 px;
+    / 아래쪽 여백 추가 /
     }
   </style>
 
 </head>
 <body>
-<h2>회원 가입</h2>
-<br/>
-<form id="f">
-  <div class="divTable minimalistBlack">
-    <div class="divTableBody">
-      <div class="divTableRow">
-        <div class="divTableCell"> 아이디
-        </div>
-        <div class="divTableCell">
-          <input type="text" name="userId" style="width:72%" placeholder="아이디"/>
-          <button id="btnUserId" type="button">확인</button>
-        </div>
-      </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 이름
-        </div>
-        <div class="divTableCell">
-          <input type="text" name="userName" style="width:72%" placeholder="이름"/>
-        </div>
-      </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 비밀번호
-        </div>
-        <div class="divTableCell">
-          <input type="password" name="password" style="width:72%" placeholder="비밀번호"/>
-        </div>
-      </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 비밀번호 확인
-        </div>
-        <div class="divTableCell">
-          <input type="password" name="password2" style="width:72%" placeholder="비밀번호 확인"/>
-        </div>
-      </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 이메일
-        </div>
-        <div class="divTableCell">
-          <input type="email" name="email" style="width:47%" placeholder="email"/>
-          <input type="text" name="authNumber"  style="width: 23%; margin-left: 10px;" placeholder="인증번호">
-          <button id="btnSendMail" type="button">중복확인</button>
-        </div>
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center justify-content-center">
+  <div class="container" data-aos="fade-up">
+    <div class="container" data-aos="fade-up"
+         style="background-color: #00000099; border-radius: 10px; width: 70%; padding-bottom: 74px">
+
+      <div class="section-title">
+        <h2 style="font-size: 12px;">SIGN UP</h2>
+        <p style="color: white">회원가입</p>
       </div>
 
-      <div class="divTableRow">
-        <div class="divTableCell"> 주소
-        </div>
-        <div class="divTableCell">
-          <input type="text" name="address" style="width:72%" placeholder="주소"/>
-          <button id="btnAddr" type="button">우편번호</button>
-        </div>
+      <div class="container" style="padding-top: 0">
+
+        <form id="f" class="php-email-form mx-auto" style="width: 90%">
+          <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+            아이디</h2>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="userId" placeholder="아이디"/>
+            <button id="btnUserId" type="button" style="font-size: 12px;">중복확인</button>
+          </div>
+          <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+            이름</h2>
+          <div class="input-group mb-3">
+            <input type="text" name="userName" class="form-control" id="userName" placeholder="이름" required/>
+          </div>
+          <!--            <div class="col-md-6 form-group">-->
+          <!--              <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">이름</h2>-->
+          <!--              <input type="text" name="userName" class="form-control" id="userName" placeholder="이름" required>-->
+          <!--            </div>-->
+          <!--            <div class="col-md-6 form-group mt-3 mt-md-0">-->
+          <!--              <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">닉네임</h2>-->
+          <!--              <input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임" required>-->
+          <!--              <button id="btnNickName" type="button" style="font-size: 12px;">중복확인</button>-->
+
+          <!--            </div>-->
+          <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+            닉네임</h2>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="nickName" id="nickName"
+                   placeholder="닉네임"/>
+            <button id="btnNickName" type="button" style="font-size: 12px;">중복확인</button>
+          </div>
+
+          <div class="form-group mt-3" style="padding-top: 6px">
+            <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+              생년월일</h2>
+
+            <input type="date" class="form-control" name="birthday" placeholder="생년월일"/>
+          </div>
+
+          <div class="form-group mt-3" style="padding-top: 6px">
+            <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+              비밀번호</h2>
+            <input type="password" class="form-control" name="password" id="password"
+                   placeholder="비밀번호" required>
+          </div>
+          <div class="form-group mt-3" style="padding-top: 6px">
+            <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+              비밀번호 확인</h2>
+            <input type="password" class="form-control" name="password2" id="password2"
+                   placeholder="비밀번호 확인" required>
+          </div>
+          <div class="row" style="margin: 16px -12px;">
+            <div class="col-md-6 form-group">
+              <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+                이메일</h2>
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" name="email" placeholder="이메일"/>
+                <button id="btnSendMail" type="button" style="font-size: 12px;">중복확인</button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group mt-3 mt-md-0">
+              <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+                인증번호</h2>
+              <input type="text" class="form-control" name="authNumber" id="authNumber"
+                     placeholder="인증번호" required>
+            </div>
+          </div>
+          <h2 style="font-size: 12px; padding-bottom: 7px; padding-left:2px; text-align: left">
+            주소</h2>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="address" placeholder="주소"/>
+            <button id="btnAddr" type="button" style="font-size: 12px;">주소 찾기</button>
+          </div>
+          <input type="hidden" name="sinceDay"/>
+          <div>
+            <button id="btnSend" name="btnSend" type="button" style="width:220px">회원가입</button>
+          </div>
+        </form>
       </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 닉네임</div>
-        <div class="divTableCell">
-          <input type="text" name="nickName" style="width:72%" placeholder="닉네임"/>
-          <button id="btnNickName" type="button">확인</button>
-        </div>
-      </div>
-      <div class="divTableRow">
-        <div class="divTableCell"> 생년월일
-        </div>
-        <div class="divTableCell">
-          <input type="date" name="birthday" style="width:72%"/>
-        </div>
-      </div>
-      <input type="hidden" name="sinceDay"/>
     </div>
   </div>
-  <div>
-    <button id="btnSend" name="btnSend" type="button">회원가입</button>
-  </div>
-</form>
+</section><!-- End Hero -->
+
+<div th:replace="~{footer}"></div>
+
 </body>
 </html>
