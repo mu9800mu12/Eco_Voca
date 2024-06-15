@@ -249,18 +249,25 @@ public class UserService implements IUserService {
 
         log.info(" 마이페이지 보고 시이이이이이잉작입니다~~~!!!");
 
-        UserDTO pDTO = null;
-        UserDTO rDTO = null;
-
         Optional<UserEntity> rEntity = userRepository.findByUserId(userId);
 
-        rDTO = new ObjectMapper().convertValue(rEntity.get(),
-                UserDTO.class);
+        UserDTO rDTO = UserDTO.builder()
+                .email(EncryptUtil.decAES128CBC(rEntity.get().getEmail()))
+                .userId(userId)
+                .nickName(rEntity.get().getNickName())
+                .userName(rEntity.get().getUserName())
+                .address(rEntity.get().getAddress())
+                .sinceDay(rEntity.get().getSinceDay())
+                .birthday(rEntity.get().getBirthday())
+                .build();
+
+
+
+//       UserDTO rDTO = new ObjectMapper().convertValue(rEntity.get(),
+//                UserDTO.class);
 //
         log.info(this.getClass().getName() + " rDTO 값이 잘 들어오는 확인하는 여기는 마이페이지 인덱스 보여주기" + rDTO);
 
-        rDTO = new ObjectMapper().convertValue(rEntity.get(),
-                UserDTO.class);
         // 복호화 어케하는지 모르겠음
         //todo 이메일 복호화 하자 -이 교수님-
         return rDTO;
