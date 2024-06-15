@@ -92,8 +92,8 @@ public class UserController {
     public UserDTO getUserPassword(HttpServletRequest request, HttpSession session) throws Exception {
 
         String userId = CmmUtil.nvl(request.getParameter("userId"));
-//        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
-        String email = (CmmUtil.nvl(request.getParameter("email")));
+        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+//        String email = (CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
         session.setAttribute("SS_USER_ID", userId);
