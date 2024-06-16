@@ -166,8 +166,8 @@ public class UserController {
     @PostMapping(value = "getUserId")
     public UserDTO getUserId(HttpServletRequest request) throws Exception {
 
-//        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
-        String email = (CmmUtil.nvl(request.getParameter("email")));
+        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+//        String email = (CmmUtil.nvl(request.getParameter("email")));
         String userName = CmmUtil.nvl(request.getParameter("userName"));
 
         log.info("email :" + email);

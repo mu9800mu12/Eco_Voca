@@ -28,13 +28,18 @@
     <script th:inline="javascript">
 
         let userId = /*[[${session.SS_USER_ID}]]*/ '';
+        let noticeUserId = /*[[${rDTO.userId}]]*/ '';
 
         if(userId == undefined) {
-            alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+            alert("로그인 정보가 없습니다.")
+            location.href="/notice/noticeList"}
+
+        else if(userId !== noticeUserId) {
+            alert("작성자만 수정이 가능합니다.")
             location.href="/notice/noticeList"
         }
 
-        //todo 세션 아이디와 작성자 아이디가 같지 않다면 접근 못하게 해야함
+
 
     </script>
 
@@ -87,13 +92,13 @@
                 <div class="portfolio-info">
                     <div class="col-md-12 form-group mx-auto" style="margin-top: 15px;">
                         <h5 style="padding-bottom: 7px; padding-left:2px; text-align: left">제목</h5>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요." th:value="${rDTO.title}" required style="padding: 12px;">
+                        <input type="text" name="title" class="form-control" id="title" maxlength="50" placeholder="제목을 입력하세요." th:value="${rDTO.title}" required style="padding: 12px;">
                     </div>
                     <h3></h3>
                     <p>
                     <div class="col-md-12 form-group mx-auto" style="margin-top: 15px;">
                         <h5 style="padding-bottom: 7px; padding-left:2px; text-align: left">내용</h5>
-                        <textarea name="contents" class="form-control" id="contents" rows="15" placeholder="내용을 입력하세요." th:text="${rDTO.contents}" required style="padding: 12px;"></textarea>
+                        <textarea name="contents" class="form-control" id="contents" rows="15" maxlength="300" placeholder="내용을 입력하세요." th:text="${rDTO.contents}" required style="padding: 12px;"></textarea>
                     </div>
                     </p>
                 </div>
