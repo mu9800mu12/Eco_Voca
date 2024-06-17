@@ -3,49 +3,106 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.serializeObject.min.js"></script>
+
   <title>카드 정보 등록</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<script th:inline="javascript">
+
+  let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+  if (userId == undefined) {
+    alert("로그인 정보가 없어 로그인 페이지로 이동합니다.")
+    location.href = "/user/login"
+  }
+
+</script>
+
+
+
 <body>
+<form name="f" id="f">
 <div class="container mt-5">
   <h2 class="mb-4">카드 정보 등록</h2>
   <form id="cardForm" method="post" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="cardNumber" class="form-label">카드 번호</label>
-      <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+      <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="19" required>
     </div>
     <div class="mb-3">
       <label for="cardHolder" class="form-label">카드 소유자 이름</label>
-      <input type="text" class="form-control" id="cardHolder" name="cardHolder" required>
+      <input type="text" class="form-control" id="cardHolder" name="cardHolder" maxlength="6" required>
     </div>
     <div class="mb-3">
       <label for="expiryDate" class="form-label">만료 날짜</label>
-      <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+      <input type="text" class="form-control" id="expiryDate" name="expiryDate" maxlength="4" placeholder="MM/YY"
+             required>
     </div>
     <div class="mb-3">
       <label for="cvc" class="form-label">CVC</label>
-      <input type="text" class="form-control" id="cvc" name="cvc" required>
+      <input type="text" class="form-control" id="cvc" name="cvc" maxlength="3" required>
     </div>
     <div class="mb-3">
       <label for="cardImage" class="form-label">카드 이미지 업로드</label>
       <input type="file" class="form-control" id="cardImage" name="cardImage" accept="image/*">
     </div>
-    <button type="submit" class="btn btn-primary">등록</button>
+    <button type="button" id="btnCardInsert" class="btn btn-primary">등록</button>
+    <input type="text" class="form-control" id="Id" name="Id" style="display: none"> <!-- 몽고디비 userId 넣기-->
   </form>
 </div>
+<script type="text/javascript">
+  $(document).ready(function () {
+
+    $("#btnCardInsert").on("click", function () {
+
+      $.ajax({
+        url: "/api/card-info/basic",
+        type: "post",
+        contentType: "application/json",
+        dataType: "JSON",
+        data: JSON.stringify($("#f").serializeObject()) //form 태그 내 인풋 타입 객체를 자동으로 전송할 형태로 변형
+      } ).then(
+          function (json) { //성공
+            alert(json.data.msg)
+          },
+          function (json) { //실패
+            const result = json.responseJSON.data;
+
+            console.log(result)
+            let errMsg = "";
+            for (const data of result) {
+              errMsg += (data.defaultMessage + "\n")
+            }
+            alert(errMsg);
+          }
+      )
+    })
+  })
+
+
+</script>
+
 
 <script>
-  document.getElementById("cardNumber").addEventListener("input", function(event) {
+  document.getElementById("cardNumber").addEventListener("input", function (event) {
     var input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
     var formattedInput = input.match(/.{1,4}/g)?.join('-') || input;
     event.target.value = formattedInput;
   });
 
-  document.getElementById("cardForm").addEventListener("submit", function(event) {
+  document.getElementById("cardForm").addEventListener("submit", function (event) {
     event.preventDefault();
-    var formData = new FormData(this);
+    var formData = new FormData();
 
-    fetch("/upload", {
+    formData.append("cardNumber", document.getElementById("cardNumber").value);
+    formData.append("cardHolder", document.getElementById("cardHolder").value);
+    formData.append("expiryDate", document.getElementById("expiryDate").value);
+    formData.append("cvc", document.getElementById("cvc").value);
+    formData.append("cardImage", document.getElementById("cardImage").files[0]); // 파일 추가
+
+    fetch("/api/card-info/upload", {
       method: "POST",
       body: formData
     })
@@ -58,13 +115,15 @@
         document.getElementById("expiryDate").value = data.expiryDate || "";
         document.getElementById("cvc").value = data.cvc || "";
       } else {
-        alert("OCR 처리에 실패했습니다. 직접 입력해주세요.");
+        alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
       }
     })
     .catch(error => console.error("Error:", error));
   });
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</form>
 </body>
 </html>

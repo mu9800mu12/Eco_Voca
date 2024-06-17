@@ -6,8 +6,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class CardInfoDTO {
+
+    private String userId;
     private String cardNumber;
     private String cardHolder;
     private String expiryDate;
     private String cvc;
+
+
 }
