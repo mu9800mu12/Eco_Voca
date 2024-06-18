@@ -46,36 +46,31 @@ public class CardInfoController {
 
     @PostMapping(value = "/upload")
     @ResponseBody
-    public String upload(@RequestParam(value = "cardImage") MultipartFile mf, ModelMap model)
+    public ResponseEntity upload(@RequestParam(value = "cardImage") MultipartFile mf, ModelMap model)
             throws Exception {
 
-//        String fileUrl = "C:\\카드테스트.png";
-        String fileUrl = "https://kr.object.ncloudstorage.com/fridge/2024/06/17/240617071652284.jpg";
-
-//        mf.transferTo(new File(cardImage));
-
+        CardInfoDTO rDTO = null;
         try {
 
-            log.info("fileUrl : " + fileUrl);
+            log.info("받은 파일 : " + mf);
             String fileSeq = "1";
 
-            BufferedImage originalImage = loadImageFromUrl(fileUrl);
+            BufferedImage originalImage = loadImageFromUrl(mf);
+            log.info("BufferedImage : " + originalImage);
 
-            BufferedImage highResolutionImage = resizeImageWithHigherResolution(originalImage, 1200,
-                    1800); // 예시 해상도: 1200x1800
+//            BufferedImage highResolutionImage = resizeImageWithHigherResolution(originalImage, 1200,
+//                    1800); // 예시 해상도: 1200x1800
 
-            List<CardInfoDTO> rList = Optional.ofNullable(
-                            cardInfoService.cardOcr(highResolutionImage))
-                    .orElseGet(ArrayList::new);
+            rDTO = cardInfoService.cardOcr(originalImage);
 
-            model.addAttribute("rList", rList);
+            model.addAttribute("cardNumber", rDTO.getCardNumber());
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "/main";
         }
 
-        return "/user/cardInfo";
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), rDTO));
 
     }
 
@@ -99,10 +94,9 @@ public class CardInfoController {
         return resizedImage;
     }
 
-    public static BufferedImage loadImageFromUrl(String fileUrl) throws IOException {
-        URL url = new URL(fileUrl);
-        BufferedImage originalImage = ImageIO.read(url);
-        return originalImage;
+    public static BufferedImage loadImageFromUrl(MultipartFile image) throws IOException {
+        BufferedImage file = ImageIO.read(image.getInputStream());
+        return file;
     }
 
     @PostMapping(value = "basic") //api/card-info/basic으로 호출해야 함

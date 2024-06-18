@@ -50,11 +50,11 @@
       <form id="cardForm" method="post" enctype="multipart/form-data" action="api/card-info/upload">
         <div class="mb-3">
           <label for="cardNumber" class="form-label">카드 번호</label>
-          <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="19" required>
+          <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="16" required>
         </div>
         <div class="mb-3">
           <label for="cardHolder" class="form-label">카드 소유자 이름</label>
-          <input type="text" class="form-control" id="cardHolder" name="cardHolder" maxlength="6" required>
+          <input type="text" class="form-control" id="cardHolder" name="cardHolder" maxlength="20" required>
         </div>
         <div class="mb-3">
           <label for="expiryDate" class="form-label">만료 날짜</label>
@@ -90,7 +90,7 @@
           alert("카드 번호를 입력하세요");
           return;
         }
-        if (cardNumber.length == 19) {
+        if (cardNumber.length !== 16) {
           alert("카드 번호를 모두 적어주세요");
           return;
         }
@@ -117,6 +117,7 @@
         }).then(
             function (json) { // 성공
               alert(json.data.msg);
+              location.href="cardInfo"
             },
             function (json) { // 실패
               const result = json.responseJSON.data;
@@ -139,31 +140,56 @@
         formData.append("cvc", $("#cvc").val());
         formData.append("cardImage", $("#cardImage")[0].files[0]); // 파일 추가
 
-        fetch("/api/card-info/upload", {
-          method: "POST",
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // OCR 결과를 입력 필드에 채워 넣기
-            $("#cardNumber").val(data.cardNumber || "");
-            $("#cardHolder").val(data.cardHolder || "");
-            $("#expiryDate").val(data.expiryDate || "");
-            $("#cvc").val(data.cvc || "");
-          } else {
-            alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
+        // jQuery를 사용하여 ajax 요청 보내기
+        $.ajax({
+          url: '/api/card-info/upload',
+          type: 'POST',
+          data: formData,
+          processData: false,  // formData가 자동으로 변환되지 않도록 설정
+          contentType: false,  // content type을 false로 설정하여 jQuery가 설정하지 않도록 함
+          success: function(json) {
+            console.log(json.data.cardNumber)
+            if (json.data.cardNumber !== null) {
+              // OCR 결과를 입력 필드에 채워 넣기
+              $("#cardNumber").val(json.data.cardNumber);
+              $("#cardHolder").val(json.data.cardHolder || "");
+              $("#expiryDate").val(json.data.expiryDate || "");
+              $("#cvc").val(json.data.cvc || "");
+            } else {
+              alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
+            }
+          },
+          error: function(error) {
+            console.error("Error:", error);
+            alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
           }
-        })
-        .catch(error => console.error("Error:", error));
+        });
+
+        // fetch("/api/card-info/upload", {
+        //   method: "POST",
+        //   body: formData
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //   if (data.success) {
+        //     // OCR 결과를 입력 필드에 채워 넣기
+        //     $("#cardNumber").val(data.cardNumber);
+        //     $("#cardHolder").val(data.cardHolder || "");
+        //     $("#expiryDate").val(data.expiryDate || "");
+        //     $("#cvc").val(data.cvc || "");
+        //   } else {
+        //     alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
+        //   }
+        // })
+        // .catch(error => console.error("Error:", error));
       });
     });
 
-    document.getElementById("cardNumber").addEventListener("input", function (event) {
-      var input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
-      var formattedInput = input.match(/.{1,4}/g)?.join('-') || input;
-      event.target.value = formattedInput;
-    });
+    // document.getElementById("cardNumber").addEventListener("input", function (event) {
+    //   var input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+    //   var formattedInput = input.match(/.{1,4}/g)?.join('-') || input;
+    //   event.target.value = formattedInput;
+    // });
 
     document.getElementById("cardForm").addEventListener("submit", function (event) {
       event.preventDefault();

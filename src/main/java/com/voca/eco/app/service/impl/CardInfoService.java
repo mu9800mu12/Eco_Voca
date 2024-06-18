@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
@@ -50,11 +51,9 @@ public class CardInfoService implements ICardInfoService {
 
     /* Naver Clova OCR 사용하여 영수증 스캔 */
     @Override
-    public List<CardInfoDTO> cardOcr(BufferedImage fileUrl) throws Exception {
+    public CardInfoDTO cardOcr(BufferedImage fileUrl) throws Exception {
 
         log.info(this.getClass().getName() + "[service] Naver OCR 사용하여 카드 정보 추출 실행");
-
-        List<CardInfoDTO> rList = new ArrayList<>();
 
         String base64Image = encodeImageToBase64(fileUrl, "png"); // 파일 경로를 전달하여 Base64로 인코딩
 
@@ -93,11 +92,25 @@ public class CardInfoService implements ICardInfoService {
 
         log.info("Response Body: " + response.getBody());
 
-        /* 이부분에 이제 니가 원하는 데이터 끌어오면 됨 */
+        // JSON 파싱을 통해 카드 번호 추출
+        JSONObject responseBody = (JSONObject) JSONValue.parse(response.getBody());
+        JSONArray images = (JSONArray) responseBody.get("images");
+        JSONObject firstImage = (JSONObject) images.get(0);
+        JSONObject creditCard = (JSONObject) firstImage.get("creditCard");
+        JSONObject result = (JSONObject) creditCard.get("result");
+        JSONObject number = (JSONObject) result.get("number");
+        String cardNumber = (String) number.get("text");
+
+        // CardInfoDTO 객체 생성
+        CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
+                .cardNumber(cardNumber)
+                .build();
+
+        log.info("cardNumber : " + cardInfoDTO.getCardNumber());
 
         log.info(this.getClass().getName() + "[service] Naver Clova OCR 사용하여 카드 스캔 종료");
 
-        return rList; // 이것도 네 코드에 맞춰서 수정
+        return cardInfoDTO; // 이것도 네 코드에 맞춰서 수정
     }
 
 
