@@ -4,24 +4,18 @@ import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IMailService;
 import com.voca.eco.app.service.IUserService;
-import com.voca.eco.app.service.impl.UserService;
 import com.voca.eco.common.util.CmmUtil;
 import com.voca.eco.common.util.EncryptUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @RequestMapping(value = "/user")
@@ -43,12 +37,20 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "cardInsert")
+    public String cardInsert() {
+
+        log.info(this.getClass().getName() + ": cardInsert Start And End!");
+
+        return "user/cardInsert";
+    }
+
     @GetMapping(value = "cardInfo")
     public String cardInfo() {
 
-        log.info(this.getClass().getName() + ": cardInfo Start And End!");
+        log.info(this.getClass().getName() + ": cardInsert Start And End!");
 
-        return "/user/cardInfo";
+        return "user/cardInfo";
     }
 
     @GetMapping(value = "userRegForm")

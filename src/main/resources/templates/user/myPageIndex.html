@@ -114,16 +114,23 @@
                   <p id="sinceDay"></p>
                 </div>
                 <div class="row text-center php-email-form" style="padding-top: 25px; padding-left: 15px">
-                  <div class="col-md-4">
+                  <div class="col-md-4" style="margin: 3px">
                     <button id="btnUpdateMypage" name="btnFindId" type="button" style="">정보 수정하기</button>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-4" style="margin: 3px">
                     <button id="btnUpdatePassword" name="btnFindId" type="button">비밀번호 변경</button>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-4" style="margin: 3px">
+                    <button id="btnCardInsert" name="btnFindId" type="button">카드 정보 입력</button>
+                  </div>
+                  <div class="col-md-4" style="margin: 3px">
+                    <button id="btnCardInfo" name="btnFindId" type="button">카드 정보 확인</button>
+                  </div>
+                  <div class="col-md-4" style="margin: 3px">
                     <button id="btnDeleteUser" name="btnFindId" type="button">회원 탈퇴</button>
                   </div>
                 </div>
+
               </div>
             </div>
           </form>
@@ -180,6 +187,12 @@
     });
     $("#btnDeleteUser").on("click", function () { //버튼 클릭 시 발생 이벤트
       location.href = "deleteUser";
+    });
+    $("#btnCardInsert").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "cardInsert";
+    });
+    $("#btnCardInfo").on("click", function () { //버튼 클릭 시 발생 이벤트
+      location.href = "cardInfo";
     });
 
     // 내 정보 가져오기

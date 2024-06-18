@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.serializeObject.min.js"></script>
+
+  <title>카드 정보 등록</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/main1.css" rel="stylesheet">
+</head>
+<script th:inline="javascript">
+  let userId = /*[[${session.SS_USER_ID}]]*/ '';
+
+  if (userId == undefined) {
+    alert("로그인 정보가 없어 로그인 페이지로 이동합니다.");
+    location.href = "/user/login";
+  }
+</script>
+
+<body>
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+  <!-- ======= Breadcrumbs ======= -->
+  <section class="breadcrumbs">
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+        <div class="section-title">
+          <h2>mypage</h2>
+          <p>내 정보</p>
+        </div>
+        <ol>
+          <li><a href="/main">Home</a></li>
+          <li>mypage</li>
+        </ol>
+      </div>
+
+    </div>
+  </section><!-- End Breadcrumbs -->
+
+  <section>
+    <div class="container mt-5">
+      <h2 class="mb-4">카드 정보 등록</h2>
+      <form id="cardForm" method="post" enctype="multipart/form-data" action="api/card-info/upload">
+        <div class="mb-3">
+          <label for="cardNumber" class="form-label">카드 번호</label>
+          <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="19" required>
+        </div>
+        <div class="mb-3">
+          <label for="cardHolder" class="form-label">카드 소유자 이름</label>
+          <input type="text" class="form-control" id="cardHolder" name="cardHolder" maxlength="6" required>
+        </div>
+        <div class="mb-3">
+          <label for="expiryDate" class="form-label">만료 날짜</label>
+          <input type="text" class="form-control" id="expiryDate" name="expiryDate" maxlength="4" placeholder="MM/YY" required>
+        </div>
+        <div class="mb-3">
+          <label for="cvc" class="form-label">CVC</label>
+          <input type="text" class="form-control" id="cvc" name="cvc" maxlength="3" required>
+        </div>
+        <div class="mb-3">
+          <label for="cardImage" class="form-label">카드 이미지 업로드</label>
+          <div class="input-group mb-3">
+            <input type="file" class="form-control" id="cardImage" name="cardImage" accept="image/*">
+            <button type="button" id="btnCardImege" class="btn btn-primary">확인</button>
+          </div>
+        </div>
+        <button type="button" id="btnCardInsert" class="btn btn-primary">등록</button>
+      </form>
+    </div>
+  </section>
+  <div th:replace="~{footer}"></div>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#btnCardInsert").on("click", function () {
+        var cardNumber = $("#cardNumber").val().replace(/-/g, ''); // 카드 번호에서 하이픈 제거
+
+        const cardHolder = $("#cardHolder").val().trim();
+        const cvc = $("#cvc").val().trim();
+        const expiryDate = $("#expiryDate").val().trim();
+
+        if (cardNumber === '') {
+          alert("카드 번호를 입력하세요");
+          return;
+        }
+        if (cardNumber.length == 19) {
+          alert("카드 번호를 모두 적어주세요");
+          return;
+        }
+
+        if (cardHolder === '') {
+          alert("카드 소유자 이름을 입력해주세요.");
+          return;
+        }
+        if (expiryDate === '') {
+          alert("만료날짜를 입력해주세요.");
+          return;
+        }
+        if (cvc === '') {
+          alert("CVC를 입력해주세요.");
+          return;
+        }
+
+        $.ajax({
+          url: "/api/card-info/basic",
+          type: "post",
+          contentType: "application/json",
+          dataType: "JSON",
+          data: JSON.stringify($("#cardForm").serializeObject())
+        }).then(
+            function (json) { // 성공
+              alert(json.data.msg);
+            },
+            function (json) { // 실패
+              const result = json.responseJSON.data;
+              console.log(result);
+              let errMsg = "";
+              for (const data of result) {
+                errMsg += (data.defaultMessage + "\n");
+              }
+              alert(errMsg);
+            }
+        );
+      });
+
+      // btnCardImege 버튼 클릭 시 upload 메서드 호출
+      $("#btnCardImege").on("click", function () {
+        var formData = new FormData();
+        formData.append("cardNumber", $("#cardNumber").val());
+        formData.append("cardHolder", $("#cardHolder").val());
+        formData.append("expiryDate", $("#expiryDate").val());
+        formData.append("cvc", $("#cvc").val());
+        formData.append("cardImage", $("#cardImage")[0].files[0]); // 파일 추가
+
+        fetch("/api/card-info/upload", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // OCR 결과를 입력 필드에 채워 넣기
+            $("#cardNumber").val(data.cardNumber || "");
+            $("#cardHolder").val(data.cardHolder || "");
+            $("#expiryDate").val(data.expiryDate || "");
+            $("#cvc").val(data.cvc || "");
+          } else {
+            alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
+          }
+        })
+        .catch(error => console.error("Error:", error));
+      });
+    });
+
+    document.getElementById("cardNumber").addEventListener("input", function (event) {
+      var input = event.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+      var formattedInput = input.match(/.{1,4}/g)?.join('-') || input;
+      event.target.value = formattedInput;
+    });
+
+    document.getElementById("cardForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var formData = new FormData();
+
+      formData.append("cardNumber", document.getElementById("cardNumber").value);
+      formData.append("cardHolder", document.getElementById("cardHolder").value);
+      formData.append("expiryDate", document.getElementById("expiryDate").value);
+      formData.append("cvc", document.getElementById("cvc").value);
+      formData.append("cardImage", document.getElementById("cardImage").files[0]); // 파일 추가
+
+      fetch("/api/card-info/upload", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // OCR 결과를 입력 필드에 채워 넣기
+          document.getElementById("cardNumber").value = data.cardNumber || "";
+          document.getElementById("cardHolder").value = data.cardHolder || "";
+          document.getElementById("expiryDate").value = data.expiryDate || "";
+          document.getElementById("cvc").value = data.cvc || "";
+        } else {
+          alert("사진이 정상적이지 않습니다. 직접 입력해주세요.");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+    });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+</main>
+</body>
+</html>

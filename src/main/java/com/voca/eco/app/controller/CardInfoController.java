@@ -6,6 +6,8 @@ import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.service.ICardInfoService;
 import com.voca.eco.app.service.impl.CardInfoService;
 import com.voca.eco.common.util.CmmUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -44,10 +46,14 @@ public class CardInfoController {
 
     @PostMapping(value = "/upload")
     @ResponseBody
-    public String upload(@RequestParam(value = "cardImage") MultipartFile cardImage, ModelMap model)
+    public String upload(@RequestParam(value = "cardImage") MultipartFile mf, ModelMap model)
             throws Exception {
 
+//        String fileUrl = "C:\\카드테스트.png";
         String fileUrl = "https://kr.object.ncloudstorage.com/fridge/2024/06/17/240617071652284.jpg";
+
+//        mf.transferTo(new File(cardImage));
+
         try {
 
             log.info("fileUrl : " + fileUrl);
@@ -100,19 +106,31 @@ public class CardInfoController {
     }
 
     @PostMapping(value = "basic") //api/card-info/basic으로 호출해야 함
-    public ResponseEntity basic(@Valid @RequestBody CardInfoDTO pDTO, BindingResult bindingResult)
+    public ResponseEntity basic(@Valid @RequestBody CardInfoDTO pDTO, BindingResult bindingResult, HttpSession session)
             throws Exception {
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
 
         log.info(this.getClass().getName() + "[Controller] : 카드정보 저장 시작!");
 
         if (bindingResult.hasErrors()) {
             return CommonResponse.getErrors(bindingResult);
         }
+        //pDTO에 userId 추가해서 보내기
+        pDTO.setUserId(userId);
 
+//        CardInfoDTO rDTO = CardInfoDTO.builder()
+//                .cardHolder(pDTO.getCardHolder())
+//                .cardNumber(pDTO.getCardNumber())
+//                .cvc(c)
+//                .build();
 
         String msg = "";
 
+        log.info("userId : " + userId);
         log.info("pDTO :" + pDTO);
+        log.info("pDTO.userId :" + pDTO.getUserId());
 
         int res = cardInfoService.mongoTest(pDTO);
 
@@ -131,5 +149,26 @@ public class CardInfoController {
 
     }
 
+    @PostMapping(value = "getCardInfo")//api/card-info/getCardInfo로 호출해야 함
+    public ResponseEntity getCardInfo(HttpSession session) throws Exception{
+            //    ResponseEntity<T> 이타입인데 제네릭 타입인데
+            // 준수형은 T에다가 ResponseDTO를 상속받은 클래스를 담아서 보냄
+            // ResoonseDTO Body에 석세스 표시를 던지는걸 해줘야함
+
+        log.info(this.getClass().getName() + "[Controller] : .noticeInsert!");
+
+
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("userId :"+ userId);
+
+        CardInfoDTO dto = cardInfoService.getCardInfo(userId);
+
+
+        log.info(this.getClass().getName() + "[Controller] : noticeInsert End!");
+
+        return ResponseEntity.ok(
+                CommonResponse.of(HttpStatus.OK, HttpStatus.OK.series().name(), dto));
+    }
 
 }

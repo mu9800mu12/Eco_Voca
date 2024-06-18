@@ -12,4 +12,7 @@ public interface ICardInfoService {
 
     // 카드 정보 MongoDB에 저장하기
     int mongoTest(CardInfoDTO pDTO) throws Exception;
+
+    //
+    CardInfoDTO getCardInfo(String userId) throws Exception;
 }

@@ -52,7 +52,7 @@ public class CardInfoService implements ICardInfoService {
     @Override
     public List<CardInfoDTO> cardOcr(BufferedImage fileUrl) throws Exception {
 
-        log.info(this.getClass().getName() + ".receiptOcr [service] Naver Clova OCR 사용하여 영수증 스캔 실행");
+        log.info(this.getClass().getName() + "[service] Naver OCR 사용하여 카드 정보 추출 실행");
 
         List<CardInfoDTO> rList = new ArrayList<>();
 
@@ -95,7 +95,7 @@ public class CardInfoService implements ICardInfoService {
 
         /* 이부분에 이제 니가 원하는 데이터 끌어오면 됨 */
 
-        log.info(this.getClass().getName() + ".receiptOcr [service] Naver Clova OCR 사용하여 카드 스캔 종료");
+        log.info(this.getClass().getName() + "[service] Naver Clova OCR 사용하여 카드 스캔 종료");
 
         return rList; // 이것도 네 코드에 맞춰서 수정
     }
@@ -114,5 +114,17 @@ public class CardInfoService implements ICardInfoService {
 
 
         return res;
+    }
+
+    @Override
+    public CardInfoDTO getCardInfo(String userId) throws Exception {
+
+        log.info(this.getClass().getName() + "[service] : 카드정보 가져오기 시작!");
+
+        CardInfoDTO rDTO = cardInfoMongo.getCardInfo(userId);
+        //todo 준수형이 리턴값 그냥 보내라~
+        log.info(this.getClass().getName() + "[service] : 카드정보 가져오기 끝!");
+
+        return rDTO;
     }
 }
