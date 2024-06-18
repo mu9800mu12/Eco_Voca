@@ -449,7 +449,7 @@ public class UserController {
 
         log.info(this.getClass().getName()+ "deleteUser 시작");
 
-        return "/user/deleteUser";
+        return "user/deleteUser";
     }
 
 
