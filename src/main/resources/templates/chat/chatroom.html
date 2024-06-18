@@ -107,7 +107,7 @@
             }
 
             // https 에서는 wss 로 호출하고 로컬에서는 ws로 호출 함
-            ws = new WebSocket("ws://" + location.host + "/ws/" + roomName + "/" + userName);
+            ws = new WebSocket("wss://" + location.host + "/ws/" + roomName + "/" + userName);
 
             ws.onopen = function (event) {
                 if (event.data === undefined)
