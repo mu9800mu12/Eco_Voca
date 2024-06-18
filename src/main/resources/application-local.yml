@@ -1,78 +1,203 @@
+#server:
+#  port: 8080
+#
+### local 개발용
+#
+#
+#spring:
+#  ## Profile Setting (is Default)
+#  application:
+#    name: EcoVoca
+#  config:
+#    activate:
+#      on-profile: local
+#  devtools:
+#    # Auto Restart
+#    restart:
+#      enabled: true
+#      additional-exclude: static/**,public/**
+#
+#   ## 메일 설정
+#  spring:
+#    mail:
+#      host: smtp.naver.com
+#      port: 465
+#      username: wltjdgus145@naver.com
+#      password: asd@4873942
+#      default-encoding: UTF-8
+#      properties:
+#        mail:
+#          smtp:
+#            auth: true
+#            starttls:
+#              enable: true
+#            ssl:
+#              enable: true
+#              trust: smtp.naver.com
+#
+#
+#
+#
+#  ## DataBase (MySQL)
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test;MODE=MySQL
+#    username: sa
+#    password:
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    open-in-view: false
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        use_sql_comments: true
+#        naming:
+#          physical-strategy = org.hibernate.model.naming.PhysicalNamingStrategyStandardImpl
+#    database: mysql
+#    generate-ddl: true
+#
+#
+#
+#
+## Logging Info
+#logging:
+#  level:
+#    org.springframework: debug
+#
+#springdoc:
+#  swagger-ui:
+#    path: "/swagger-ui"
+#  api-docs:
+#    path: "/api-docs"
+
 server:
   port: 8080
 
-## local 개발용
-
-
 spring:
-  ## Profile Setting (is Default)
+  ## Profile Setting
   application:
     name: EcoVoca
   config:
     activate:
-      on-profile: local
-  devtools:
-    # Auto Restart
-    restart:
-      enabled: true
-      additional-exclude: static/**,public/**
+      on-profile: prod
+    ## 메일 설정
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.naver.com
+            enable: true
+          auth: true
+    host: smtp.naver.com
+    username: mu9800mu12@naver.com
+    password: thdcksdngod101!
+    port: 465
+    default-encoding: UTF-8
 
-   ## 메일 설정
-  spring:
-    mail:
-      host: smtp.naver.com
-      port: 465
-      username: wltjdgus145@naver.com
-      password: asd@4873942
-      default-encoding: UTF-8
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
-            ssl:
-              enable: true
-              trust: smtp.naver.com
+  thymeleaf:
+    cache: false
+    check-template: true
+    prefix: classpath:/templates/
+    suffix: .html
 
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.205.144:3306/myDB
+    username: poly
+    password: 1234
 
+  ## DataBase (MongoDB)
 
+  data:
+    mongodb:
+      username: myUser
+      database: MyDB
+      password: '1234'
+      port: '27017'
+      host: 192.168.205.145
 
   ## DataBase (MySQL)
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test;MODE=MySQL
-    username: sa
-    password:
+  #  datasource:
+  #    driver-class-name: org.mariadb.jdbc.Driver
+  #    url: jdbc:mysql://192.168.205.134:3306/EcoVoca
+  #    username: poly
+  #    password: 1234
+
+  ## MariaDB
+
 
   jpa:
+    database: mysql
+    generate-ddl: false
+
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
     open-in-view: false
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
-        naming:
-          physical-strategy = org.hibernate.model.naming.PhysicalNamingStrategyStandardImpl
-    database: mysql
-    generate-ddl: true
 
-
-
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
 
 # Logging Info
 logging:
   level:
-    org.springframework: debug
+    org.springframework: info
 
 springdoc:
   swagger-ui:
     path: "/swagger-ui"
   api-docs:
     path: "/api-docs"
+
+# NAVER API KEY
+naver:
+  centOs:
+    server:
+      ip: ''
+  secret:
+    key: ''
+
+  # NAVER LOGIN
+  href: https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=falzESNckhJdwYjg9mcL&state=blu&redirect_uri=http://localhost:11000/auth/naver/callback
+  client_id: Go3RUangwA4y64jc2JQG
+  redirect_uri: http://localhost:3306/auth1/naver/callback
+  client_secret: PaUoFus6dP
+  access:
+    key: ''
+
+  # NAVER MAP KEY
+  map:
+    client:
+      id: ''
+      secret: ''
+  # 네이버 OCR API 설정 추가
+  ocr:
+    url: https://jhtrirhpq3.apigw.ntruss.com/custom/v1/31811/c4d98a67fa5072bcda6ee43f01ba481f7a9ff9eabfd7a6333d3e001290cc0241/document/credit-card
+    secret: U1N6QnJIYnZ4dGxVUER1WExGb3VGYWlRZElkb0l1b0o=
+
+#orc:
+#  model:
+#    data: C:/model/tessdata
