@@ -52,6 +52,14 @@ public class UserController {
 
         return "user/cardInfo";
     }
+    @GetMapping(value = "main")
+    public String main1() {
+
+        log.info(this.getClass().getName() + "main Start!");
+
+        return "user/main";
+    }
+
 
     @GetMapping(value = "userRegForm")
     public String userRegForm() {
