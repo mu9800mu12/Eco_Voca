@@ -66,7 +66,7 @@ public class ChatController {
 
         log.info(this.getClass().getName() + ".chatroom End!");
 
-        return "/chat/chatroom";
+        return "chat/chatroom";
     }
 
     /**

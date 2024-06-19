@@ -42,6 +42,10 @@
       transition: 0.4s;
       border-radius: 4px;
     }
+
+    #btnNews {
+      display: none;
+    }
   </style>
 
   <!-- =======================================================
@@ -102,7 +106,7 @@
         <div class="php-email-form mx-auto text-center"
              style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="flex: 1;">
-<!--            <button type="button" id="btnSaveNote">단어 저장하기</button>-->
+            <!--            <button type="button" id="btnSaveNote">단어 저장하기</button>-->
           </div>
           <div style="flex: 2; display: flex; justify-content: center; align-items: center;">
             <button type="button" id="minus">이전</button>
@@ -169,11 +173,13 @@
       if (seq < 0) {
         seq = 0
       }
+      hideNewsButton()
       insertData()
     })
 
     $("#plus").on("click", function () {
       seq++
+      hideNewsButton()
       insertData()
     })
 
@@ -188,8 +194,6 @@
     $("#btnSaveNote1").on("click", function () {
       showAnswer()
     })
-
-
 
     getWordList();
 
@@ -270,6 +274,7 @@
     if (userAnswer === correctAnswer) {
       alert("정답입니다!")
       document.getElementById("word").textContent = data[seq].word
+      document.getElementById("btnNews").style.display = "block"  // 관련 뉴스 보기 버튼 보이기
 
     } else {
       alert("오답입니다!")
@@ -279,8 +284,12 @@
   function showAnswer() {
     document.getElementById("word").textContent = data[seq].word
     alert("다음에 맞춰보세요!")
+    document.getElementById("btnNews").style.display = "block"  // 관련 뉴스 보기 버튼 보이기
   }
 
+  function hideNewsButton() {
+    document.getElementById("btnNews").style.display = "none"  // 관련 뉴스 보기 버튼 숨기기
+  }
 
 </script>
 </body>

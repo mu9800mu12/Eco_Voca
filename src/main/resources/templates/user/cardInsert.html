@@ -50,7 +50,7 @@
       <form id="cardForm" method="post" enctype="multipart/form-data" action="api/card-info/upload">
         <div class="mb-3">
           <label for="cardNumber" class="form-label">카드 번호</label>
-          <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="16" required>
+          <input type="number" class="form-control" id="cardNumber" name="cardNumber" maxlength="16" required>
         </div>
         <div class="mb-3">
           <label for="cardHolder" class="form-label">카드 소유자 이름</label>
@@ -58,11 +58,11 @@
         </div>
         <div class="mb-3">
           <label for="expiryDate" class="form-label">만료 날짜</label>
-          <input type="text" class="form-control" id="expiryDate" name="expiryDate" maxlength="4" placeholder="MM/YY" required>
+          <input type="number" class="form-control" id="expiryDate" name="expiryDate" maxlength="4" placeholder="MM/YY" required>
         </div>
         <div class="mb-3">
           <label for="cvc" class="form-label">CVC</label>
-          <input type="text" class="form-control" id="cvc" name="cvc" maxlength="3" required>
+          <input type="number" class="form-control" id="cvc" name="cvc" maxlength="3" required>
         </div>
         <div class="mb-3">
           <label for="cardImage" class="form-label">카드 이미지 업로드</label>
@@ -91,9 +91,22 @@
           return;
         }
         if (cardNumber.length !== 16) {
-          alert("카드 번호를 모두 적어주세요");
+          alert("카드 번호 16자리를 적어주세요");
           return;
         }
+        if (expiryDate.length !== 4) {
+          alert("만료날짜를 4글자를 적어주세요");
+          return;
+        }
+        if (cvc.length !== 3) {
+          alert("cvc 번호 3글자를 적어주세요");
+          return;
+        }
+        if (cardHolder.length <= 2) {
+          alert("이름을 정확히 적어주세요");
+          return;
+        }
+
 
         if (cardHolder === '') {
           alert("카드 소유자 이름을 입력해주세요.");

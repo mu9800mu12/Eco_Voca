@@ -117,6 +117,12 @@ public class UserService implements IUserService {
 
         log.info(this.getClass().getName() + "비밀번호 찾기 서비스 시작");
 
+
+        log.info(nickName);
+        log.info(email);
+        log.info(userId);
+
+
         Optional<UserEntity> rEntity = userRepository.findByNickNameAndEmailAndUserId(nickName, email, userId);
 
         log.info("rEntity : " + rEntity);
@@ -268,8 +274,6 @@ public class UserService implements IUserService {
 //
         log.info(this.getClass().getName() + " rDTO 값이 잘 들어오는 확인하는 여기는 마이페이지 인덱스 보여주기" + rDTO);
 
-        // 복호화 어케하는지 모르겠음
-        //todo 이메일 복호화 하자 -이 교수님-
         return rDTO;
     }
 

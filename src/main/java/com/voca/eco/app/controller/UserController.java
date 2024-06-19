@@ -115,7 +115,7 @@ public class UserController {
 
         UserDTO rDTO = userService.getUserPassword(userName, email, userId);
 
-        log.info(this.getClass().getName() + "rDTO 내용을 담은 나는 : " + rDTO);
+        log.info(this.getClass().getName() + "[컨트롤러] rDTO 내용을 담은 나는 : " + rDTO);
 
         session.setAttribute("NEW_PASSWORD", userId);
 

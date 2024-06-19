@@ -85,7 +85,7 @@
     <div class="container">
 
       <div class="php-email-form" style="padding-bottom: 10px; overflow: hidden;">
-        <button type="button" id="btnNews" style="float: right;">관련 뉴스 보기</button>
+        <button type="button" id="btnNews" style="float: right; display: none;">관련 뉴스 보기</button>
       </div>
       <div class="portfolio-info" style="min-height: 610px">
         <div id="list" style="min-height: 500px">
@@ -95,15 +95,15 @@
           <span id="content"></span>
         </div>
         <div style="display: flex; justify-content: center; align-items: center;">
-          <input type="text" id="userInput" style="width: 300px; height: 35px"  placeholder="정답을 입력하세요" >
+          <input type="text" class="form-control" id="userInput" style="width: 300px; height: 42px; margin-right: 5px;"  placeholder="정답을 입력하세요" >
           <div>
             <button type="button" id="submit">입력</button>
           </div>
-          </div>
+        </div>
         <div class="php-email-form mx-auto text-center"
              style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
           <div style="flex: 1;">
-<!--            <button type="button" id="btnSaveNote">단어 저장하기</button>-->
+            <!--            <button type="button" id="btnSaveNote">단어 저장하기</button>-->
           </div>
           <div style="flex: 2; display: flex; justify-content: center; align-items: center;">
             <button type="button" id="minus">이전</button>
@@ -147,7 +147,7 @@
   let seq = 0
   let data
 
-  // HTML로딩이 완료되고, 실행됨
+  // HTML 로딩이 완료되고, 실행됨
   $(document).ready(function () {
     $("#btnSaveNote").on("click", function () {
       saveNote()
@@ -159,11 +159,13 @@
         seq = 0
       }
       insertData()
+      hideNewsButton()
     })
 
     $("#plus").on("click", function () {
       seq++
       insertData()
+      hideNewsButton()
     })
 
     $("#btnNews").on("click", function () {
@@ -199,8 +201,15 @@
     }
   })
 
-  function saveNote() {
+  function hideNewsButton() {
+    $("#btnNews").hide();
+  }
 
+  function showNewsButton() {
+    $("#btnNews").show();
+  }
+
+  function saveNote() {
     let word = data[seq].word
     let content = data[seq].contents.toString().split(".").join(".\n\n");
 
@@ -223,14 +232,12 @@
 
   // 리스트 가져오기
   function getWordList() {
-
     $.ajax({
       url: "/word/getWord700List",
       type: "post",
       dataType: "JSON",
       success: function (json) {
         data = json
-
         insertData()
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -277,6 +284,8 @@
       let contentWithAnswer = data[seq].contents;
       contentWithAnswer = contentWithAnswer.split(".").join(".\n\n").split('\n').join('<br>');
       document.getElementById("content").innerHTML = contentWithAnswer;
+
+      showNewsButton()
     } else {
       alert("오답입니다!")
     }
@@ -290,6 +299,8 @@
     let contentWithAnswer = data[seq].contents;
     contentWithAnswer = contentWithAnswer.split(".").join(".\n\n").split('\n').join('<br>');
     document.getElementById("content").innerHTML = contentWithAnswer;
+
+    showNewsButton()
   }
 
 </script>

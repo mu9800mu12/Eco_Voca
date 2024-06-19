@@ -53,7 +53,7 @@ public class NewsService implements INewsService {
 
         log.info(responseBody); // 응답 로그 출력
 
-        // JSON 응답을 객체로 변환
+        // JSON 응답을 NewsDTO로 담아서 반환 함
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(responseBody, NewsDTO.class);
     }

@@ -135,7 +135,7 @@ public class CardInfoService implements ICardInfoService {
         log.info(this.getClass().getName() + "[service] : 카드정보 가져오기 시작!");
 
         CardInfoDTO rDTO = cardInfoMongo.getCardInfo(userId);
-        //todo 준수형이 리턴값 그냥 보내라~
+        // 준수형이 리턴값 그냥 보내라~
         log.info(this.getClass().getName() + "[service] : 카드정보 가져오기 끝!");
 
         return rDTO;
