@@ -209,7 +209,9 @@ public class UserController {
     @PostMapping(value = "UserEmailExists")
     public int UserEmailExists(HttpServletRequest request) throws Exception {
 
-        String email = CmmUtil.nvl(request.getParameter("email"));
+//        String email = CmmUtil.nvl(request.getParameter("email"));
+        String email = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
+
         log.info("email" + email);
         log.info(this.getClass().getName() + "이메일 컨트롤러임 ");
 
@@ -365,33 +367,36 @@ public class UserController {
         int res = 0;
         String msg = "";
 
-        String email = CmmUtil.nvl(request.getParameter("email")); // 회원아이디
+        // 이메일을 암호화하여 데이터베이스에서 존재 여부를 확인
+        String encryptedEmail = EncryptUtil.encAES128CBC(CmmUtil.nvl(request.getParameter("email")));
 
-        log.info("email : " + email);
+        log.info("암호화된 email : " + encryptedEmail);
 
-        int existsYn = userService.userEmailExists(email);
+        int existsYn = userService.userEmailExists(encryptedEmail);
 
         log.info("나는 1이면 이메일 중복인 Yn입니다 값은 : " + existsYn);
 
-        //이메일이 DB에 없어서 참
+        // 이메일이 DB에 없어서 참
         int authNumber = 0;
         if (existsYn == 0) {
             log.info("인증번호 생성 시작");
 
+            // 암호화된 이메일을 복호화
+            String decryptedEmail = EncryptUtil.decAES128CBC(encryptedEmail);
+            log.info("복호화된 email : " + decryptedEmail);
+
             // 6자리 랜덤 숫자 생성하기
-            authNumber = ThreadLocalRandom.current().nextInt(1000, 100000);
+            authNumber = ThreadLocalRandom.current().nextInt(100000, 1000000);
 
             log.info("authNumber : " + authNumber);
 
             String title = "이메일 인증번호 발송 메일";
             String contents = "인증번호는 " + authNumber + " " + "입니다.";
 
-            res = mailService.doSendMail(email, title, contents);
+            res = mailService.doSendMail(decryptedEmail, title, contents);
 
             if (res == 0) {
-
                 msg = "메일 발송에 실패하였습니다. 메일을 다시 확인해주세요";
-
             } else {
                 msg = "사용 가능한 이메일입니다. 메일 발송하였습니다. 인증번호를 작성해주세요";
             }
@@ -399,9 +404,7 @@ public class UserController {
             log.info("나는 1이어야 성공하는 res 입니다 값은 : " + res);
 
         } else {
-
             msg = "이메일이 존재합니다. 다른 이메일로 가입 바랍니다.";
-
         }
 
         log.info(this.getClass().getName() + ".getEmailExists End!");
