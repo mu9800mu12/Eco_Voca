@@ -1,6 +1,5 @@
 package com.voca.eco.app.service.impl;
 
-import com.voca.eco.app.domain.Entity.CardInfoMongoMapper;
 import com.voca.eco.app.domain.ICardInfoMongo;
 import com.voca.eco.app.dto.CardInfoDTO;
 import com.voca.eco.app.service.ICardInfoService;
@@ -18,13 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
+import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Service

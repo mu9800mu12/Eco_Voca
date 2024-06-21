@@ -159,6 +159,7 @@ public class CardInfoController {
         CardInfoDTO dto = cardInfoService.getCardInfo(userId);
 
 
+
         log.info(this.getClass().getName() + "[Controller] : noticeInsert End!");
 
         return ResponseEntity.ok(
