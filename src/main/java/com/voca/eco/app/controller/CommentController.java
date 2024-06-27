@@ -133,7 +133,6 @@ public class CommentController {
     public MsgDTO deleteComment(HttpServletRequest request, HttpSession session) throws Exception {
         log.info("[ 컨트롤러 ] :  댓글삭제 시작!");
 
-
         // json 으로 보내거나 받는 것은 String으로 받아야 한다. -소영누나- //오브젝트도 된다
 //        Long commentSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("commentSeq")));
 //        Long noticeSeq = Long.valueOf(CmmUtil.nvl(request.getParameter("noticeSeq")));
