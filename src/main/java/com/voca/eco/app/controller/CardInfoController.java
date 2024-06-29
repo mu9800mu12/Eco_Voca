@@ -151,14 +151,10 @@ public class CardInfoController {
 
         log.info(this.getClass().getName() + "[Controller] : .noticeInsert!");
 
-
-
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         log.info("userId :"+ userId);
 
         CardInfoDTO dto = cardInfoService.getCardInfo(userId);
-
-
 
         log.info(this.getClass().getName() + "[Controller] : noticeInsert End!");
 
