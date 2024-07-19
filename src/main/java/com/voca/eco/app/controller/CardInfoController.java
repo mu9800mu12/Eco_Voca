@@ -143,6 +143,7 @@ public class CardInfoController {
 
     }
 
+
     @PostMapping(value = "getCardInfo")//api/card-info/getCardInfo로 호출해야 함
     public ResponseEntity getCardInfo(HttpSession session) throws Exception{
             //    ResponseEntity<T> 이타입인데 제네릭 타입인데
