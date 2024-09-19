@@ -21,7 +21,15 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2022.0.4")
+}
+
+
 dependencies {
+    // openfeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     implementation 'joda-time:joda-time:2.10.10'
 
     implementation 'net.sourceforge.tess4j:tess4j:5.4.0'
@@ -48,7 +56,8 @@ dependencies {
 
     runtimeOnly 'com.h2database:h2'
 
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+//    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
 
     annotationProcessor 'org.projectlombok:lombok'
 
@@ -58,6 +67,13 @@ dependencies {
     // JSON
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
 
 tasks.named('test') {
     useJUnitPlatform()

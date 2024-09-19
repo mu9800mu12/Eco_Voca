@@ -35,7 +35,6 @@ public class CardInfoService implements ICardInfoService {
     private String ocrInvokeUrl;
 
     private final RestTemplate restTemplate;
-    /* 여기다간 네가 사용할 매퍼 적어주면 되고 */
 
     /* URL에서 이미지를 다운로드하고 Base64로 인코딩하는 메소드 */
     public static String encodeImageToBase64(BufferedImage image, String formatName) throws IOException {
@@ -105,7 +104,7 @@ public class CardInfoService implements ICardInfoService {
 
         log.info(this.getClass().getName() + "[service] Naver Clova OCR 사용하여 카드 스캔 종료");
 
-        return cardInfoDTO; // 이것도 네 코드에 맞춰서 수정
+        return cardInfoDTO;
     }
 
 

@@ -100,7 +100,7 @@ spring:
           auth: true
     host: smtp.naver.com
     username: mu9800mu12@naver.com
-    password: thdcksdngod101!
+    password: bjzerogod101!
     port: 465
     default-encoding: UTF-8
 
@@ -118,14 +118,24 @@ spring:
 
   ## DataBase (MongoDB)
 
-  data:
-    mongodb:
-      username: myUser
-      database: MyDB
-      password: '1234'
-      port: '27017'
-      host: 192.168.205.145
+#  data:
+#    mongodb:
+#      username: myUser
+#      database: MyDB
+#      password: '1234'
+#      port: '27017'
+#      host: 192.168.205.145
 
+  data:
+    #    mongodb:
+    #      username: myUser
+    #      database: MyDB
+    #      password: 1234
+    #      port: 27017
+    ##      host: 3.35.126.201
+    #      host: 192.168.205.145
+    mongodb:
+      uri: mongodb://myUser:1234@192.168.205.145:27017/MyDB
   ## DataBase (MySQL)
   h2:
     console:
@@ -201,3 +211,11 @@ naver:
 #orc:
 #  model:
 #    data: C:/model/tessdata
+
+# TimeOut Setting
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 60000
