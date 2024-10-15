@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>하루 경제 - 학습일지</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/img/favicon.png" rel="icon">
+    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- fullcalendar CSS File -->
+    <link href='/fullcalendar-4.4.0/packages/core/main.css' rel='stylesheet'/>
+    <link href='/fullcalendar-4.4.0/packages/daygrid/main.css' rel='stylesheet'/>
+    <link href='/fullcalendar-4.4.0/packages/list/main.css' rel='stylesheet'/>
+
+    <!-- vendor/main CSS Files -->
+    <link href="/vendor/main/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/main/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/main/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/vendor/main/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/main/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/vendor/main/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/main.css" rel="stylesheet">
+    <style>
+
+        body {
+            padding: 0;
+            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: auto;
+            margin-top: 5px;
+            margin-bottom: 5%;
+        }
+
+        #calendar a {
+            color: black;
+        }
+
+        .event-image {
+            max-width: 50px; /* 이미지의 최대 너비 */
+            max-height: 50px; /* 이미지의 최대 높이 */
+            margin-top: 5%;
+            margin-right: 5px; /* 이미지 간격 조절 */
+            margin-left: 25%;
+        }
+
+        .fc-event {
+            border: none;
+            background-color: transparent;
+        }
+
+        #modal {
+            display: none;
+            margin: auto;
+        }
+
+        .custom-button {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: transparent;
+            border: none;
+        }
+
+        /* 모달 배경 */
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 배경 */
+            z-index: 999; /* 다른 요소 위에 표시 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 모달 내용 */
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 80%; /* 모달의 최대 너비 */
+            max-height: 80%; /* 모달의 최대 높이 */
+            overflow-y: auto; /* 내용이 너무 길 때 스크롤 표시 */
+            position: relative; /* 상대 위치 */
+            min-height: 60%;
+        }
+
+        /* 닫기 버튼 */
+        .close-button {
+            position: absolute; /* 절대 위치 */
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            width: 5%;
+        }
+
+        .button {
+            padding: 10px 20px; /* 버튼의 상하, 좌우 여백 */
+            font-size: 16px; /* 글자 크기 */
+            color: black; /* 글자 색상 변경: 검정색 */
+            background-color: #ffc451; /* 버튼 배경색 */
+            border: none; /* 테두리 제거 */
+            border-radius: 5px; /* 둥근 모서리 */
+            cursor: pointer; /* 마우스 커서 모양 변경 */
+            transition: background-color 0.3s; /* 배경색 변경 시 부드럽게 전환 */
+        }
+
+        .button:hover {
+            background-color: #ffb347; /* 마우스 호버 시 배경색 변경 */
+        }
+
+    </style>
+
+    <!-- =======================================================
+    * Template Name: Gp
+    * Template URL: https://bootstrapmade.com/gp-free-multipurpose-html-bootstrap-template/
+    * Updated: Mar 17 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<div th:replace="~{innerHeader}"></div>
+<!-- End Header -->
+
+<!-- ======= Main ======= -->
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center" style="padding-top: 20px">
+                <div class="section-title">
+                    <h2>learning journal</h2>
+                    <p>일자별 학습 기록</p>
+                </div>
+                <ol>
+                    <li><a href="/main">Home</a></li>
+                    <li>learning journal</li>
+                </ol>
+            </div>
+             <!-- 버튼 영역 추가 (여기) -->
+            <div class="button-container" style="text-align: right; margin-top: 10px;">
+                <button class="button" onclick="location.href='learningList'">전체 학습 단어</button>
+            </div>
+
+        </div>
+    </section><!-- End Breadcrumbs -->
+
+    <div id='calendar'></div>
+    <div id="modal" class="modal-background">
+        <div id="modalContents" class="modal-content">
+            <div class="section-title">
+                <h2>Learning Words</h2>
+                <p>공부한 단어</p>
+            </div>
+            <hr>
+            <div id="list"></div>
+            <button id="closeModalBtn" class="close-button" style="border: none"><img src="/imgMain/calender/x.png"
+                                                                                      alt="" style="max-height: 50px">
+            </button>
+            <div class="php-email-form mx-auto text-center" style="margin-top: 20px; justify-items: center">
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<div th:replace="~{footer}"></div>
+<!-- End Footer -->
+
+<div id="preloader"></div>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- fullcalendar JS Files -->
+<script src='/fullcalendar-4.4.0/packages/core/main.js'></script>
+<script src='/fullcalendar-4.4.0/packages/interaction/main.js'></script>
+<script src='/fullcalendar-4.4.0/packages/daygrid/main.js'></script>
+<script src='/fullcalendar-4.4.0/packages/list/main.js'></script>
+
+<!-- vendor/main JS Files -->
+<script src="/vendor/main/purecounter/purecounter_vanilla.js"></script>
+<script src="/vendor/main/aos/aos.js"></script>
+<script src="/vendor/main/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/main/glightbox/js/glightbox.min.js"></script>
+<script src="/vendor/main/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/vendor/main/swiper/swiper-bundle.min.js"></script>
+<script src="/vendor/main/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/js/main.js"></script>
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var calendarEl = document.getElementById('calendar');
+
+        var today = new Date();
+
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+
+        var dateString = year + '-' + month + '-' + day;
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['dayGrid', 'list'],
+            header: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'today'
+            },
+            defaultDate: dateString,
+
+            navLinks: true, // can click day/week names to navigate views
+            businessHours: true, // display business hours
+            editable: true,
+            events: [
+                /*[# th:each="event : ${rList}"]*/
+                {
+                    start: "[(${event.date})]",
+                    extendedProps: {
+                        imageUrl: "/imgMain/calender/check2.png"
+                    }
+                },
+                /*[/]*/
+            ],
+            eventRender: function (info) {
+
+                if (info.event.extendedProps.imageUrl) {
+                    info.el.querySelector('.fc-title').insertAdjacentHTML('beforebegin', '<img src="' + info.event.extendedProps.imageUrl + '" class="event-image" />');
+                }
+            },
+            eventClick: function (info) {
+
+                // 이벤트 클릭 시 모달 보이기
+                var date = info.event.start; // 예시로 이벤트의 ID를 가져오는 것으로 가정합니다.
+
+                var year = date.getFullYear();
+                var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                var day = ('0' + date.getDate()).slice(-2);
+                var formattedDate = year + "-" + month + "-" + day;
+
+                console.log(formattedDate)
+
+                // 날짜별 단어 리스트 가져오기
+                $.ajax({
+                    url: "/calendar/getList",
+                    type: "post",
+                    dataType: "JSON", // "JSON" 대신 "json"으로 수정
+                    data: {date: formattedDate},
+                    success: function (json) {
+                        console.log(json)
+
+                        data = json
+
+                        var content = data;
+                        console.log(content);
+
+                        $("#list").empty();
+
+                        for (let i = 0; i < data.length; i++) {
+                            console.log(data[i]);
+                            $("#list").append('<span class="word" id="' + data[i].noteSeq + '">' + data[i].word + '</span><br/><hr>');
+
+                        }
+
+
+                        $(".word").click(function () {
+                            // 클릭된 단어에 해당하는 index 찾기
+                            var clickedWord = $(this).attr("id");
+                            console.log(clickedWord)
+                            var index = -1;
+                            for (var i = 0; i < data.length; i++) {
+                                console.log(data[i])
+                                if (data[i].noteSeq == clickedWord) {
+                                    index = i;
+                                    break;
+                                }
+                            }
+
+                            // 클릭된 단어에 해당하는 정보가 없으면 종료
+                            if (index === -1) {
+                                console.log('Clicked word not found in content array');
+                                return;
+                            }
+
+                            // 클릭된 단어에 해당하는 정보 가져오기
+                            var clickedWordInfo = content[index];
+                            var word = clickedWordInfo.word;
+                            var contents = clickedWordInfo.contents;
+
+                            console.log('Clicked word:', word);
+                            console.log('Corresponding contents:', contents);
+
+                            $("#list").empty();
+
+                            $("#list").append('<span class="word">' + content[i].word + '</span><br/>');
+                            $("#list").append('<span class="contents">' + content[i].contents + '</span><br/>');
+
+                            var buttonHtml = '<button id="customButton" class="custom-button"><img src="/imgMain/calender/back.png" alt="" style="max-height: 50px"></button>';
+                            $("#modalContents").append(buttonHtml);
+
+                            // 클릭 이벤트 핸들러 등록
+                            $("#customButton").click(function () {
+                                sendAjaxRequest(formattedDate);
+                                $(this).remove();
+                            });
+
+                            function sendAjaxRequest(formattedDate) {
+                                $.ajax({
+                                    url: "/calendar/getList",
+                                    type: "post",
+                                    dataType: "JSON", // "JSON" 대신 "json"으로 수정
+                                    data: {date: formattedDate},
+                                    success: function (json) {
+                                        var content = json.content;
+
+                                        console.log(content);
+
+                                        $("#list").empty();
+
+                                        for (let i = 0; i < data.length; i++) {
+                                            console.log(data[i]);
+                                            $("#list").append('<span class="word" id="' + data[i].noteSeq + '">' + data[i].word + '</span><br/><hr>');
+
+                                        }
+
+                                        // 재귀 호출을 통해 반복적으로 클릭 이벤트 핸들러 등록
+                                        $(".word").click(function () {
+                                            var clickedWord = $(this).attr("id");
+                                            console.log(clickedWord)
+                                            handleWordClick(clickedWord, formattedDate);
+                                        });
+                                    },
+                                    error: function (xhr, textStatus, errorThrown) {
+                                        console.error(xhr.statusText);
+                                    }
+                                });
+                            }
+
+                            function handleWordClick(word, formattedDate) {
+                                // 클릭된 단어의 정보 사용하여 원하는 동작 수행
+                                console.log('Custom button clicked for word:', word);
+
+                                // 클릭된 단어의 정보를 보여주고 AJAX 요청을 보냄
+                                displayWordInfo(word, formattedDate);
+                            }
+
+                            function displayWordInfo(word, formattedDate) {
+                                // 클릭된 단어의 정보를 가져와서 리스트에 표시
+                                var index = -1;
+                                for (var i = 0; i < content.length; i++) {
+                                    if (content[i].noteSeq == word) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+
+                                // 클릭된 단어에 해당하는 정보가 없으면 종료
+                                if (index === -1) {
+                                    console.log('Clicked word not found in content array');
+                                    return;
+                                }
+
+                                // 클릭된 단어에 해당하는 정보 가져오기
+                                var clickedWordInfo = content[index];
+                                var word = clickedWordInfo.word;
+                                var contents = clickedWordInfo.contents;
+
+                                console.log('Clicked word:', word);
+                                console.log('Corresponding contents:', contents);
+
+                                // 클릭된 단어 정보를 모달에 표시
+                                $("#list").empty();
+                                $("#list").append('<span class="word">' + word + '</span><br/>');
+                                $("#list").append('<span class="contents">' + contents + '</span><br/>');
+
+
+                                // 커스텀 버튼 추가
+                                var buttonHtml = '<button id="customButton" class="custom-button"><img src="/imgMain/calender/back.png" alt="" style="max-height: 50px"></button>';
+                                $("#modalContents").append(buttonHtml);
+
+                                // 커스텀 버튼 클릭 이벤트 핸들러 등록
+                                $("#customButton").click(function () {
+                                    // 클릭된 단어 정보를 다시 가져와서 AJAX 요청 보냄
+                                    sendAjaxRequest(formattedDate);
+                                    $(this).remove();
+                                });
+                            }
+
+                            $(".word").click(function () {
+                                // 클릭된 단어와 날짜 정보 가져오기
+                                var clickedWord = $(this).text();
+                                var date = $('#calendar').fullCalendar('getDate');
+                                var formattedDate = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + date.getDate()).slice(-2);
+
+
+                                // 클릭된 단어의 정보를 보여주고 AJAX 요청을 보냄
+                                handleWordClick(clickedWord, formattedDate);
+                            });
+
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error(xhr.statusText);
+                    }
+                });
+                document.getElementById('modal').style.display = 'flex';
+            }
+        });
+
+        calendar.render();
+
+        // 모달 닫기 버튼 이벤트 처리
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('modal').style.display = 'none';
+            $("#minus").remove();
+            $("#seq").remove();
+            $("#plus").remove();
+        });
+
+
+    });
+
+    $(document).ready(function () {
+
+        // 현재 페이지에 해당하는 네비게이션 활성화 설정
+        var currentPage = 'learning';
+
+        // 각 페이지에 따라 해당 네비게이션 항목 활성화
+        if (currentPage === 'home') {
+            $("#nav-home").addClass("active");
+        } else if (currentPage === 'study') {
+            $("#nav-study").addClass("active");
+        } else if (currentPage === 'search') {
+            $("#nav-search").addClass("active");
+        } else if (currentPage === 'learning') {
+            $("#nav-learning").addClass("active");
+        } else if (currentPage === 'notice') {
+            $("#nav-notice").addClass("active");
+        } else if (currentPage === 'mypage') {
+            $("#nav-mypage").addClass("active");
+        }
+    });
+</script>
+</body>
+
+</html>

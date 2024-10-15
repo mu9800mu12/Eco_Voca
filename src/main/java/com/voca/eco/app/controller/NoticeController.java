@@ -1,12 +1,15 @@
 package com.voca.eco.app.controller;
 
 import com.voca.eco.app.dto.CommentDTO;
+import com.voca.eco.app.dto.FileDTO;
 import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.NoticeDTO;
 import com.voca.eco.app.service.ICommentService;
+import com.voca.eco.app.service.IFileService;
 import com.voca.eco.app.service.INoticeService;
+import com.voca.eco.app.service.IS3Service;
 import com.voca.eco.common.util.CmmUtil;
-import jakarta.mail.Session;
+import com.voca.eco.common.util.FileUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -19,7 +22,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequestMapping("/notice")
@@ -28,8 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class NoticeController {
 
     private final INoticeService noticeService;
-
     private final ICommentService commentService;
+    private final IS3Service s3Service; // S3 파일 처리 서비스 추가
+    private final IFileService fileService;
 
     /**
      * 게시판 전체보기
@@ -67,19 +73,19 @@ public class NoticeController {
         return "notice/noticeReg";
     }
 
-
-
     /**
-     * 게시판 작성하기
+     * 게시판 작성하기 (파일 업로드 포함)
      */
     @ResponseBody
     @PostMapping(value = "noticeInsert")
-    public MsgDTO noticeInsert(HttpServletRequest request, HttpSession session) {
+    public MsgDTO noticeInsert(HttpServletRequest request, HttpSession session,
+            @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeInsert Start!");
 
-        String msg = "";
+        log.info("사진이 들어 왔어요 : " + file);
 
+        String msg = "";
         MsgDTO dto;
 
         try {
@@ -93,25 +99,68 @@ public class NoticeController {
             log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
-            noticeService.insertNoticeInfo(title, noticeYn, contents, userId);
+            // 1. 게시글 정보 저장
+            Long noticeSeq = noticeService.insertNoticeInfo(title, noticeYn, contents, userId);
+
+
+            log.info("나 게시글 번호 : " + noticeSeq);
+
+            log.info("파일 업로드 전 로그");
+
+            // 2. 파일 업로드 처리
+            if(file != null && !file.isEmpty()) {
+                String saveFilePath = FileUtil.mkdirForData();      // 웹서버에 저장할 파일 경로 생성
+
+                log.info("파일 업로드 하는 로그");
+
+                String orgFileName = file.getOriginalFilename();      // 파일의 원본 명
+                String fileSize = String.valueOf(file.getSize());     // 파일 크기
+                String ext = orgFileName.substring(orgFileName.lastIndexOf(".") + 1).toLowerCase(); // 확장자
+
+                if (ext.equals("jpeg") || ext.equals("jpg") || ext.equals("gif") || ext.equals("png")) {
+
+                    log.info("orgFileName : " + orgFileName);
+                    log.info("fileSize : " + fileSize);
+                    log.info("ext : " + ext);
+                    log.info("saveFilePath : " + saveFilePath);
+
+                    // 파일을 S3에 업로드
+                    FileDTO rDTO = s3Service.uploadFile(file, ext);
+
+                    // 파일 정보 저장
+                    FileDTO fileDTO = FileDTO.builder()
+                            .noticeSeq(noticeSeq)
+                            .orgFileName(orgFileName)
+                            .saveFilePath(saveFilePath)
+                            .fileSize(fileSize)
+                            .saveFileName(rDTO.saveFileName())
+                            .saveFileUrl(rDTO.saveFileUrl())
+                            .build();
+
+                    log.info("saveFileUrl : " + rDTO.saveFileUrl());
+
+                    fileService.saveFiles(fileDTO);
+
+                    fileDTO = null;
+                }
+            } else {
+                log.info("파일이 실종됨");
+            }
 
             msg = "등록되었습니다.";
 
         } catch (Exception e) {
-
             msg = "등록에 실패하였습니다. : " + e.getMessage();
             log.info(e.toString());
             e.printStackTrace();
-
         } finally {
-
             dto = MsgDTO.builder().msg(msg).build();
-
             log.info(this.getClass().getName() + ".noticeInsert End!");
         }
 
         return dto;
     }
+
 
     /**
      * 게시판 상세보기
@@ -132,6 +181,7 @@ public class NoticeController {
         // 1. 클라이언트에게 받은 값
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq"), "0"); // 공지글번호(PK)
 
+
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         log.info("nSeq : " + nSeq);
 
@@ -151,12 +201,16 @@ public class NoticeController {
 
         // 댓글 보기 호출
         List<CommentDTO> rList = Optional.ofNullable(commentService.getCommentList(cDTO))
-                        .orElseGet(ArrayList::new);
+                .orElseGet(ArrayList::new);
+
+        // 이미지 호출
+        FileDTO fDTO = fileService.getFilePath(Long.parseLong(nSeq));
 
 
         // 4. 클라이언트에게 보여주기 위해 model객체에 service의 return값을 담기
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("rList", rList);
+        model.addAttribute("fDTO", fDTO);
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
 
@@ -190,11 +244,12 @@ public class NoticeController {
     }
 
     /**
-     * 게시판 글 수정
+     * 게시판 글 수정 (파일 업로드 포함)
      */
     @ResponseBody
     @PostMapping(value = "noticeUpdate")
-    public MsgDTO noticeUpdate(HttpSession session, HttpServletRequest request) {
+    public MsgDTO noticeUpdate(HttpSession session, HttpServletRequest request,
+            @RequestParam(value = "file", required = false) List<MultipartFile> files) throws Exception {
 
         log.info(this.getClass().getName() + ".noticeUpdate Start!");
 
@@ -214,22 +269,18 @@ public class NoticeController {
             log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
-            /*
-             * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-             */
-            NoticeDTO pDTO = NoticeDTO.builder()
-                    .userId(userId)
-                    .noticeSeq(Long.parseLong(nSeq))
-                    .title(title)
-                    .noticeYn(noticeYn)
-                    .contents(contents).build();
+            // 1. 게시글 수정하기
+            noticeService.updateNoticeInfo(Long.parseLong(nSeq), title, contents, userId, noticeYn);
 
-            // 게시글 수정하기 DB
-            noticeService.updateNoticeInfo(pDTO.noticeSeq()
-                    , pDTO.title()
-                    , pDTO.contents()
-                    , pDTO.userId()
-                    , pDTO.noticeYn());
+            // 2. 파일 업로드 처리
+
+            // 게시글 수정시 추가된 MultipartFile이 있을 경우 실행
+            if (files != null) {
+
+                // 현재 파일에 있는 이미지 저장 메서드 호출
+                this.saveImg(files, Long.parseLong(nSeq));
+
+            }
 
             msg = "수정되었습니다.";
 
@@ -239,19 +290,15 @@ public class NoticeController {
             e.printStackTrace();
 
         } finally {
-
-            // 결과 메시지 전달하기
             dto = MsgDTO.builder().msg(msg).build();
-
             log.info(this.getClass().getName() + ".noticeUpdate End!");
-
         }
 
         return dto;
     }
 
     /**
-     * 게시판 글 삭제
+     * 게시판 삭제
      */
     @ResponseBody
     @PostMapping(value = "noticeDelete")
@@ -263,10 +310,9 @@ public class NoticeController {
         MsgDTO dto = null;
 
         try {
-            String nSeq = CmmUtil.nvl(request.getParameter("nSeq"));
+            String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
             log.info("nSeq : " + nSeq);
 
-            // 게시글 삭제하기 DB
             noticeService.deleteNoticeInfo(Long.parseLong(nSeq));
 
             msg = "삭제되었습니다.";
@@ -277,15 +323,59 @@ public class NoticeController {
             e.printStackTrace();
 
         } finally {
-
             dto = MsgDTO.builder().msg(msg).build();
-
             log.info(this.getClass().getName() + ".noticeDelete End!");
-
         }
 
         return dto;
-
-
     }
+
+    /**
+     * 이미지 저장을 위한 메서드
+     */
+    private void saveImg(List<MultipartFile> files, Long noticeSeq) throws Exception {
+
+        log.info("controller saveImg");
+
+        // 웹서버에 저장할 파일 경로 생성
+        String saveFilePath = FileUtil.mkdirForData();
+
+        for (MultipartFile mf : files) {
+
+            log.info("mf : " + mf);
+
+            String orgFileName = mf.getOriginalFilename();      // 파일의 원본 명
+            String fileSize = String.valueOf(mf.getSize());     // 파일 크기
+            String ext = orgFileName.substring(orgFileName.lastIndexOf(".") + 1,    // 확장자
+                    orgFileName.length()).toLowerCase();
+
+            // 이미지 파일만 실행되도록 함
+            if (ext.equals("jpeg") || ext.equals("jpg") || ext.equals("gif") || ext.equals("png")) {
+
+                log.info("orgFileName : " + orgFileName);
+                log.info("fileSize : " + fileSize);
+                log.info("ext : " + ext);
+                log.info("saveFilePath : " + saveFilePath);
+
+                //  Object Storage에 이미지 업로드를 위한 메서드 호출
+                FileDTO rDTO = s3Service.uploadFile(mf, ext);
+
+                FileDTO fileDTO = FileDTO.builder()
+                        .noticeSeq(0L)
+                        .orgFileName(orgFileName)
+                        .saveFilePath(saveFilePath)
+                        .saveFileName(rDTO.saveFileName())
+                        .saveFileUrl(rDTO.saveFileUrl())
+                        .build();
+
+                log.info("sageFileUrl : " + rDTO.saveFileUrl());
+
+                fileService.saveFiles(fileDTO);
+
+                fileDTO = null;
+
+            }
+        }
+
+}
 }

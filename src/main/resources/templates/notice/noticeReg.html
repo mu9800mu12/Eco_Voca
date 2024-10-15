@@ -31,6 +31,7 @@
 
     let userId = /*[[${session.SS_USER_ID}]]*/ '';
 
+
     if(userId == undefined) {
       alert("로그인 정보가 없어 글을 작성할 수 없습니다. \n로그인 페이지로 이동합니다.")
       location.href="/user/login"
@@ -50,15 +51,13 @@
         doSubmit(); // 공지사항 등록하기 실행
       });
 
-    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-    $("#btnList").on("click", function () {
-      if (confirm("글 작성을 취소하시겠습니까?")) {
-
-        location.href = "/notice/noticeList"; // 공지사항 리스트 이동
-      }
-    })
+      // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+      $("#btnList").on("click", function () {
+        if (confirm("글 작성을 취소하시겠습니까?")) {
+          location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+        }
+      });
     });
-
 
     // 글자 길이 바이트 단위로 체크하기(바이트값 전달)
     function calBytes(str) {
@@ -79,7 +78,11 @@
 
     // 공지사항 저장하기
     function doSubmit() {
+
       let f = document.getElementById("f"); // form 태그
+
+      let formData = new FormData(f); // FormData 객체 생성하여 form의 모든 데이터 포함
+
 
       if (f.title.value === "") {
         alert("제목을 입력하시기 바랍니다.");
@@ -103,13 +106,43 @@
         return;
       }
 
+      // 서버에 보낼 껍데기DTO, 뷰에서 클라이언트에게 받을 데이터 껍데기를 생성
+      // 클라이언트에게 받은 데이터를 껍데이게 저장 후
+      // 정리해서 서버에 보낼 껍데기에 다시 저장
+      // var formData = new FormData(); // 파일이 존재하는 경우 추가
+      // if (f.file.files.length > 0) {
+      //   formData.append("file", f.file.files[0]); // 파일 추가
+      // }
+      //
+      // // 나머지 필드 추가
+      // formData.append("title", f.title?.value); // 제목 추가
+      // formData.append("contents", f.contents.value); // 내용 추가 // 서버에 보낼 껍데기
+      // // var file = new files(); // 클라이언트에게 값을 받을 껍데기 ( 여러 개를 보낼 시 )
+      //
+      //
+      // // for(let i = 0; i < files.size(); i++){
+      // //   formData.append(files[i])
+      // // }
+      // formData.append("userId", f.userId.value);
+      // formData.append("title", f.title.value);
+      // formData.append("contents", f.contents.value)
+
+      // formData라는 껍데기를 만든다(DTO를 선언한다)
+      // FormDataDTO formData = new FormDataDTO();
+
+          // DTO 만들고
+          // 받은 이미지 값들을 DTO 담고
+          // 보내고
+
+
       // Ajax 호출해서 글 등록하기
       $.ajax({
         url: "/notice/noticeInsert",
         type: "post", // 전송방식은 Post
-        // contentType: "application/json",
         dataType: "JSON", // 전송 결과는 JSON으로 받기
-        data: $("#f").serialize(), // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+        data: formData, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+        processData: false, // formData를 스트링으로 변환하지 않도록 설정
+        contentType: false, // multipart/form-data를 사용하기 때문에 false로 설정
         success: function (json) { // /notice/noticeInsert 호출이 성공했다면..
           alert(json.msg); // 메시지 띄우기
           location.href = "/notice/noticeList"; // 공지사항 리스트 이동
@@ -120,6 +153,7 @@
 
 </head>
 <body>
+
 
 <!-- ======= Header ======= -->
 <div th:replace="~{innerHeader}"></div>
@@ -149,17 +183,12 @@
     <div class="container">
       <div class="container">
         <h2></h2>
-        <form name="f" id="f">
+        <form name="f" id="f" enctype="multipart/form-data">
           <div class="portfolio-info">
             <div class="form-group col-md-12 mx-auto" style="margin-top: 15px;">
               <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">제목</h5>
-              <input type="text" name="title" id="title" class="form-control" maxlength="50" placeholder="제목을 입력하세요.">
+              <input type="text" id="title" name="title" class="form-control" maxlength="50" placeholder="제목을 입력하세요."/>
               <hr>
-            </div>
-            <div class="form-group col-md-12 mx-auto" style="margin-top: 15px;">
-<!--              <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">공지글 여부</h5>-->
-<!--              <label><input type="radio" name="noticeYn" value="Y"/> 예</label>-->
-<!--              <label><input type="radio" name="noticeYn" value="N"/> 아니오</label>-->
             </div>
             <div class="form-group">
               <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">내용</h5>
@@ -167,7 +196,12 @@
                         placeholder="내용을 입력하세요." maxlength="300" required style="padding: 12px;"></textarea>
             </div>
             <div class="php-email-form" style="text-align: right; margin-top: 10px;">
-
+              <hr>
+              <div class="form-group col-md-12 mx-auto" style="margin-top: 15px;">
+                <h5 style="padding-bottom: 7px; padding-left: 2px; text-align: left;">사진 업로드</h5>
+                <input class="form-control" type="file" id="file" name="file" accept=".jpeg, .jpg, .gif, .png">
+              </div>
+              <hr>
               <button id="btnSend" type="button">등록</button>
               <button type="reset">다시 작성</button>
               <button id="btnList" type="button">목록</button>

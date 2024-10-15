@@ -66,6 +66,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     // JSON
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    // S3 API
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.470'
 }
 
 dependencyManagement {

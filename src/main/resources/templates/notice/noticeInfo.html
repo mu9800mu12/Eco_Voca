@@ -240,6 +240,8 @@
           <p>
             <textarea readonly="" class="readTextarea" th:text="${rDTO.contents}"
                       style="width: 100%; overflow-y: hidden; border: none; resize: none; outline: none; cursor: default"></textarea>
+<!--            <img th:src="${fDTO.saveFileUrl()}" width="50%"><br><br>-->
+            <img th:if="${fDTO != null}" th:src="${fDTO.saveFileUrl()}" width="50%">
           </p>
         </div>
         <div class="php-email-form" style="text-align: right; margin-top: 10px">

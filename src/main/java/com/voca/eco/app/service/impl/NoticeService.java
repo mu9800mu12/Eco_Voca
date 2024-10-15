@@ -72,7 +72,7 @@ public class NoticeService implements INoticeService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertNoticeInfo(
+    public Long insertNoticeInfo(
             final String title,
             final String noticeYn,
             final String contents,
@@ -84,8 +84,8 @@ public class NoticeService implements INoticeService {
         log.info("contents : " + contents);
         log.info("userId : " + createdByUserId);
 
-        // 빌더로 올리고 바로 저장 떄려버림 값이 없으면 save가오류를 잡아줌
-        noticeRepository.save(
+        // NoticeEntity를 생성하고 저장
+        NoticeEntity savedNotice = noticeRepository.save(
                 NoticeEntity.builder()
                         .title(title)
                         .noticeYn(noticeYn)
@@ -98,6 +98,7 @@ public class NoticeService implements INoticeService {
 
         log.info(this.getClass().getName() + "[서비스] : .InsertNoticeInfo End!");
 
+    return savedNotice.getNoticeSeq();
     }
 
     /**

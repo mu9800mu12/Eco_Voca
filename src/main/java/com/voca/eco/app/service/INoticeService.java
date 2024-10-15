@@ -21,13 +21,8 @@ public interface INoticeService {
 
     /**
      * 게시판 작성
-     * @param xtitle
-     * @param noticeYn
-     * @param contents
-     * @param userId
-     * @throws Exception
      */
-    void insertNoticeInfo(  final String title,
+    Long insertNoticeInfo(  final String title,
             final String noticeYn,
             final String contents,
             final String userId) throws Exception;
