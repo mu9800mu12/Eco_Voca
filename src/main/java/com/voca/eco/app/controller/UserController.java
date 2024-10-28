@@ -3,6 +3,7 @@ package com.voca.eco.app.controller;
 import com.voca.eco.app.dto.MsgDTO;
 import com.voca.eco.app.dto.UserDTO;
 import com.voca.eco.app.service.IMailService;
+import com.voca.eco.app.service.INaverService;
 import com.voca.eco.app.service.IUserService;
 import com.voca.eco.common.util.CmmUtil;
 import com.voca.eco.common.util.EncryptUtil;
@@ -27,6 +28,7 @@ public class UserController {
 
     private final IMailService mailService;
 
+    private  final INaverService naverService;
 
     @GetMapping(value = "index")
     public String index() {
@@ -546,6 +548,15 @@ public class UserController {
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         log.info("나는 유저를 삭제시키는 컨트롤러에 세션 아이디 값 입니다" + userId);
+
+        String token = CmmUtil.nvl((String) session.getAttribute("token"));
+
+        if (userId.matches("naver_(.*)")) {
+            naverService.deleteToken(token);
+
+        }
+
+        session.removeAttribute("SS_USER_ID");
 
         userService.userDelete(userId);
 

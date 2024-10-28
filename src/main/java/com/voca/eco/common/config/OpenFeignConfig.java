@@ -1,11 +1,20 @@
 package com.voca.eco.common.config;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import feign.Contract;
 import feign.Logger;
 import feign.RequestInterceptor;
+import feign.codec.Decoder;
+import feign.form.FormEncoder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
+import feign.codec.Encoder;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 
 @Configuration
 public class OpenFeignConfig {
@@ -16,21 +25,32 @@ public class OpenFeignConfig {
     @Value("${naver.client_secret}")
     private String clientSecret;
 
-    /**
-     *  API 접속을 위해 접속 방법은 기본 값으로 설정 ( 반드시 필요한 설정)
-     *  설정 값에 따라 @FeignClient에서 사용할 하위 어노테이션이 변경 됨
-     * @return
-     */
+    // application/x-www-form-urlencoded 형식으로 인코딩을 위한 FormEncoder 설정 ( 네이버 로그인 API - 2024.10.05 )
+    @Bean
+    public Encoder feignFormEncoder() {
+        return new FormEncoder(new SpringEncoder(() -> new HttpMessageConverters()));
+    }
+
+    // XML 응답 처리를 위한 SpringDecoder 설정 ( 네이버 로그인 API - 2024.10.05 )
+    @Bean
+    public Decoder feignDecoder() {
+        return new SpringDecoder(() ->
+                new HttpMessageConverters(
+                        new MappingJackson2XmlHttpMessageConverter(new XmlMapper())));
+    }
+
 
     /**
-     * 네이버 뉴스검색 API 호출시 사용 설정
-     * @return
+     * 네이버 API 호출시 사용할 기본 Feign 설정
      */
     @Bean
     public Contract feignContract() {
         return new Contract.Default();
     }
 
+    /**
+     * 네이버 API 인증 헤더 설정
+     */
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
@@ -41,16 +61,13 @@ public class OpenFeignConfig {
 
     /**
      * 오픈페인 수신, 전송 모든 과정 로그 찍기
-     *
-     * NONE: 로깅하지 않음(기본 값)
-     * BASIC: 요청 메소드와 URI와 응답 상태와 실행시간 로깅
-     * HEADERS 요청과 응답 헤더와 함께 기본 정보를 남김
-     * FULL: 요청과 응답에 대한 헤더와 바디, 메타 데이터를 남김
-     *
-     * @return
      */
     @Bean
     Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
     }
+
+
+
+
 }

@@ -265,6 +265,7 @@ public class UserService implements IUserService {
                 .address(rEntity.get().getAddress())
                 .sinceDay(rEntity.get().getSinceDay())
                 .birthday(rEntity.get().getBirthday())
+                .password(rEntity.get().getPassword())
                 .build();
 
 

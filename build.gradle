@@ -69,6 +69,10 @@ dependencies {
 
     // S3 API
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.470'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0' // XML형식 API 파싱을 위한 Jackson 라이브러리
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0' // XML형식 API 파싱을 위한 Jackson 라이브러리
+
 }
 
 dependencyManagement {

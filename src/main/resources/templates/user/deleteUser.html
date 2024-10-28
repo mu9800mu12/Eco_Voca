@@ -54,7 +54,7 @@
       <form id="f" role="form" class="php-email-form">
         <div class="section-title" style="margin-top: 15px; padding-bottom: 14px">
           <p class="fst-italic" id="deleteMsg" style="color: white; font-size: 24px"></p>
-          <h6 style="color: lightgrey">"계정 삭제" 입력시 계정이 삭제됩니다.</h6>
+          <h6 style="color: lightgrey">"계정삭제" 입력시 계정이 삭제됩니다.</h6>
         </div>
         <div style="margin-top: 0px;">
           <div class="col-md-6 form-group mx-auto" style="margin: 15px;">
@@ -106,6 +106,9 @@
 
       removeUser();
 
+
+
+
       alert("계정 삭제가 완료되었습니다.");
 
       location.href = "/user/login";
@@ -121,7 +124,8 @@
         data: $("#f").serialize(),
         success: function (json) {
 
-          document.getElementById("deleteMsg").textContent = json.userId + " 님의 계정을 삭제하시겠습니까?";
+          document.getElementById("deleteMsg").textContent =  "계정을 삭제하시겠습니까?";
+          // document.getElementById("deleteMsg").textContent = json.userId + " 님의 계정을 삭제하시겠습니까?";
 
         }
       })
